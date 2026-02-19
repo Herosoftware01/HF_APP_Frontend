@@ -2,7 +2,6 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
-from . import models
 
 import requests
 import json
