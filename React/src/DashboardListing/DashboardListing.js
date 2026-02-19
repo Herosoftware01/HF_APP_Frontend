@@ -12,7 +12,7 @@ const siteIdentifier = "site/site1";
 const environment = "enterprise";
 
 //ASP.NET Core application would be run on http://localhost:61377/, which needs to be set as `apiHost`
-const apiHost="http://localhost:8000"
+const apiHost="http://localhost:8080"
 
 //Bold BI Server URL (ex: http://localhost:5000/bi, http://demo.boldbi.com/bi)
 const rootUrl = "http://localhost:60951/bi/";
@@ -20,6 +20,8 @@ const rootUrl = "http://localhost:60951/bi/";
 //Url of the GetDetails action in ValuesController of the ASP.NET Core application
 const authorizationUrl="/get_embed_details";
 
+//Url of the TokenGeneration action in BoldBIEmbedController of the ASP.NET Core application
+const tokenGenerationUrl = "/tokenGeneration";
 //Enter your BoldBI credentials here
 const userEmail= "";
 const embedSecret= "";
@@ -31,33 +33,63 @@ class DashboardListing extends React.Component {
        this.BoldBiObj = new BoldBI();
    };
 
-   renderDashboard(data) {
-    this.dashboard= BoldBI.create({
-      serverUrl: rootUrl + siteIdentifier,
-      dashboardId: data.Id,
-      embedContainerId: "dashboard",
-      embedType: BoldBI.EmbedType.Component,
-      environment: environment==="enterprise"? BoldBI.Environment.Enterprise:BoldBI.Environment.Cloud,
-      mode:BoldBI.Mode.View,
-      width:"100%",
-      height: window.innerHeight + 'px',
-      expirationTime:100000,
-      authorizationServer: {
-          url:apiHost + authorizationUrl
-      }
-  });
+  //  renderDashboard(data) {
+  //   this.dashboard= BoldBI.create({
+  //     serverUrl: rootUrl + siteIdentifier,
+  //     dashboardId: data.Id,
+  //     embedContainerId: "dashboard",
+  //     embedType: BoldBI.EmbedType.Component,
+  //     environment: environment==="enterprise"? BoldBI.Environment.Enterprise:BoldBI.Environment.Cloud,
+  //     mode:BoldBI.Mode.View,
+  //     width:"100%",
+  //     height: window.innerHeight + 'px',
+  //     expirationTime:100000,
+  //     authorizationServer: {
+  //         url:apiHost + authorizationUrl
+  //     }
+  // });
 
-  console.log(this.dashboard);
-  this.dashboard.loadDashboard();     
+  // console.log(this.dashboard);
+  // this.dashboard.loadDashboard();     
     
-  }
+  // }
+
+  
+getEmbedToken() {
+      return fetch(apiHost + tokenGenerationUrl, { // Backend application URL
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Token fetch failed");
+          return response.text();
+        });
+    }
+  
+    renderDashboard(data) {
+      this.getEmbedToken()
+        .then(accessToken => {
+          const dashboard = BoldBI.create({
+            serverUrl: data.ServerUrl + "/" + data.SiteIdentifier,
+            dashboardId: data.DashboardId,
+            embedContainerId: "dashboard",
+            embedToken: accessToken
+          });
+  
+          dashboard.loadDashboard();
+        })
+        .catch(err => {
+          console.error("Error rendering dashboard:", err);
+        });
+    };
 
   render() {
     return (
       <div id="DashboardListing">
           <div id="container">
             <div className="header-section">
-              <div id="grid-title">All Dashboard</div>
+              <div id="grid-title">All Dashboards</div>
             </div>
             <div id="panel">
               {this.state.items.map((el) => 
