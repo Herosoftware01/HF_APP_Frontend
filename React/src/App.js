@@ -1,16 +1,18 @@
 import React from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import DashboardListing from './DashboardListing/DashboardListing';
 import Dashboard from './Dashboard/Dashboard';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 class App extends React.Component {
   render() {
     return (
-      <div>
-      {/* <DashboardListing/> */}
-            <Dashboard/>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboardlisting" element={<DashboardListing />} />
+        </Routes>
+      </BrowserRouter>
     );
   }
 }

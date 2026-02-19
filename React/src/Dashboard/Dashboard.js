@@ -3,12 +3,12 @@ import '../index';
 import { BoldBI } from '@boldbi/boldbi-embedded-sdk';
 
 //ASP.NET Core application would be run on https://localhost:5001; http://localhost:5000, which needs to be set as `apiHost`
-const apiHost = "http://localhost:8080";
+const apiHost = "http://localhost:8000";
 
-//Url of the TokenGeneration action in BoldBIEmbedController of the ASP.NET Core application
+//Url of the TokenGeneration action in views.py of the backend application
 const tokenGenerationUrl = "/tokenGeneration";
 
-var BoldBiObj;
+//var BoldBiObj;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -54,9 +54,7 @@ class Dashboard extends React.Component {
       <div id="DashboardListing">
         <div id="container">
         </div>
-        <div id="viewer-section">
           <div id="dashboard"></div>
-        </div>
       </div>
     );
   }
@@ -74,7 +72,6 @@ class Dashboard extends React.Component {
         SiteIdentifier: data.SiteIdentifier
       };
       this.setState({ embedConfig: transformedEmbedConfigData }, () => {
-        //console.log("eree ", this.state.embedConfig);
         this.renderDashboard(this.state.embedConfig);
       });
     } catch (error) {
