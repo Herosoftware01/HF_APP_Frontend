@@ -4,7 +4,7 @@ This project was created using React with Python. This application aims to demon
 
 ## Dashboard view
 
-   ![Dashboard view](images/dashboard-view.png)
+   ![Dashboard view](images/dashboard.png)
 
 ## Prerequisites
 
@@ -20,79 +20,55 @@ The samples require the following to run.
 
 #### Supported browsers
   
-* Google Chrome, Microsoft Edge, Mozilla Firefox, and Safari.
+* Google Chrome, Microsoft Edge, and Mozilla Firefox.
+
+## Configuration
+
+* Please [get](https://github.com/boldbi/react-with-aspnet-core-sample/tree/master/React-with-ASP.NETCore) the React with ASP.NET Core sample from GitHub.
+
+* Please ensure you have enabled embed authentication on the `embed settings` page. If it is not currently enabled, please refer to the following image or detailed [instructions](https://help.boldbi.com/site-administration/embed-settings/#get-embed-secret-code?utm_source=github&utm_medium=backlinks) to enable it.
+   ![Embed Settings](/images/enable-embedsecretkey.png)
+
+* To download the `embedConfig.json` file, please follow this [link](https://help.boldbi.com/site-administration/embed-settings/#get-embed-configuration-file?utm_source=github&utm_medium=backlinks) for reference. Additionally, you can refer to the following image for visual guidance.
+  
+    ![Embed Settings Download](/images/download-embedsecretkey.png)
+    ![EmbedConfig Properties](/images/embedconfig-file.png)
+
+* Copy the downloaded `embedConfig.json` file and paste it into the designated [location](https://github.com/boldbi/react-with-python/tree/master/python/django-sample-master) within the application. Please ensure you have placed it in the application, as shown in the following image.
+
+    ![EmbedConfig image](/images/embedconfig-location.png)
 
 ## Developer IDE
 
-* Visual studio code(<https://code.visualstudio.com/download>)
+* [Visual Studio Code](<https://code.visualstudio.com/download>)
 
-### Run a Sample Using Visual Studio Code
+## Run a Sample Using Visual Studio Code
 
- 1. The React application acts as a client, and the Python application acts as a server. In the `models.py` file of the Python application, you need to set the User Email and Embed Secret properties.
+### Python sample via VS Code
 
-    <meta charset="utf-8"/>
-    <table>
-    <tbody>
-        <tr>
-            <td align="left">UserEmail</td>
-            <td align="left">UserEmail of the Admin in your Bold BI, which would be used to get the dashboard list.</td>
-        </tr>
-        <tr>
-            <td align="left">User Password</td>
-            <td align="left">Password of the Admin in Bold BI, which will be used to get the dashboards list.</td>
-        </tr>
-    </tbody>
-    </table>
+  1. Open the [Python Django](https://github.com/boldbi/react-with-python/tree/master/python/django-sample-master) folder in Visual Studio Code.
 
- 2. Once you have provided the details, run the application using the command "python manage.py runserver." The application will be running on port number 8000.
+  2. Open the terminal in Visual Studio Code and execute the command `python manage.py runserver` to run the application.  It will display a URL in the command line interface, typically something like http://localhost:8000. Copy this URL and paste it into your default web browser, as shown in the image below.
 
- 3. Then, once you run your Python application, you will see results similar to those of the React application.
+      ![backend image](/images/backend-api.png)
 
-    ![Python Backend API](images/backend-api.png)
+### React sample via VS Code
 
- 4. To run the React application, we need to set the following properties in the DashboardListing.js file:
+  1. Open the [React](https://github.com/boldbi/react-with-python/tree/master/React) folder in Visual Studio Code.
 
-    ![DashboardListing](images/dashboard-listing.png)
+  2. To install all dependent packages, use the following command `npm install`.
 
-    <meta charset="utf-8"/>
-    <table>
-    <tbody>
-    <tr>
-        <td align="left">SiteIdentifier</td>
-            <td align="left">For the Bold BI Enterprise edition, it should be like `site/site1`. For Bold BI Cloud, it should be an empty string.</td>
-        </tr>
-        <tr>
-            <td align="left">RootUrl</td>
-            <td align="left">Dashboard Server URL (Eg: http://localhost:5000/bi, http://demo.boldbi.com/bi).</td>
-        </tr>
-        <tr>
-            <td align="left">Authorization URL</td>
-            <td align="left">Provide the API end point(get_embed_details) of python application.</td>
-        </tr>
-        <tr>
-            <td align="left">Environment</td>
-            <td align="left">Your Bold BI application environment. (If Cloud, you should use `cloud,` if Enterprise, you should use `onpremise`).</td>
-        </tr>
-        <tr>
-            <td align="left">API Host</td>
-            <td align="left">URL of python application(example: http://localhost:8000/).</td>
-        </tr>
-        <tr>
-            <td align="left">UserEmail</td>
-            <td align="left">UserEmail of the Admin in your Bold BI, which would be used to get the dashboard list.</td>
-        </tr>
-        <tr>
-            <td align="left">User Password</td>
-            <td align="left">Password of the Admin in Bold BI, which will be used to get the dashboards list.</td>
-        </tr>
-    </tbody>
-    </table>
+     > **NOTE:** If you are using Node.js version higher than v16.17, you can update the `package.json` file by adding the following line as a `script` within the `start` command. Make ensure that you replace the existing line with this updated script.
 
- 5. Once you provide these details, run the command “npm install.” After all the packages are installed, run the command “npm start.”
+      ``` bash
+      "start": "react-scripts --openssl-legacy-provider start"
+      ```
 
-    ![Dashboard view](images/dashboard-view.png)
+  3. To run the application, use the command `npm start` in the terminal.  After executing the command, the application will automatically launch in the default browser. You can access it at the specified port number (<http://localhost:3000>). Please refer to the following image.
 
-> **NOTE:** If the API host is already in use, modify the port number per your preference in embed.js and update that Dashboard.js file.
+     ![dashboard view](/images/dashboard.png)
+
+> **NOTE:** We represent the dashboard embedding by default without the dashboard listing sidebar. To view the dashboard listing, provide userEmail and embedSecret values in the `DashboardListing.js` file and then navigate to the URL (such as http://localhost:3000/dashboardlisting).
 
 ## Important notes
 
