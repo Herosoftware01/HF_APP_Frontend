@@ -47,10 +47,21 @@ The samples require the following to run.
 ### Python sample via VS Code
 
   1. Open the [Python Django](https://github.com/boldbi/react-with-python/tree/master/python/django-sample-master) folder in Visual Studio Code.
+  2. Install Python dependencies from the `requirements.txt` file (located in the same `python` folder). In the terminal run:
 
-  2. Open the terminal in Visual Studio Code and execute the command `python manage.py runserver` to run the application.  It will display a URL in the command line interface, typically something like http://localhost:8000. Copy this URL and paste it into your default web browser, as shown in the image below.
+        ```powershell
+            py -m pip install -r requirements.txt
+        ```
 
-      ![backend image](/images/backend-api.png)
+  3. Open the terminal in Visual Studio Code and execute the command `py manage.py runserver` to run the application.  It will display a URL in the command line interface, typically something like http://localhost:8000. Copy this URL and paste it into your default web browser, as shown in the image below.
+
+      If port `8000` is already in use or not accessible, run the server on a different port, for example:
+
+      ```powershell
+        py manage.py runserver 9000
+      ```
+
+        Replace the port `9000` in `apiHost` within `Dashboard.js`.
 
 ### React sample via VS Code
 
