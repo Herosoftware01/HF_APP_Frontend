@@ -36,7 +36,7 @@ import Report from '../order/reportviewer.tsx';
 import Formbuilder from '../order/formbuilder.tsx'; 
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
-
+import Pdf from "../order/Pdf/Pdf.tsx"
 
 function Home() {
   return (
@@ -78,6 +78,7 @@ function Home() {
         <Route path='/Formbuilder' element={<Formbuilder />} />
         <Route path='/Embedd' element={<Embedd />} />
         <Route path='/Dashboard' element={<Dashboard />} />
+        <Route path='/pdf' element={<Pdf />} />
     </Routes>
   );
 }

@@ -426,7 +426,7 @@ const HeroFashionGrid131: React.FC = () => {
     // { field: 'uom', label: 'UOM', type: 'string' },
     // { field: 'abc', label: 'ABC', type: 'string' }
     
-    { field: 'fdt', label: 'FDT ISO', type: 'date' , operators:stringOperator },
+    { field: 'fdt', label: 'fdt', type: 'date' , operators:stringOperator },
     { field: 'slno', label: 'Serial No', type: 'number' , operators:stringOperator},
     { field: 'insdatenew', label: 'Ins Date New', type: 'string', operators:stringOperator },
     { field: 'jobno_oms', label: 'Job No OMS', type: 'string', operators:stringOperator },
@@ -441,7 +441,7 @@ const HeroFashionGrid131: React.FC = () => {
     { field: 'styledesc', label: 'Style Description', type: 'string', operators:stringOperator },
     { field: 'season', label: 'Season', type: 'string' , operators:stringOperator},
     { field: 'jobnoomsnew', label: 'Job No New', type: 'string', operators:stringOperator },
-    { field: 'Print', label: 'Print Detail', type: 'string', operators:stringOperator },
+    { field: 'Print', label: '1-Print', type: 'string', operators:stringOperator },
     { field: 'Others1', label: 'Image Link 1', type: 'string', operators:stringOperator },
     { field: 'Others2', label: 'Image Link 2', type: 'string', operators:stringOperator },
     { field: 'Others3', label: 'Image Link 3', type: 'string', operators:stringOperator },
@@ -720,7 +720,7 @@ const HeroFashionGrid131: React.FC = () => {
       serverUpdated = false;
       newPrimaryKey = null;
     }
-    if(args.requestType==='searching')
+    if(args.requestType==='searching' || args.requestType==='filtering')
     {
       const records = gridRef.current?.getFilteredRecords();
       setShowingCount(records ? (records as object[]).length : 0);
@@ -756,7 +756,49 @@ const HeroFashionGrid131: React.FC = () => {
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
       <b>Fdt_wk:</b> {highlightText(p.Fdt_wk)}<br />
-      </div>);
+    </div>);
+
+ const udf12 = (p: any) => {
+  console.log(p.fdt)
+  let fdtdata = p.fdt;
+ const month = fdtdata.toLocaleString('en-US', { month: 'short' });
+const yearShort = fdtdata.getFullYear().toString().slice(-2);
+const monthText = `${month} ${yearShort} Y`;
+ 
+// ---- Week (ISO week number) ----
+function getWeekNumber(date: any) {
+  const d: any = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart: any = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+ 
+const week = getWeekNumber(fdtdata);
+const weekText = `${week} ${yearShort} Y`;
+ 
+// ---- Year (26 Y) ----
+const yearText = `${yearShort} Y`;
+  // fdtdata.get
+  // new Date().getDate
+  // new Date().getDay
+  return(
+    // <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
+    //   <b>Fdt_date:</b> {highlightText(fdtdata.getDate())}<br />
+    //   <b>Fdt_day:</b> {highlightText(fdtdata.getDay())}<br />
+    // </div>
+    <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
+      {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
+      {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
+      <b>Month-</b> {highlightText(monthText)}<br />
+      <b>Week-</b> {highlightText(weekText)}<br />
+      <b>Year-</b> {highlightText(yearText)}<br />
+      {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
+      <b>Uom-</b> {highlightText(p.uom)}<br />
+      <b>abc-</b> {highlightText(p.abc)}<br />
+
+    </div>)
+ }
   
   const ordHeaderTemplate = (p: OrderData) => {
     return (
@@ -877,7 +919,7 @@ const HeroFashionGrid131: React.FC = () => {
 
   const deliveryInfoTemplate = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br />
+      <b>Fdt:</b> <span style={getDateStyle((p as any).Fdt)}>{highlightText((p as any).fdt)}</span><br />
       <b>Dir:</b> {highlightText(p.director_sample_order)}<br />
       <b>ST:</b> {highlightText(p.styleno)}<br />
       <b>Uom:</b> {highlightText(p.uom)}<br />
@@ -1151,7 +1193,7 @@ const HeroFashionGrid131: React.FC = () => {
             <div>
               <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '5px' }}>Fdt</label>
               {/* <input id="Fdt" name="Fdt" type="text" value={data.Fdt || ''} onChange={onChange} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '14px' }} /> */}
-              <DatePickerComponent id="fdt" name="fdt" type="text" value={(data as any).fdt}/>
+              <DatePickerComponent id="fdt" name="fdt" type="text" value={(data as any).fdt} format={'dd/MM/yyyy'}/>
             </div>
         </div>
 
@@ -1919,7 +1961,7 @@ const HeroFashionGrid131: React.FC = () => {
           allowFiltering={false}
           resizeSettings={{ mode: 'Auto' }}
           allowMultiSorting={true}
-          filterSettings={{ showFilterBarOperator: true, mode: 'Immediate' }}
+          filterSettings={{ showFilterBarOperator: true, mode: 'Immediate', type: "Excel" }}
           statelessTemplates={['directiveTemplates']}
           allowGrouping={true}
           groupSettings={{ showGroupedColumn: true, showDropArea: !Browser.isDevice }}
@@ -1932,7 +1974,7 @@ const HeroFashionGrid131: React.FC = () => {
           allowTextWrap={true}
           textWrapSettings={{ wrapMode: 'Both' }}
           autoFit={true}
-          sortSettings={{ columns: [{ field: 'director_sample_order', direction: 'Descending' }, { field: 'Fdt', direction: 'Ascending' }] }}
+          sortSettings={{ columns: [{ field: 'director_sample_order', direction: 'Descending' }, { field: 'fdt', direction: 'Ascending' }] }}
           gridLines="Both"
           searchSettings={searchSettings}
           toolbar={toolbarOptions}
@@ -1948,12 +1990,13 @@ const HeroFashionGrid131: React.FC = () => {
           <ColumnsDirective>
             <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="110" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective field="fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="FabdyIN" headerText="FabdyIN"  width="150" maxWidth="150" type="string" template={udf11} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective  headerText="Fab1"  width="150" maxWidth="150" type="string" template={udf12} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Print" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Emb" headerText="Emb" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Others1" headerText="imgs1" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />

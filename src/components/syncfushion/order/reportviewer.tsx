@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
  
 // ✅ Bold Reports styles
-import '@boldreports/javascript-reporting-controls/Content/v2.0/tailwind-light/bold.report-viewer.min.css';
+// import '@boldreports/javascript-reporting-controls/Content/v2.0/tailwind-light/bold.report-viewer.min.css';
  
 // ✅ Bold Reports scripts
 import '@boldreports/javascript-reporting-controls/Scripts/v2.0/common/bold.reports.common.min';

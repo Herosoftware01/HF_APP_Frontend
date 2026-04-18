@@ -1,10 +1,10 @@
 import React from "react";
 import { 
   FaChartPie, FaCheck, FaWallet, FaViadeo, FaAudible, FaDiceD20, FaDisease, FaDrupal,
-  FaDribbble, FaRegSmileWink, FaTencentWeibo, FaMixcloud,
-  FaCodepen, FaAirbnb, FaDove, FaPushed, FaRaspberryPi,
+  FaDribbble, FaRegSmileWink, FaTencentWeibo, FaMixcloud,FaHeartbeat, FaMailchimp,
+  FaCodepen, FaAirbnb, FaDove, FaPushed, FaRaspberryPi, FaPaw,
   FaRegPaperPlane, FaVirus, FaBity , FaVolleyballBall,
-  FaReact, FaGalacticRepublic,FaCodiepie, FaDemocrat
+  FaReact, FaGalacticRepublic,FaCodiepie, FaDemocrat, FaGrav
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -471,11 +471,11 @@ const Dashboard = () => {
             onClick={() => navigate("Report")}
             className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
           >
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
-            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
-              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-orange-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaGrav className="text-orange-500 text-2xl" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-orange-600 transition">
             Bold Reports details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
@@ -488,11 +488,11 @@ const Dashboard = () => {
             onClick={() => navigate("Embedd")}
             className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
           >
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
-            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
-              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-purple-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaHeartbeat className="text-purple-500 text-2xl" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-purple-600 transition">
             Embedd Edit Reports details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
@@ -500,26 +500,39 @@ const Dashboard = () => {
             </p>
           </div>
         
-             <div
+          <div
             onClick={() => navigate("Dashboard")}
             className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
           >
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
-            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
-              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-fuchsia-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-fuchsia-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaMailchimp className="text-fuchsia-500 text-2xl" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-fuchsia-600 transition">
             Embedd Published Reports details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
               Embedd Bold Reports details 
             </p>
+          </div>  
+
+          <div
+            onClick={() => navigate("pdf")}
+            className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-yellow-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaPaw className="text-yellow-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-yellow-600 transition">
+              Pdf Related Details
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Syncfusion Pdf Details and Editor 
+            </p>
           </div>        
 
-
-
-
-
+          
         </div>
       </div>
     </div>

@@ -1,26 +1,35 @@
 import * as ReactDOM from 'react-dom';
 import { extend } from '@syncfusion/ej2-base';
 import { KanbanComponent, ColumnsDirective, ColumnDirective } from "@syncfusion/ej2-react-kanban";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { Ajax } from '@syncfusion/ej2-base';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
+import { UserContext } from "../../../../UserContext";
+
 function App() {
- const [kanbanData, setKanbanData] = useState([]);
-  const ajaxUrl = 'https://app.herofashion.com/udf7_update/';
-  // here you can modify the loggged in user from your data to filter the data based on the logged in user.
-  const loggedInUser = 'PREMAVATHI.N';
+  const [kanbanData, setKanbanData] = useState([]);
+  const ajaxUrl = 'https://app.herofashion.com/diwasg/';
+  
+  const { username } = useContext(UserContext);
+  console.log(username)
   const data = new DataManager(kanbanData);
   const [query, setQuery] = useState(new Query());
-  useEffect(() => {
-    setQuery(new Query().where('asgby_name', 'equal', loggedInUser));
-  }, [loggedInUser]);
-  // Load initial data
-  useEffect(() => {
-    loadData();
-  }, []);
+
+    const filterMyData = () => {
+    if (username) {
+        setQuery(
+        new Query().where('asgby_name', 'contains', username, true)
+        );
+    }
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
   interface KanbanDataModel {
     Id?: string;
     Title?: string;
@@ -46,6 +55,10 @@ function App() {
                                 <tr>
                                     
                                     <td>{props.asgby_name}</td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td>{props.field_empname}</td>
                                 </tr>
                                 <tr>
                                     
@@ -101,7 +114,7 @@ function App() {
     } 
         else if (args.requestType === 'cardChanged' && args.changedRecords) {
       // Handle Update
-      let updateUrl=ajaxUrl + args.changedRecords[0]['asgby_name']+ "/";
+      let updateUrl=ajaxUrl + args.changedRecords[0]['asgby_code']+ "/";
       args.changedRecords.forEach((card: any) => {
         const ajax = new Ajax({
           url: updateUrl,
@@ -249,6 +262,7 @@ function App() {
 const dialogTemplate = (props: any) => {
         return <KanbanDialogFormTemplate {...props} />;
 };
+
 const imageContainer: HTMLElement | null = document.getElementById('image-container') as HTMLElement;
     if (imageContainer) {
       const circularImages: NodeListOf<HTMLElement> = imageContainer.querySelectorAll('.circular-image');
@@ -315,7 +329,7 @@ let kanbanObj = useRef(null);
     const reset = () => {
         (priorityObj.current as any).value = "None";
         (statusObj.current as any).value = "None";
-        (kanbanObj.current as any).query = new Query();
+         setQuery(new Query());
     };
     
   return (
@@ -387,6 +401,9 @@ let kanbanObj = useRef(null);
                             >
                                 Reset
                             </ButtonComponent>
+                            <ButtonComponent onClick={filterMyData}>
+                                My Task
+                            </ButtonComponent>
                         </div>
                     </div>
                 </div>
@@ -400,8 +417,6 @@ let kanbanObj = useRef(null);
                 <img src="https://app.herofashion.com/staff_images/10022.jpg" alt="VIJAYAKUMAR.K" className="circular-image" title="Fuller King" style={{ width: '35px', height: '35px' }} />
                 <img src="https://app.herofashion.com/staff_images/10028.jpg" alt="THANGADURAI.P" className="circular-image" title="Davolio Fuller" style={{ width: '35px', height: '35px' }} />
               </div>
-              
-            
           </div>
       <KanbanComponent 
         id="kanban" 
