@@ -36,6 +36,15 @@ function Machine_allocate() {
   const html5QrCodeRef = useRef(null);
   const lock = useRef(false);
 
+
+  const [popupData, setPopupData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const openPopup = (details) => {
+    setPopupData(details);
+    setShowPopup(true);
+  };
+
   useEffect(() => {
     api.get("/qcapp/api/units/").then((res) => {
       setUnits(res.data);
@@ -258,9 +267,9 @@ useEffect(() => {
   return (
     <div className="h-screen flex flex-col bg-[#F1F5F9] font-sans overflow-hidden">
       {/* Header */}
-      <header className="bg-white px-6 py-4 shadow-sm flex justify-between items-center z-10">
+      <header className="bg-white px-6 py-4 shadow-sm flex justify-between items-center z-10 mt-8 md:mt-8 lg:mt-0">
         <h1 className="text-xl font-black text-slate-800 tracking-tighter uppercase italic">Control Panel</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
            <button 
              onClick={() => { setScanMode("needle"); setScanStep(1); setShowScanner(true); }}
              className="text-[10px] font-black text-indigo-600 border-2 border-indigo-50 px-4 py-2 rounded-xl uppercase tracking-widest">
@@ -311,7 +320,8 @@ useEffect(() => {
                 <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                   <th className="px-6 py-5">Machine</th>
                   <th className="px-6 py-5">Employee</th>
-                  <th className="px-6 py-5">Seq</th>
+                  {/* <th className="px-6 py-5">Seq</th> */}
+                  <th className="px-6 py-5">Needle</th>
                   <th className="px-6 py-5 text-right">Status</th>
                 </tr>
               </thead>
@@ -335,7 +345,14 @@ useEffect(() => {
                         <button onClick={() => setPopup({ open: true, machineId: a.machine.id })} className="text-[10px] font-black text-slate-300 border border-dashed px-3 py-1 rounded-lg uppercase">Assign</button>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm font-black text-slate-800">{a.employees?.[0]?.sequence || "—"}</td>
+                    {/* <td className="px-6 py-4 text-sm font-black text-slate-800">{a.employees?.[0]?.sequence || "—"}</td> */}
+                    {/* <td className="px-6 py-4 text-sm font-black text-slate-800">{a.needle_count}</td> */}
+                    <td
+                      className="px-6 py-4 text-sm font-black text-slate-800 cursor-pointer text-blue-600"
+                      onClick={() => openPopup(a.needle_details)}
+                    >
+                      {a.needle_count}
+                    </td>
                     <td className="px-6 py-4 text-right">
                       {a.employees?.[0] && (
                         <button onClick={() => toggleStatus(a.machine.id, a.employees[0].emp_code, a.employees[0].status)}
@@ -351,6 +368,68 @@ useEffect(() => {
           </div>
         </div>
       </main>
+
+
+
+      {showPopup && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-white/30">
+    
+    {/* Modal */}
+    <div className="w-[90%] sm:w-[400px] max-h-[80vh] overflow-hidden rounded-2xl shadow-2xl bg-white/80 backdrop-blur-lg border border-white/40 animate-fadeIn">
+      
+      {/* Header */}
+      <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-800">
+          Needle Change Details
+        </h2>
+        <button
+          onClick={() => setShowPopup(false)}
+          className="text-gray-500 hover:text-red-500 text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-y-auto max-h-[60vh]">
+        <table className="w-full text-sm text-gray-700">
+          <thead className="sticky top-0 bg-white/70 backdrop-blur">
+            <tr>
+              <th className="text-left px-4 py-2 font-medium">Time</th>
+              <th className="text-left px-4 py-2 font-medium">Count</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {popupData.map((item, index) => (
+              <tr
+                key={index}
+                className="hover:bg-blue-50/50 transition"
+              >
+                <td className="px-4 py-2">
+                  {new Date(item.time).toLocaleString()}
+                </td>
+                <td className="px-4 py-2 font-semibold text-blue-600">
+                  {item.count}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Footer */}
+      <div className="p-3 border-t border-gray-200 flex justify-end">
+        <button
+          onClick={() => setShowPopup(false)}
+          className="px-4 py-1.5 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* --- SCANNER MODAL --- */}
       {showScanner && (
