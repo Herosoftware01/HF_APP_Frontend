@@ -264,7 +264,7 @@ useEffect(() => {
            <button 
              onClick={() => { setScanMode("needle"); setScanStep(1); setShowScanner(true); }}
              className="text-[10px] font-black text-indigo-600 border-2 border-indigo-50 px-4 py-2 rounded-xl uppercase tracking-widest">
-             Scan Needle
+            Needle Scan
            </button>
            <div className="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full">
              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
