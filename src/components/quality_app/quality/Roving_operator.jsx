@@ -26,7 +26,7 @@ function OperatorProcess() {
 
     try {
       const res = await api.get(
-        `qcapp/api/machine/${encodeURIComponent(id)}/?jobno=${jobNo}&topbottom_des=${product}&unit=${unit}&line=${line}`
+        `qcapp/api/machine/${encodeURIComponent(id)}/?jobno=${jobNo}&topbottom_des=${product}&unit=${unit}&line=${line}&bundleNo=${bundleNo}`
       );
 
       const data = res.data;
