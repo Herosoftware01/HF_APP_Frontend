@@ -22,6 +22,8 @@ import Sticker from "./components/Cutting/sticker production/App"
 import Bitcheck from "./components/Cutting/bit checking/App"
 import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
+import BoldBi from "./components/syncfushion/DashboardListing/DashboardListing"
+import BoldReport from "./components/syncfushion/order/reportviewer"
 
 function App() {
 
@@ -214,8 +216,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-         <Route
+        <Route
           path="/holdwage/*"
           element={
             <ProtectedRoute>
@@ -225,7 +226,27 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
+        <Route
+          path="/boldbi/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <BoldBi />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/boldreport/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <BoldReport />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
         
 
       </Routes>
