@@ -730,7 +730,7 @@ const HeroFashionGrid131: React.FC = () => {
   const orderSummaryTemplate = (p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4', width: '90px' }}>
-        <b>J-</b> {highlightText(p.jobno_oms)}<br />
+        <b>OR-</b> {highlightText(p.jobno_oms)}<br />
         <b>Buy-</b> {highlightText(p.buyer1)}<br />
         <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br />
         <b>Unit-</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
@@ -742,7 +742,7 @@ const HeroFashionGrid131: React.FC = () => {
   const orderSummaryHeaderTemplate = (p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>Jobno</b><br/>
+        <b>OR</b><br/>
         <b>Buy</b> <br/>
         <b>Mer</b> <br/>
         <b>Unit</b><br/>
@@ -754,10 +754,9 @@ const HeroFashionGrid131: React.FC = () => {
   
  const udf11 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
-        <b>Uom-</b> {highlightText(p.uom)}<br />
-        <b>abc-</b> {highlightText(p.abc)}<br />
-    </div>);
+      <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
+      <b>Fdt_wk:</b> {highlightText(p.Fdt_wk)}<br />
+      </div>);
   
   const ordHeaderTemplate = (p: OrderData) => {
     return (
@@ -791,7 +790,7 @@ const HeroFashionGrid131: React.FC = () => {
           <b>wk</b> <br/>
           <b>yr</b> <br/>
           <b>uom</b> <br/>
-          {/* <b>abc</b> <br/> */}
+          <b>abc</b> <br/>
           {/* <b>order_follow_up</b><br/>
           <b>Qty</b><br/> */}
       </div>
@@ -890,12 +889,12 @@ const HeroFashionGrid131: React.FC = () => {
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
       {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
-      <b>Ft:</b> {highlightText(p.Fdt_wk)}<br />
       <b>Month-</b> {highlightText(p.FMonth_yr)}<br />
       <b>Week-</b> {highlightText(p.Week_R)}<br />
       <b>Year-</b> {highlightText(p.wk)}<br />
       {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
-
+      <b>Uom-</b> {highlightText(p.uom)}<br />
+      <b>abc-</b> {highlightText(p.abc)}<br />
 
     </div>
   );
@@ -1949,7 +1948,7 @@ const HeroFashionGrid131: React.FC = () => {
           <ColumnsDirective>
             <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="110" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />

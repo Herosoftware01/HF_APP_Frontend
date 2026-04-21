@@ -36,6 +36,7 @@ import Report from '../order/reportviewer.tsx';
 import Formbuilder from '../order/formbuilder.tsx'; 
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
+import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 
 
 function Home() {
@@ -78,6 +79,7 @@ function Home() {
         <Route path='/Formbuilder' element={<Formbuilder />} />
         <Route path='/Embedd' element={<Embedd />} />
         <Route path='/Dashboard' element={<Dashboard />} />
+        <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
     </Routes>
   );
 }

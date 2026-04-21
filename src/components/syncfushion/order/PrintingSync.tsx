@@ -59,11 +59,13 @@ interface OrderData {
   actdaten: string; actyeardate: string; pono: string; u46: string; u37: string; qltycontroller: string; Print: string; Others1: string;
   mainimagepath: string; finaldelvdate: string; prnclr?: string | null; prnfile1?: string; prnfile2?: string; img_fpath?: string; clr?: string; print_img?: string; Fab_R: string;
   ITS_R: string; Order_R: string; Dy_R: string; Sample_R: string; Week_R: string; FMonth_yr: string; Emb_R: string; Week_R1: string; year: string; wk: string; 
-  prnmeaimg?: string; mpic?: string; FabdyIN?: string;
+ FabdyIN?: string;
   Others2: string; Others3: string; Others4: string; Others5: string; Others6: string; Others7: string,
+  jobno: string; buyerid: number; buyer: string; production_unit: string;  printing_r: string;  hex: string; print_ty: string; print_des: string; part: string;  scr1: string; scr2: string; prnmeaimg: string; clrcomb: string; noclr: number; in_out: string; sup: string;  mpic: string; ordimg: string; tbimg: string; indpart: string; groundclr: string; slno: number;
+
 }
 
-const HeroFashionGrid131: React.FC = () => {
+const HeroFashionGrid1311: React.FC = () => {
   const [dataSource, setDataSource] = useState<OrderData[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [showingCount, setShowingCount] = useState<number>(0);
@@ -167,7 +169,7 @@ const HeroFashionGrid131: React.FC = () => {
       try {
         setLoading(true); setError(null);
         const [orderResponse] = await Promise.all([
-          fetch('https://app.herofashion.com/order_panda'),
+          fetch('https://app.herofashion.com/ord_prn'),
           
         ]);
         if (!orderResponse.ok ) throw new Error("Failed to fetch data from APIs");
@@ -644,7 +646,7 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   // --- Templates ---
-  const imageFieldTemplate = useCallback((field: 'mainimagepath' | 'Print' | 'print_img' | 'prnmeaimg' | 'img_fpath' | 'Emb' | 'Others1' | 'Others2' | 'Others3' | 'Others4' | 'Others5' | 'Others6' | 'Others7') => (p: OrderData) => {
+  const imageFieldTemplate = useCallback((field: 'ordimg' | 'tbimg' | 'mpic' | 'print_img' | 'img_fpath' | 'Emb' | 'Others1' | 'Others2' | 'Others3' | 'Others4' | 'Others5' | 'Others6' | 'Others7') => (p: OrderData) => {
     if (!p[field]) return <div style={{ color: '#ccc', fontSize: '10px' }}>No Image</div>;
     
     return (
@@ -730,11 +732,11 @@ const HeroFashionGrid131: React.FC = () => {
   const orderSummaryTemplate = (p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4', width: '90px' }}>
-        <b>J-</b> {highlightText(p.jobno_oms)}<br />
-        <b>Buy-</b> {highlightText(p.buyer1)}<br />
-        <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br />
-        <b>Unit-</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
-        <b>Qty-</b> {highlightText(p.quantity)}
+        <b>OR-</b> {highlightText(p.jobno)}<br />
+        <b>Buy-</b> {highlightText(p.groundclr)}<br />
+        {/* <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br /> */}
+        <b>Unit-</b> <span style={getPunitStyle(p.indpart)}>{highlightText(p.indpart)}</span><br />
+        <b>Qty-</b> {highlightText(p.part)}
       </div>
     );
   }
@@ -742,7 +744,7 @@ const HeroFashionGrid131: React.FC = () => {
   const orderSummaryHeaderTemplate = (p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>Jobno</b><br/>
+        <b>OR</b><br/>
         <b>Buy</b> <br/>
         <b>Mer</b> <br/>
         <b>Unit</b><br/>
@@ -754,10 +756,9 @@ const HeroFashionGrid131: React.FC = () => {
   
  const udf11 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
-        <b>Uom-</b> {highlightText(p.uom)}<br />
-        <b>abc-</b> {highlightText(p.abc)}<br />
-    </div>);
+      <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
+      <b>Fdt_wk:</b> {highlightText(p.Fdt_wk)}<br />
+      </div>);
   
   const ordHeaderTemplate = (p: OrderData) => {
     return (
@@ -791,7 +792,7 @@ const HeroFashionGrid131: React.FC = () => {
           <b>wk</b> <br/>
           <b>yr</b> <br/>
           <b>uom</b> <br/>
-          {/* <b>abc</b> <br/> */}
+          <b>abc</b> <br/>
           {/* <b>order_follow_up</b><br/>
           <b>Qty</b><br/> */}
       </div>
@@ -879,9 +880,9 @@ const HeroFashionGrid131: React.FC = () => {
   const deliveryInfoTemplate = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br />
-      <b>Dir:</b> {highlightText(p.director_sample_order)}<br />
-      <b>ST:</b> {highlightText(p.styleno)}<br />
-      <b>Uom:</b> {highlightText(p.uom)}<br />
+      <b>print_ty:</b> {highlightText(p.print_ty)}<br />
+      <b>print_des:</b> {highlightText(p.print_des)}<br />
+      <b>clrcomb:</b> {highlightText(p.clrcomb)}<br />
       <b>PType:</b> {highlightText(p.production_type_inside_outside)}
     </div>
   );
@@ -890,12 +891,12 @@ const HeroFashionGrid131: React.FC = () => {
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
       {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
-      <b>Ft:</b> {highlightText(p.Fdt_wk)}<br />
       <b>Month-</b> {highlightText(p.FMonth_yr)}<br />
       <b>Week-</b> {highlightText(p.Week_R)}<br />
       <b>Year-</b> {highlightText(p.wk)}<br />
       {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
-
+      <b>Uom-</b> {highlightText(p.uom)}<br />
+      <b>abc-</b> {highlightText(p.abc)}<br />
 
     </div>
   );
@@ -1948,14 +1949,14 @@ const HeroFashionGrid131: React.FC = () => {
         >
           <ColumnsDirective>
             <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective field="ordimg" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('ordimg')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="110" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="FabdyIN" headerText="FabdyIN"  width="150" maxWidth="150" type="string" template={udf11} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="Print" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="print_img" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('print_img')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Emb" headerText="Emb" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Others1" headerText="imgs1" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Others2" headerText="AOP-9 img" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others2')} allowEditing={false} customAttributes={{ class: 'img' }} />
@@ -2275,4 +2276,4 @@ const HeroFashionGrid131: React.FC = () => {
   );
 };
 
-export default HeroFashionGrid131;
+export default HeroFashionGrid1311;
