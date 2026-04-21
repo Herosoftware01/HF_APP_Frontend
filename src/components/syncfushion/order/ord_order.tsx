@@ -728,14 +728,58 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   const orderSummaryTemplate = (p: OrderData) => {
+    let rollno = (p as any).index
     return (
-      <div style={{ fontSize: '12px', lineHeight: '1.4', width: '90px' }}>
-        <b>J-</b> {highlightText(p.jobno_oms)}<br />
-        <b>Buy-</b> {highlightText(p.buyer1)}<br />
-        <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br />
-        <b>Unit-</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
-        <b>Qty-</b> {highlightText(p.quantity)}
-      </div>
+        <div style={{ 
+          fontSize: '12px', 
+          lineHeight: '1.4', 
+          width: '110px',
+          position: 'relative',
+          border: '1px solid #ccc',
+          padding: '4px'
+        }}>
+          
+          {/* Count badge */}
+          <span style={{
+            position: 'absolute',
+            top: '4px',
+            right: '4px',
+            background: '#f4a100',
+            color: '#000',
+            borderRadius: '50%',
+            width: '16px',
+            height: '16px',
+            fontSize: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold'
+          }}>
+            {++rollno}
+          </span>
+
+          <b>J:</b> <span style={{ color: 'red', fontWeight: 'bolder' }}>
+            {highlightText(p.jobno_oms)}
+          </span><br />
+
+          <b>Buy:</b> {highlightText(p.buyer1)}<br />
+
+          <b>Mer:</b> {
+            p.merch 
+              ? highlightText(p.merch.includes("Murthy-") 
+                ? p.merch.split("Murthy-h ")[1] 
+                : p.merch) 
+              : ""
+          }<br />
+
+          <b>Unit:</b> 
+          <span style={getPunitStyle(p.punit_sh)}>
+            {highlightText(p.punit_sh)}
+          </span><br />
+
+          <b>Qty:</b> {highlightText(p.quantity)}
+
+        </div>
     );
   }
 
@@ -754,9 +798,9 @@ const HeroFashionGrid131: React.FC = () => {
   
  const udf11 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
-        <b>Uom-</b> {highlightText(p.uom)}<br />
-        <b>abc-</b> {highlightText(p.abc)}<br />
+        <b>Fab dyIN:</b> {highlightText(p.FabdyIN)}<br />
+        <b>Uom:</b> {highlightText(p.uom)}<br />
+        <b>abc:</b> {highlightText(p.abc)}<br />
     </div>);
   
   const ordHeaderTemplate = (p: OrderData) => {
@@ -812,11 +856,11 @@ const HeroFashionGrid131: React.FC = () => {
 
   const udf = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b className='no-highlight'>1-Print-</b> {highlightText(p.printing_R)}<br />
-      <b className='no-highlight'>3-Emb-</b> {highlightText(p.Emb_R)}<br />
-      <b className='no-highlight'>8-Fab-</b> {highlightText(p.Fab_R)}<br />
-      <b className='no-highlight'>14-dye-</b> {highlightText(p.Dy_R)}<br />
-      <b className='no-highlight'>7-cust</b> {highlightText(p.u7)}<br />
+      <b className='no-highlight'>1-Print:</b> {highlightText(p.printing_R)}<br />
+      <b className='no-highlight'>3-Emb:</b> {highlightText(p.Emb_R)}<br />
+      <b className='no-highlight'>8-Fab:</b> {highlightText(p.Fab_R)}<br />
+      <b className='no-highlight'>14-dye:</b> {highlightText(p.Dy_R)}<br />
+      <b className='no-highlight'>7-cust:</b> {highlightText(p.u7)}<br />
       {/* <b>25-week:</b> {highlightText(p.Week_R)}<br /> */}
       {/* <b>Unit:</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
       <b>Qty:</b> {highlightText(p.quantity)} */}
@@ -825,11 +869,11 @@ const HeroFashionGrid131: React.FC = () => {
 
   const udf2 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b>31-ITS</b> {highlightText(p.ITS_R)}<br />
-      <b>36-CUT</b> {highlightText(p.u36)}<br />
-      <b>45-Ord</b> {highlightText(p.Order_R)}<br />
-      <b>46-Empty</b> {highlightText(p.u46)}<br />
-      <b>141-Sam</b> {highlightText(p.Sample_R)}<br />
+      <b>31-ITS:</b> {highlightText(p.ITS_R)}<br />
+      <b>36-CUT:</b> {highlightText(p.u36)}<br />
+      <b>45-Ord:</b> {highlightText(p.Order_R)}<br />
+      <b>46-Empty:</b> {highlightText(p.u46)}<br />
+      <b>141-Sam:</b> {highlightText(p.Sample_R)}<br />
       {/* <b>3-Emb:</b> {highlightText(p.number_03_emb)}<br />
       <b>8-Fab:</b> {highlightText(p.u8)}<br />
       <b>14-Fabdy:</b> {highlightText(p.u14)}<br /> */}
@@ -842,9 +886,9 @@ const HeroFashionGrid131: React.FC = () => {
 
   const qualy = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b>styleno-</b> {highlightText(p.styleno)}<br />
-      <b>styledesc-</b> {highlightText(p.styledesc)}<br />
-      <b>qcontr-</b> {highlightText(p.quality_controller)}<br />
+      <b>styleno:</b> {highlightText(p.styleno)}<br />
+      <b>styledesc:</b> {highlightText(p.styledesc)}<br />
+      <b>qcontr:</b> {highlightText(p.quality_controller)}<br />
 
       {/* <b>36-ITS:</b> {highlightText(p.u36)}<br /> */}
     </div>
@@ -890,10 +934,10 @@ const HeroFashionGrid131: React.FC = () => {
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
       {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
-      <b>Ft:</b> {highlightText(p.Fdt_wk)}<br />
-      <b>Month-</b> {highlightText(p.FMonth_yr)}<br />
-      <b>Week-</b> {highlightText(p.Week_R)}<br />
-      <b>Year-</b> {highlightText(p.wk)}<br />
+      <b>Ft:</b><span style={{color: 'red', fontWeight:'bolder'}}> {highlightText(p.Fdt_wk)}</span> <br />
+      <b>Month:</b> {highlightText(p.FMonth_yr)}<br />
+      <b>Week:</b> {highlightText(p.Week_R)}<br />
+      <b>Year:</b> {highlightText(p.wk)}<br />
       {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
 
 
@@ -1415,12 +1459,12 @@ const HeroFashionGrid131: React.FC = () => {
     }
   },[]);
 
-  const rollnoTemplate = (props: any) => {
-    let rollno = props.index
-    if (rollno) {
-      return (<span>{++rollno}</span>)
-    }
-  }
+  // const rollnoTemplate = (props: any) => {
+  //   let rollno = props.index
+  //   if (rollno) {
+  //     return (<span>{++rollno}</span>)
+  //   }
+  // }
 
   const footerSum = (props: any) => {
     return (<span className='font-bold'>Q: {props.Sum}</span>)
@@ -1947,10 +1991,10 @@ const HeroFashionGrid131: React.FC = () => {
           load={load}
         >
           <ColumnsDirective>
-            <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="110" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
+            {/* <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} /> */}
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
