@@ -37,6 +37,7 @@ import Formbuilder from '../order/formbuilder.tsx';
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
+import Optimize from '../order/ord_order_opt.tsx'
 
 
 function Home() {
@@ -80,6 +81,8 @@ function Home() {
         <Route path='/Embedd' element={<Embedd />} />
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
+        <Route path='/optimize' element={<Optimize />} />
+        
     </Routes>
   );
 }

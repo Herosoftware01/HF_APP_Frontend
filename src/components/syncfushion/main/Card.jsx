@@ -493,14 +493,14 @@ const Dashboard = () => {
               <FaDiceD20 className="text-cyan-500 text-2xl" />
             </div>
             <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
-            Embedd Edit Reports details 
+              Bold Bi Embedd Edit details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
-              Embedd Edit Bold Reports details 
+              Embedd Edit Bold Bi Reports details 
             </p>
           </div>
         
-             <div
+          <div
             onClick={() => navigate("Dashboard")}
             className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
           >
@@ -509,15 +509,14 @@ const Dashboard = () => {
               <FaDiceD20 className="text-cyan-500 text-2xl" />
             </div>
             <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
-            Embedd Published Reports details 
+              Bold Bi Embedd Published details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
-              Embedd Bold Reports details 
+              Embedd Bold Bi Published details 
             </p>
           </div>        
 
-
-              <div
+          <div
             onClick={() => navigate("HeroFashionGrid1311")}
             className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
           >
@@ -526,15 +525,29 @@ const Dashboard = () => {
               <FaDiceD20 className="text-cyan-500 text-2xl" />
             </div>
             <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
-            Print Sync Reports details 
+              Print Sync Reports details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
               Print Sync Reports details 
             </p>
+          </div>     
+
+
+          <div
+            onClick={() => navigate("optimize")}
+            className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            order data optimize with Ai 
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Ai optimized code 
+            </p>
           </div>      
-
-
-
 
         </div>
       </div>

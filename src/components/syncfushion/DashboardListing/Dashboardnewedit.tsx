@@ -3,7 +3,8 @@ import React from 'react';
 import { BoldBI } from '@boldbi/boldbi-embedded-sdk';
 
 //ASP.NET Core application would be run on https://localhost:5001; http://localhost:5000, which needs to be set as `apiHost`
-const apiHost = "http://localhost:8000";
+// const apiHost = "http://localhost:8000";
+const apiHost = "https://hfapi.herofashion.com"
 
 //Url of the TokenGeneration action in views.py of the backend application
 const tokenGenerationUrl = "/tokenGeneration";
