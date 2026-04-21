@@ -87,7 +87,7 @@ const HeroFashionGrid131: React.FC = () => {
     data: any;
     user: string; // <-- add this
   }
-
+  
   const [savedSettings, setSavedSettings] = useState<SavedSetting[]>([]);
 
   const [selectedSetting, setSelectedSetting] = useState<string>('');
@@ -102,6 +102,8 @@ const HeroFashionGrid131: React.FC = () => {
   const qryBldrObj = useRef<QueryBuilderComponent>(null);
   const dialogRef = useRef<DialogComponent>(null);
 
+
+  // searchable fields
   const searchableFields = useMemo(() => [
     'slno1', 'jobno_oms', 'company_name', 'buyer1', 'stylename', 'uom',
     'final_delivery_date', 'merch', 'punit_sh', 'styleno',
