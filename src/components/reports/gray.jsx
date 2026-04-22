@@ -22,7 +22,7 @@ const Gray = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://10.1.21.13:8001/coraroll/');
+      const res = await fetch('http://10.1.21.13:200/reports/coraroll/');
       const api = await res.json();
 
       const formatted = api.map(item => ({

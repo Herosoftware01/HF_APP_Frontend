@@ -39,7 +39,7 @@ import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent, UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-import './Material 3/Showcase Material3/style.css';
+// import './Material 3/Showcase Material3/style.css';
 // import "../../../App.css";
 // import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { DatePickerComponent, DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
@@ -61,6 +61,10 @@ interface OrderData {
   ITS_R: string; Order_R: string; Dy_R: string; Sample_R: string; Week_R: string; FMonth_yr: string; Emb_R: string; Week_R1: string; year: string; wk: string; 
   prnmeaimg?: string; mpic?: string; FabdyIN?: string;
   Others2: string; Others3: string; Others4: string; Others5: string; Others6: string; Others7: string,
+  // Added for optimized sorting/filtering
+  parsedFinalDelvDate?: Date | null;
+  directorPriority?: number;
+  directorLower?: string;
 }
 
 const HeroFashionGrid131: React.FC = () => {
@@ -141,6 +145,15 @@ const HeroFashionGrid131: React.FC = () => {
     return new Date(year, month - 1, day);
   };
 
+  // Small debounce helper used for search input
+  const debounce = (fn: (...args: any[]) => void, wait = 200) => {
+    let t: any = null;
+    return (...args: any[]) => {
+      if (t) clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  };
+
   const getDateStyle = (dateStr: string) => {
     const targetDate = parseDate(dateStr);
     if (!targetDate) return { color: 'inherit' };
@@ -176,76 +189,52 @@ const HeroFashionGrid131: React.FC = () => {
 
         const printMap: Record<string, any> = {};
 
+        // Build merged data and precompute parsed dates & director priority once
         const mergedData = orderData.map((order) => {
           const matchingPrintData = printMap[order.jobno_oms] || {};
+          const dateStr = order.finaldelvdate || order.final_delivery_date || '';
+          const parsedFinalDelvDate = parseDate(dateStr);
+          const directorLower = (order.director_sample_order || '').toLowerCase().trim();
+          const directorPriority = directorLower === 'sam d' ? 0 : directorLower === 'ord d' ? 1 : 2;
+
           return {
             ...order,
             clr: matchingPrintData.clr || null,
             print_img: matchingPrintData.print_img || '',
             prnmeaimg: matchingPrintData.prnmeaimg || '',
             mpic: matchingPrintData.mpic || '',
-            // img_fpath: matchingPrintData.img_fpath || ''
+            parsedFinalDelvDate,
+            directorPriority,
+            directorLower,
           };
         });
 
+        // Filter out obviously invalid years and sort with a single comparator (faster than multiple sorts)
         const processedData = mergedData
           .filter((item) => {
-            const dateStr = item.finaldelvdate || item.final_delivery_date;
-            if (!dateStr) return true;
-            const dateParts = dateStr.split(/[-/]/); let year = 0;
-            if (dateParts.length === 3) {
-              const p0 = parseInt(dateParts[0]); const p2 = parseInt(dateParts[2]);
-              year = p0 > 1000 ? p0 : (p2 < 100 ? 2000 + p2 : p2);
-            }
-            return year <= 2127;
+            if (!item.parsedFinalDelvDate) return true;
+            const y = item.parsedFinalDelvDate.getFullYear();
+            return y <= 2127;
           })
           .sort((a, b) => {
-            const typeA = (a.director_sample_order || '').toLowerCase();
-            const typeB = (b.director_sample_order || '').toLowerCase();
-            if (typeA !== typeB) {
-              if (typeA === 'Sam D') return -1; if (typeB === 'Sam D') return 1;
-              return typeA.localeCompare(typeB);
-            }
-            const dateA = new Date(a.finaldelvdate || a.final_delivery_date || 0).getTime();
-            const dateB = new Date(b.finaldelvdate || b.final_delivery_date || 0).getTime();
-            return dateA - dateB;
+            // compare director priority first
+            const pa = a.directorPriority ?? 2;
+            const pb = b.directorPriority ?? 2;
+            if (pa !== pb) return pa - pb;
+
+            // then compare parsed final delivery date (nulls go last)
+            const da = a.parsedFinalDelvDate ? a.parsedFinalDelvDate.getTime() : Number.POSITIVE_INFINITY;
+            const db = b.parsedFinalDelvDate ? b.parsedFinalDelvDate.getTime() : Number.POSITIVE_INFINITY;
+            if (da !== db) return da - db;
+
+            // final fallback: locale compare of jobno or directorLower
+            const ja = String(a.jobno_oms || a.directorLower || '');
+            const jb = String(b.jobno_oms || b.directorLower || '');
+            return ja.localeCompare(jb);
           })
+          .map((item, index) => ({ ...item, slno1: index + 1 }));
 
-          .sort((a, b) => {
-            // Priority: Sample=0, Order=1, Others=2
-            const getPriority = (val: string) => {
-              const type = (val || '').toLowerCase().trim();
-              if (type === 'Sam D') return 0;
-              if (type === 'Ord D') return 1;
-              return 2;
-            };
-
-            const priorityA = getPriority(a.director_sample_order);
-            const priorityB = getPriority(b.director_sample_order);
-
-            // Sort by priority: Sample first, Order second, Others last
-            if (priorityA !== priorityB) {
-              return priorityA - priorityB;
-            }
-
-            // Within same priority, sort by finaldelvdate ascending
-            const dateA = parseDate(a.finaldelvdate);
-            const dateB = parseDate(b.finaldelvdate);
-
-            // Handle null/invalid dates — push them to the end
-            if (!dateA && !dateB) return 0;
-            if (!dateA) return 1;
-            if (!dateB) return -1;
-
-            return dateA.getTime() - dateB.getTime();
-          })
-
-          // --- FRONTEND SLNO GENERATION ---
-          .map((item, index) => ({
-            ...item,
-            slno1: index + 1
-          }));
-        // Convert UTC date strings to Date objects for proper grid date handling
+        // Convert to grid-friendly JSON once
         const gridData = (DataUtil as any).parse.parseJson(JSON.stringify(processedData));
         setDataSource(gridData);
         setTotalCount(processedData.length);
@@ -571,14 +560,18 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   // --- Search & Highlight Logic ---
-  const highlightText = (text: any) => {
-    // Handle null/undefined
+  // Memoize the search regex to avoid recreating it per cell render
+  const searchRegex = useMemo(() => {
+    if (!searchKey) return null;
+    const escapedKey = searchKey.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+    return new RegExp(`(${escapedKey})`, 'gi');
+  }, [searchKey]);
+
+  const highlightText = useCallback((text: any) => {
     if (text === undefined || text === null) return text;
 
-    // Convert Date objects to readable string format
     let stringText: string;
     if (text instanceof Date) {
-      // Format date as dd/MM/yyyy
       const day = String(text.getDate()).padStart(2, '0');
       const month = String(text.getMonth() + 1).padStart(2, '0');
       const year = text.getFullYear();
@@ -587,27 +580,63 @@ const HeroFashionGrid131: React.FC = () => {
       stringText = String(text);
     }
 
-    // If no search key, return the formatted string
-    if (!searchKey) return stringText;
+    if (!searchRegex) return stringText;
 
-    // Apply highlighting
-    const escapedKey = searchKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const parts = stringText.split(new RegExp(`(${escapedKey})`, 'gi'));
+    const parts = stringText.split(searchRegex as RegExp);
+    const keyLower = searchKey.toLowerCase();
     return (
       <span>
-        {parts.map((part, i) =>
-          part.toLowerCase() === searchKey.toLowerCase() ?
-            <span key={i} className="custom-highlight">{part}</span> : part
+        {parts.map((part: string, i: number) =>
+          part.toLowerCase() === keyLower ? <span key={i} className="custom-highlight">{part}</span> : part
         )}
       </span>
     );
-  };
+  }, [searchRegex, searchKey]);
 
   const created = useCallback(() => {
-    document.getElementById(gridRef.current?.element.id + "_searchbar")?.addEventListener('keyup', (event: any) => {
-      gridRef.current?.search(event.target?.value);
-    });
+    const el = document.getElementById((gridRef.current?.element?.id || '') + "_searchbar");
+    if (!el) return;
+    const handler = debounce((value: string) => {
+      gridRef.current?.search(value);
+    }, 200);
+    const listener = (event: any) => handler(event?.target?.value || '');
+    el.addEventListener('keyup', listener);
+    // cleanup if needed when component unmounts
+    return () => el.removeEventListener('keyup', listener);
   }, []);
+
+  // Lazy-load images inside the grid using IntersectionObserver
+  useEffect(() => {
+    const rootElem = gridRef.current?.element as HTMLElement | null;
+    const selectorRoot = rootElem || document;
+    const imgs = Array.from(selectorRoot.querySelectorAll('img.lazy-img[data-src]')) as HTMLImageElement[];
+    if (!imgs.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      imgs.forEach(img => {
+        const ds = img.getAttribute('data-src');
+        if (ds) { img.src = ds; img.removeAttribute('data-src'); }
+      });
+      return;
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          const ds = img.getAttribute('data-src');
+          if (ds) {
+            img.src = ds;
+            img.removeAttribute('data-src');
+          }
+          io.unobserve(img);
+        }
+      });
+    }, { root: rootElem, rootMargin: '300px' });
+
+    imgs.forEach(img => io.observe(img));
+    return () => io.disconnect();
+  }, [dataSource]);
 
   const genericHighlighter = (field: keyof OrderData) => (props: OrderData) => (
     <>{highlightText(props[field])}</>
@@ -649,8 +678,11 @@ const HeroFashionGrid131: React.FC = () => {
     
     return (
       <img 
-        src={p[field]} 
+        data-src={p[field]}
+        src={'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='}
         alt="img" 
+        className="lazy-img"
+        loading="lazy"
         onClick={Browser.isDevice ? imageDoubleTapHandler : undefined}
         style={{ 
           width: '70px', 
@@ -727,7 +759,7 @@ const HeroFashionGrid131: React.FC = () => {
     }
   }, []);
 
-  const orderSummaryTemplate = (p: OrderData) => {
+  const orderSummaryTemplate = useCallback((p: OrderData) => {
     let rollno = (p as any).index
     return (
         <div style={{ 
@@ -736,7 +768,7 @@ const HeroFashionGrid131: React.FC = () => {
           width: '110px',
           position: 'relative',
           border: '1px solid #ccc',
-          // padding: '4px'
+          padding: '4px'
         }}>
           
           {/* Count badge */}
@@ -781,9 +813,9 @@ const HeroFashionGrid131: React.FC = () => {
 
         </div>
     );
-  }
+  }, [highlightText, getPunitStyle]);
 
-  const orderSummaryHeaderTemplate = (p: OrderData) => {
+  const orderSummaryHeaderTemplate = useCallback((p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
         <b>Jobno</b><br/>
@@ -793,17 +825,30 @@ const HeroFashionGrid131: React.FC = () => {
         <b>Qty</b><br/>
       </div>
     );
-  }
+  }, []);
 
   
- const udf11 = (p: OrderData) => (
-    <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>Fab dyIN:</b> {highlightText(p.FabdyIN)}<br />
-        <b>Uom:</b> {highlightText(p.uom)}<br />
-        <b>abc:</b> {highlightText(p.abc)}<br />
-    </div>);
+ const udf11 = useCallback((p: OrderData) => (
+  <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
+    <b>Fab dyIN:</b> {highlightText(p.FabdyIN)}<br />
+    <b>Uom:</b> {highlightText(p.uom)}<br />
+    <b>abc:</b> {highlightText(p.abc)}<br />
+  </div>
+  ), [highlightText]);
   
-  const ordHeaderTemplate = (p: OrderData) => {
+  // const ordHeaderTemplate = (p: OrderData) => {
+  //   return (
+  //     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
+  //       <b>Fdt</b><br/>
+  //       <b>Dir</b> <br/>
+  //       <b>ST</b> <br/>
+  //       <b>UOM</b><br/>
+  //       <b>Type</b><br/>
+        
+  //     </div>
+  //   );
+  // }
+  const ordHeaderTemplate = useCallback((p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
         <b>Fdt</b><br/>
@@ -811,12 +856,11 @@ const HeroFashionGrid131: React.FC = () => {
         <b>ST</b> <br/>
         <b>UOM</b><br/>
         <b>Type</b><br/>
-        
       </div>
     );
-  }
+  }, []);
 
-  const udfheaderTemplate = (p: OrderData) => {
+  const udfheaderTemplate = useCallback((p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
         <b>1-Print</b><br/>
@@ -826,7 +870,7 @@ const HeroFashionGrid131: React.FC = () => {
         <b>7-cust</b><br/>
       </div>
     );
-  }
+  }, []);
   
   const udf4HeaderTemplate = (p: OrderData) => {
     return (
@@ -842,7 +886,7 @@ const HeroFashionGrid131: React.FC = () => {
     );
   }
 
-  const udf2HeaderTemplate = (p: OrderData) => {
+  const udf2HeaderTemplate = useCallback((p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
         <b>31-ITS</b><br/>
@@ -852,22 +896,19 @@ const HeroFashionGrid131: React.FC = () => {
         <b>141-Sam</b><br/>
       </div>
     );
-  }
+  }, []);
 
-  const udf = (p: OrderData) => (
+  const udf = useCallback((p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       <b className='no-highlight'>1-Print:</b> {highlightText(p.printing_R)}<br />
       <b className='no-highlight'>3-Emb:</b> {highlightText(p.Emb_R)}<br />
       <b className='no-highlight'>8-Fab:</b> {highlightText(p.Fab_R)}<br />
       <b className='no-highlight'>14-dye:</b> {highlightText(p.Dy_R)}<br />
       <b className='no-highlight'>7-cust:</b> {highlightText(p.u7)}<br />
-      {/* <b>25-week:</b> {highlightText(p.Week_R)}<br /> */}
-      {/* <b>Unit:</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
-      <b>Qty:</b> {highlightText(p.quantity)} */}
     </div>
-  );
+  ), [highlightText]);
 
-  const udf2 = (p: OrderData) => (
+  const udf2 = useCallback((p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       <b>31-ITS:</b> {highlightText(p.ITS_R)}<br />
       <b>36-CUT:</b> {highlightText(p.u36)}<br />
@@ -882,7 +923,7 @@ const HeroFashionGrid131: React.FC = () => {
       {/* <b>Unit:</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
       <b>Qty:</b> {highlightText(p.quantity)} */}
     </div>
-  );
+  ), [highlightText]);
 
   const qualy = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
@@ -930,19 +971,14 @@ const HeroFashionGrid131: React.FC = () => {
     </div>
   );
 
-  const udf4 = (p: OrderData) => (
+  const udf4 = useCallback((p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
-      {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
       <b>Ft:</b><span style={{color: 'red', fontWeight:'bolder'}}> {highlightText(p.Fdt_wk)}</span> <br />
       <b>Month:</b> {highlightText(p.FMonth_yr)}<br />
       <b>Week:</b> {highlightText(p.Week_R)}<br />
       <b>Year:</b> {highlightText(p.wk)}<br />
-      {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
-
-
     </div>
-  );
+  ), [highlightText]);
 
   const searchTemplate = useMemo(() => {
     return () => {
@@ -1506,7 +1542,7 @@ const HeroFashionGrid131: React.FC = () => {
     }
   };
 
-  const groupByPrint = (printing: OrderData[]) => {
+  const groupByPrint = useCallback((printing: OrderData[]) => {
     const map = new Map<string, any>();
 
     printing.forEach((item) => {
@@ -1543,9 +1579,9 @@ const HeroFashionGrid131: React.FC = () => {
     });
 
     return Array.from(map.values());
-  };
+  }, []);
 
-  const detailTemplate = (props: OrderData) => {
+  const detailTemplate = useCallback((props: OrderData) => {
     const ord = Array.isArray(props.jobno_oms) ? props.jobno_oms : [];
     const printGroups = groupByPrint(ord);
 
@@ -1592,8 +1628,11 @@ const HeroFashionGrid131: React.FC = () => {
                 <div style={{ display: "flex", gap: "20px", width: `${imageBlockWidth}px`, flexShrink: 0 }}>
                   {grp.image ? (
                     <img
-                      src={grp.image}
+                      data-src={grp.image}
+                      src={'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='}
                       alt="print"
+                      className="lazy-img"
+                      loading="lazy"
                       style={{ width: "160px", border: "1px solid #ccc", padding: "6px", display: "block", objectFit: "contain", background: "#fff" }}
                       onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                         (e.currentTarget as HTMLImageElement).style.display = "none";
@@ -1676,7 +1715,7 @@ const HeroFashionGrid131: React.FC = () => {
         })}
       </div>
     );
-  };
+  }, [groupByPrint, showVal]);
 
   <TooltipComponent
     target=".image-tooltip-target"
@@ -1992,16 +2031,16 @@ const HeroFashionGrid131: React.FC = () => {
         >
           <ColumnsDirective>
             <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="110" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="mainimagepath" headerText="ORD IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             {/* <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} /> */}
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="FabdyIN" headerText="FabdyIN"  width="150" maxWidth="150" type="string" template={udf11} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="Print" headerText="Print PLT" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Emb" headerText="Embroidery" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Others1" headerText="Others" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Print" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Emb" headerText="Emb" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Others1" headerText="imgs1" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Others2" headerText="AOP-9 img" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others2')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="quantity" headerText="QTY" width="110" textAlign="Center" template={genericHighlighter('quantity')} />
             <ColumnDirective field="director_sample_order" headerText="dir" width="75" maxWidth="100" filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />

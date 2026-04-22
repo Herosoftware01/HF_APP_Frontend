@@ -36,8 +36,8 @@ function Login() {
       <div className="relative z-10 w-full max-w-md bg-white border border-gray-100 p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
         {/* Header */}
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome back</h2>
-          <p className="text-gray-500 mt-2">Enter your credentials to access your account</p>
+          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">HERO FASHION</h2>
+          
         </div>
 
         {/* Error Message */}

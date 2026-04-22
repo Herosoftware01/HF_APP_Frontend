@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-deploy:
@@ -24,8 +25,18 @@ jobs:
     - name: Copy web.config
       run: copy web.config dist\web.config
 
-    - name: Deploy to IIS folder
+    # - name: Deploy to IIS folder
+    #   run: xcopy dist "D:\PRODUCTION_SOFTWEARE\frontend\dist" /E /H /C /I /Y
+
+    #  Deploy to PRODUCTION (main branch)
+    - name: Deploy to Production IIS
+      if: github.ref == 'refs/heads/main'
       run: xcopy dist "D:\PRODUCTION_SOFTWEARE\frontend\dist" /E /H /C /I /Y
+
+    #  Deploy to DEVELOPMENT (dev branch)
+    - name: Deploy to Dev IIS
+      if: github.ref == 'refs/heads/dev'
+      run: xcopy dist "D:\DEV_SOFTWEARE\frontend\dist" /E /H /C /I /Y
 
     - name: Restart IIS
       run: iisreset

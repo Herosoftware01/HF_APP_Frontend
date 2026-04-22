@@ -6,7 +6,8 @@ import Axios from 'axios';
 
 //ASP.NET Core application would be run on http://localhost:61377/, which needs to be set as `apiHost`
 // const apiHost = "http://localhost:8000"
-const apiHost = "http://127.0.0.1:8000"
+// const apiHost = "http://127.0.0.1:8000"
+const apiHost = "https://hfapi.herofashion.com"
 
 //Url of the TokenGeneration action in views.py of the backend application
 const tokenGenerationUrl = "/tokenGeneration";

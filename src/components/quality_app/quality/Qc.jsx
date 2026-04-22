@@ -25,11 +25,11 @@ export default function QC() {
     setActiveUnit(activeUnit === unitId ? null : unitId);
   };
 
-  // ✅ Role-based filtering
+  //  Role-based filtering
   const filteredUnits = units.filter((unit) => {
     if (!role) return false;
 
-    if (role === "admin") return true;
+    if (role === "admin" || role === "production" || role === "Nantha") return true;
 
     const match = role.match(/\d+/);
     return match && unit.unit.toString() === match[0];

@@ -492,11 +492,11 @@ const Dashboard = () => {
             <div className="w-14 h-14 flex items-center justify-center bg-purple-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
               <FaHeartbeat className="text-purple-500 text-2xl" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-purple-600 transition">
-            Embedd Edit Reports details 
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+              Bold Bi Embedd Edit details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
-              Embedd Edit Bold Reports details 
+              Embedd Edit Bold Bi Reports details 
             </p>
           </div>
         
@@ -508,11 +508,11 @@ const Dashboard = () => {
             <div className="w-14 h-14 flex items-center justify-center bg-fuchsia-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
               <FaMailchimp className="text-fuchsia-500 text-2xl" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-fuchsia-600 transition">
-            Embedd Published Reports details 
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+              Bold Bi Embedd Published details 
             </h2>
             <p className="text-gray-500 text-sm mt-1">
-              Embedd Bold Reports details 
+              Embedd Bold Bi Published details 
             </p>
           </div>  
 
@@ -532,7 +532,55 @@ const Dashboard = () => {
             </p>
           </div>        
 
-          
+          <div
+            onClick={() => navigate("HeroFashionGrid1311")}
+            className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+              Print Sync Reports details 
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Print Sync Reports details 
+            </p>
+          </div>     
+
+
+          <div
+            onClick={() => navigate("optimize")}
+            className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            order data optimize with Ai 
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Ai optimized code 
+            </p>
+          </div>    
+
+          <div
+            onClick={() => navigate("Formbuilder")}
+            className="group cursor-pointer bg-white rounded-2xl shadow-lg p-6 relative overflow-hidden transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
+            <div className="w-14 h-14 flex items-center justify-center bg-cyan-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
+              <FaDiceD20 className="text-cyan-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+            Form builder
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Ai optimized code 
+            </p>
+          </div>      
+
         </div>
       </div>
     </div>

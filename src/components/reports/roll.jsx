@@ -33,7 +33,7 @@ const Roll = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://10.1.21.13:8001/get_master_final_mistake_data/');
+        const response = await fetch('http://10.1.21.13:8200/reports/get_master_final_mistake_data/');
         const result = await response.json();
         setData(result);
         applyTimeframe(result, 'today');

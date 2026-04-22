@@ -3,7 +3,7 @@ import Select from "react-select";
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { useNavigate } from "react-router-dom"; // Add this
 
-const BASE = "http://10.1.21.13:8200/reports";
+const BASE = "https://hfapi.herofashion.com/reports";
 
 const Hold = () => {
   const [empList, setEmpList] = useState([]);
@@ -18,6 +18,8 @@ const Hold = () => {
   const [date] = useState(new Date().toISOString().split("T")[0]);
   const navigate = useNavigate();
   const [holdAadharSet, setHoldAadharSet] = useState(new Set());
+
+  
 
   // Modern Toast Configuration
   const Toast = Swal.mixin({
@@ -198,7 +200,7 @@ const Hold = () => {
              >
                Reset
              </button>
-             <button onClick={() => navigate('/')} className="bg-white text-slate-600 cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all active:scale-95 border border-slate-200">
+             <button onClick={() => navigate(-1)} className="bg-white text-slate-600 cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all active:scale-95 border border-slate-200">
                   ← Back
              </button>
           </div>

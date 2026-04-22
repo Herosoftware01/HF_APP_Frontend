@@ -27,7 +27,7 @@ const PaidReport = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://10.1.21.13:8200/reports/holdwagepaid/");
+      const res = await axios.get("https://hfapi.herofashion.com/reports/holdwagepaid/");
       const fetchedData = res.data;
       setData(fetchedData);
       setFilteredData(fetchedData);
@@ -78,7 +78,7 @@ const PaidReport = () => {
               <RotateCcw size={14} />
               <span className="hidden sm:inline">Reset</span>
             </button>
-            <button onClick={() => navigate('/')} className="bg-white text-slate-600 cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all active:scale-95 border border-slate-200">
+            <button onClick={() => navigate(-1)} className="bg-white text-slate-600 cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all active:scale-95 border border-slate-200">
                   ← Back
              </button>
           </div>
@@ -191,15 +191,16 @@ const PaidReport = () => {
                         <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">Date</th>
                         <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">Code</th>
                         <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">Name</th>
-                        <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200 text-right">Period</th>
+                        <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">Paid Amount</th>
+                        <th className="p-4 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200 ">Period</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {filteredData.map((item, index) => (
                         <tr key={index} className="group hover:bg-indigo-50/30 transition-colors">
-                          <td className="p-4 text-sm text-slate-600 font-mono">#{item.entry_no}</td>
+                          <td className="p-4 text-sm text-slate-600 font-mono">{item.entry_no}</td>
                           <td className="p-4 text-sm text-slate-600">
-                            <span className="bg-slate-100 px-2 py-1 rounded-md text-xs">{item.dt}</span>
+                            <span className="bg-slate-100 px-2 py-1 rounded-md text-xs"> {new Date(item.dt).toLocaleDateString("en-IN")}</span>
                           </td>
                           <td className="p-4">
                             <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded border border-indigo-100">
@@ -207,7 +208,8 @@ const PaidReport = () => {
                             </span>
                           </td>
                           <td className="p-4 text-sm font-medium text-slate-800">{item.emp_name}</td>
-                          <td className="p-4 text-sm text-slate-600 text-right font-medium">{item.t_period}</td>
+                          <td className="p-4 text-sm font-medium text-slate-800">{item.paid_amt}</td>
+                          <td className="p-4 text-sm text-slate-600  font-medium">{item.t_period}</td>
                         </tr>
                       ))}
                     </tbody>

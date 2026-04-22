@@ -16,23 +16,6 @@
 @import "../node_modules/@syncfusion/ej2-querybuilder/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-react-dropdowns/styles/material.css";
 
-/* @import '../node_modules/@syncfusion/ej2-base/styles/tailwind-lite.css';  
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind-lite.css';  
-@import '../node_modules/@syncfusion/ej2-calendars/styles/tailwind-lite.css';  
-@import '../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind-lite.css';  
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind-lite.css';  
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind-lite.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind-lite.css';
-@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind-lite.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind-lite.css';
-@import "../node_modules/@syncfusion/ej2-react-grids/styles/tailwind-lite.css";
-@import "../node_modules/@syncfusion/ej2-react-blockeditor/styles/tailwind-lite.css";
-@import "../node_modules/@syncfusion/ej2-gantt/styles/tailwind-lite.css";
-@import '../node_modules/@syncfusion/ej2-kanban/styles/tailwind-lite.css';
-@import "../node_modules/@syncfusion/ej2-pivotview/styles/tailwind-lite.css";
-@import "../node_modules/@syncfusion/ej2-querybuilder/styles/tailwind-lite.css";
-@import "../node_modules/@syncfusion/ej2-react-dropdowns/styles/tailwind-lite.css"; */
-
 /* Tailwind must come after all other @import rules */
 @import "tailwindcss";
  

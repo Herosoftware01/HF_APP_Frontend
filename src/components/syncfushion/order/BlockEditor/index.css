@@ -105,6 +105,7 @@
     .custom-rating.e-rating-container .e-rating-item-container.e-rating-selected .e-rating-icon {
         background: linear-gradient(to right, #ffa600 var(--rating-value), #ffa600 var(--rating-value));
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 1px #ffa600;
     }

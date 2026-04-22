@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import path from 'path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa' // Corrected import
@@ -87,6 +88,11 @@ export default defineConfig({
   ],
   optimizeDeps: {
     include: ['react-simple-maps', 'd3-geo', 'topojson-client','@syncfusion/ej2-react-gantt']
+  },
+  resolve: {
+    alias: {
+      'form-renderer.base.css': path.resolve(__dirname, 'node_modules/@syncfusion/ej2-react-form-renderer/styles/form-renderer.base.css')
+    }
   },
   server: {
     host: '0.0.0.0',
