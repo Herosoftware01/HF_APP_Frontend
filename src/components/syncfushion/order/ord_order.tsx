@@ -39,7 +39,7 @@ import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent, UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-// import './Material 3/Showcase Material3/style.css';
+import './Material 3/Showcase Material3/style.css';
 // import "../../../App.css";
 // import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { DatePickerComponent, DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
@@ -736,7 +736,7 @@ const HeroFashionGrid131: React.FC = () => {
           width: '110px',
           position: 'relative',
           border: '1px solid #ccc',
-          padding: '4px'
+          // padding: '4px'
         }}>
           
           {/* Count badge */}

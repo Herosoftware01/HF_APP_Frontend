@@ -12,7 +12,7 @@ import Sample from '../order/Sample.tsx';
 import StoreGrid from '../order/StoreGrid.tsx';
 import MultiQuality from '../order/MultiQuality.jsx';
 import PRN from '../order/ord_prn.tsx';
-import TemplateGallery from '../order/eblockeditor.tsx';
+import TemplateGallery from '../order/BlockEditor/eblockeditor.tsx';
 import Excel from '../order/excel.tsx';
 import FabricForm from '../fabric/Fabric.jsx';
 import Signin1 from '../layout/Signup.tsx';
@@ -33,9 +33,10 @@ import Websocket from "../order/websocket.jsx"
 import Weborder from "../order/web_order.tsx"
 import "../order/Global.tsx"
 import Report from '../order/reportviewer.tsx'; 
-import Formbuilder from '../order/formbuilder.tsx'; 
+import Formbuilder from '../order/FormBuilder/formbuilder.tsx'; 
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
+import Pdf from "../order/Pdf/Pdf.tsx"
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
 
@@ -80,6 +81,7 @@ function Home() {
         <Route path='/Formbuilder' element={<Formbuilder />} />
         <Route path='/Embedd' element={<Embedd />} />
         <Route path='/Dashboard' element={<Dashboard />} />
+        <Route path='/pdf' element={<Pdf />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
         <Route path='/optimize' element={<Optimize />} />
         
