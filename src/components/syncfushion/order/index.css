@@ -341,16 +341,3 @@ td.e-rowcell .statustxt.e-nonavailablecolor {
             content: '\e702';
             font-family: 'e-grid-rowheight';
         }
-
-        @font-face {
-            font-family: 'ej2-headertemplate';
-            src:
-            url('Fonts/ej2-headertemplate.ttf') format('truetype'),
-            url('Fonts/ej2-headertemplate.woff') format('woff'),
-            url('Fonts/ej2-headertemplate.eot') format('eot'),
-            url('Fonts/ej2-headertemplate.svg?#ej2-headertemplate') format('svg');
-            font-weight: normal;
-            font-style: normal;
-            }
-            .sf-icon-BT_Calendar:before { content: "\e960"; }
-            .sf-icon-employee:before { content: "\e702"; }
