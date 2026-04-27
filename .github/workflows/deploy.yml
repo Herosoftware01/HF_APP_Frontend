@@ -31,7 +31,9 @@ jobs:
 
     # ✅ Faster + safer build
     - name: Build React app
-      run: CI=false npm run build
+      run: npm run build
+      env:
+        CI: false
 
     - name: Copy web.config
       run: copy web.config dist\web.config

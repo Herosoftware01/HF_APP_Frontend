@@ -8,8 +8,7 @@ function Cut_main() {
    
     <Routes>
       <Route path="/" element={<M_scan />} />
-      <Route path="mes_details" element={<Mes_details />} />
-      
+      <Route path="mes_details" element={<Mes_details />} />  
     </Routes>
   
   );

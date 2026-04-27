@@ -7,7 +7,7 @@ import DefectTabs from "../quality/Defects"
 import Reving from "../quality/Roving"
 import Roving_operator from "../quality/Roving_operator";
 import Rowing_defects from "../quality/Rowing_defects";
-import order_measurements from "../../cutting_sample/pages/order_m_scan";
+import order_measurements from "../../cutting_sample/main/cut_main";
 
 function Quality_main() {
   return (
