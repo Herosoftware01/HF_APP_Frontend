@@ -18,7 +18,8 @@ export default function LineDetail() {
             subtitle: 'Quality Assurance Protocol',
             icon: "📋",
             qc_type: "rowing_qc"
-        }
+        },
+        
     ];
 
     const handleSelect = async (inspection) => {
@@ -66,7 +67,7 @@ export default function LineDetail() {
     }
 
     // =========================
-    // 👉 ROVING QC LOGIC
+    //  ROVING QC LOGIC
     // =========================
     if (id === "rowing-qc") {
         try {
