@@ -9,11 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    // visualizer({
-    //   open: true,
-    //   gzipSize: true,
-    //   brotliSize: true
-    // }),
+    
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
