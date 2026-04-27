@@ -27,6 +27,7 @@ import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
 const BoldBi = lazy(()=>import("./components/syncfushion/DashboardListing/DashboardListing")) 
 const BoldReport = lazy(()=>import("./components/syncfushion/order/reportviewer")) 
+import Cut_sample from "./components/cutting_sample/main/cut_main"
 
 function App() {
 
@@ -246,6 +247,17 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <BoldReport />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cut_sample/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Cut_sample />
               </ProtectedLayout>
             </ProtectedRoute>
           }
