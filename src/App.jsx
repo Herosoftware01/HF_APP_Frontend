@@ -22,6 +22,7 @@ import Sticker from "./components/Cutting/sticker production/App"
 import Bitcheck from "./components/Cutting/bit checking/App"
 import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
+import Cut_sample from "./components/cutting_sample/main/cut_main"
 
 function App() {
 
@@ -221,6 +222,17 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Home_hw />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cut_sample/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Cut_sample />
               </ProtectedLayout>
             </ProtectedRoute>
           }
