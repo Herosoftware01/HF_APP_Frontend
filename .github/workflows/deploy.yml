@@ -16,37 +16,23 @@ jobs:
       with:
         persist-credentials: false
 
-    # ✅ Cache npm dependencies
-    - name: Cache npm
-      uses: actions/cache@v4
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    # ✅ Faster install
     - name: Install dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
 
-    # ✅ Faster + safer build
     - name: Build React app
       run: npm run build
-      env:
-        CI: false
 
     - name: Copy web.config
       run: copy web.config dist\web.config
 
-    # ✅ Deploy only changed files (faster than xcopy)
+
     - name: Deploy to Production IIS
       if: github.ref == 'refs/heads/main'
-      run: robocopy dist D:\PRODUCTION_SOFTWEARE\frontend\dist /MIR
+      run: xcopy dist "D:\PRODUCTION_SOFTWEARE\frontend\dist" /E /H /C /I /Y
 
     - name: Deploy to Dev IIS
       if: github.ref == 'refs/heads/dev'
-      run: robocopy dist D:\DEV_SOFTWEARE\frontend\dist /MIR
+      run: xcopy dist "D:\DEV_SOFTWEARE\frontend\dist" /E /H /C /I /Y
 
-    # ⚠️ Restart only if needed
     - name: Restart IIS
       run: iisreset
