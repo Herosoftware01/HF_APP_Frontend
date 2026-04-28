@@ -40,16 +40,16 @@ function App() {
                         <table className="card-template-wrap">
                             <tbody>
                                 <tr>
-                                    
+                                    <td className="e-label">EntryNo</td>
                                     <td><b>{props.entryno}</b></td>
                                 </tr>
                                 <tr>
-                                    
+                                    <td className="e-label">Assignor</td>
                                     <td>{props.asgby_name}</td>
                                 </tr>
                                 <tr>
-                                    
-                                    <td>{props.asgdt}</td>
+                                    <td className="e-label">Assignee</td>
+                                    <td>{props.field_empname}</td>
                                 </tr>
                                 <tr>
                                     
@@ -141,25 +141,32 @@ function App() {
     }
   };
   const KanbanDialogFormTemplate = (props: any) => {
-   
-        let assigneeData: string[] = [
-            "PREMAVATHI.N",
-            "SARANYA.S",
-            "KANDASAMY.M",
-            "VIJAYAKUMAR.K",
-            "THANGADURAI.P",
-            "SENTHIL KUMAR.R",
-            "SURESHKUMAR.R.M1",
-        ];
+      const [assigneeData, setAssigneeData] = useState([]);
+      const [assignorData, setAssignorData] = useState([]);
+       useEffect(() => {
+       const fetchData = async () => {
+        const response = await fetch('https://app.herofashion.com/diwasg/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        
+        // Extract field_empname from all items and filter out null/empty values
+        const assigneeNames = data
+          .map((item: any) => item.field_empname)
+          .filter((name: any) => name != null && name !== '');
+        
+        setAssigneeData(assigneeNames);
+        const assignorNames = data
+          .map((item: any) => item.asgby_name)
+          .filter((name: any) => name != null && name !== '');
+        setAssignorData(assignorNames); 
+     
+    };
+
+    fetchData();
+  }, []);
         let statusData: string[] = ["Open", "InProgress", "Testing", "Close"];
-        let priorityData: string[] = [
-            "TEST",
-            "Cutting",
-            "Finance",
-            "HR",
-            "Production",
-        ];
-        let tagsHtmlAttributes = { name: "Tags" };
         const [state, setState] = useState(extend({}, {}, props, true));
         const onChange = (args: any): void => {
          
@@ -201,20 +208,20 @@ function App() {
                             </td>
                         </tr>
                         <tr>
-                            <td className="e-label">Assignee</td>
+                            <td className="e-label">Assignor</td>
                             <td>
                                 <DropDownListComponent
                                     id="Assignee"
                                     name="Assignee"
                                     className="e-field"
-                                    dataSource={assigneeData}
+                                    dataSource={assignorData}
                                     placeholder="Assignee"
                                     value={data.asgby_name}
                                 ></DropDownListComponent>
                             </td>
                         </tr>
                         <tr>
-                            <td className="e-label">Work Category</td>
+                            <td className="e-label">Assignee</td>
                             <td>
                                 <DropDownListComponent
                                     type="text"
@@ -222,8 +229,8 @@ function App() {
                                     id="Priority"
                                     popupHeight="300px"
                                     className="e-field"
-                                    value={data.wrkcat}
-                                    dataSource={priorityData}
+                                    value={data.field_empname}
+                                    dataSource={assigneeData}
                                     placeholder="Priority"
                                 ></DropDownListComponent>
                             </td>

@@ -87,7 +87,7 @@ const HeroFashionGrid131: React.FC = () => {
     data: any;
     user: string; // <-- add this
   }
-
+  
   const [savedSettings, setSavedSettings] = useState<SavedSetting[]>([]);
 
   const [selectedSetting, setSelectedSetting] = useState<string>('');
@@ -102,6 +102,8 @@ const HeroFashionGrid131: React.FC = () => {
   const qryBldrObj = useRef<QueryBuilderComponent>(null);
   const dialogRef = useRef<DialogComponent>(null);
 
+
+  // searchable fields
   const searchableFields = useMemo(() => [
     'slno1', 'jobno_oms', 'company_name', 'buyer1', 'stylename', 'uom',
     'final_delivery_date', 'merch', 'punit_sh', 'styleno',
@@ -728,14 +730,58 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   const orderSummaryTemplate = (p: OrderData) => {
+    let rollno = (p as any).index
     return (
-      <div style={{ fontSize: '12px', lineHeight: '1.4', width: '90px' }}>
-        <b>OR-</b> {highlightText(p.jobno_oms)}<br />
-        <b>Buy-</b> {highlightText(p.buyer1)}<br />
-        <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br />
-        <b>Unit-</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
-        <b>Qty-</b> {highlightText(p.quantity)}
-      </div>
+        <div style={{ 
+          fontSize: '12px', 
+          lineHeight: '1.4', 
+          width: '110px',
+          position: 'relative',
+          border: '1px solid #ccc',
+          // padding: '4px' removed padding
+        }}>
+          
+          {/* Count badge */}
+          <span style={{
+            position: 'absolute',
+            top: '4px',
+            right: '4px',
+            background: '#f4a100',
+            color: '#000',
+            borderRadius: '50%',
+            width: '16px',
+            height: '16px',
+            fontSize: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold'
+          }}>
+            {++rollno}
+          </span>
+
+          <b>J:</b> <span style={{ color: 'red', fontWeight: 'bolder' }}>
+            {highlightText(p.jobno_oms)}
+          </span><br />
+
+          <b>Buy:</b> {highlightText(p.buyer1)}<br />
+
+          <b>Mer:</b> {
+            p.merch 
+              ? highlightText(p.merch.includes("Murthy-") 
+                ? p.merch.split("Murthy-h ")[1] 
+                : p.merch) 
+              : ""
+          }<br />
+
+          <b>Unit:</b> 
+          <span style={getPunitStyle(p.punit_sh)}>
+            {highlightText(p.punit_sh)}
+          </span><br />
+
+          <b>Qty:</b> {highlightText(p.quantity)}
+
+        </div>
     );
   }
 
