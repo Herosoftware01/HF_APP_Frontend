@@ -26,6 +26,19 @@ const afIroningValue = af_ironing === true || af_ironing === 1 || af_ironing ===
     }
   }, [jobNo, product, size]);
 
+  const rowIndex = activeCell?.rowIndex;
+
+const standard = parseFloat(
+  measurements[rowIndex]?.meas || 0
+);
+
+const quickValues = rowIndex !== undefined ? [
+  (standard - 1).toFixed(2),
+  (standard - 0.5).toFixed(2),
+  (standard + 0.5).toFixed(2),
+  (standard + 1).toFixed(2),
+] : [];
+
 
 
   // const fetchMeasurements = async () => {
@@ -412,6 +425,9 @@ const handleFinalSave = async () => {
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Point</p>
                 <h2 className="text-lg font-bold text-slate-900 leading-tight">{measurements[activeCell.rowIndex]?.measurdtls}</h2>
               </div>
+
+              
+
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="bg-slate-50 p-4 rounded-3xl text-center">
                   <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Standard</p>
@@ -422,6 +438,24 @@ const handleFinalSave = async () => {
                   <p className="text-2xl font-black text-blue-600">±{measurements[activeCell.rowIndex]?.toll}</p>
                 </div>
               </div>
+
+              <div className="grid grid-cols-4 gap-3 mb-6">
+                {quickValues.map((val, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setTempValue(val)}
+                    className={`py-3 rounded-xl font-bold text-sm transition-all 
+                      ${tempValue == val 
+                        ? "bg-blue-600 text-white shadow-lg" 
+                        : "bg-slate-100 text-slate-700 hover:bg-blue-100"}
+                    `}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+
+
               <input
                 autoFocus
                 type="number"
