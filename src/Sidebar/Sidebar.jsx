@@ -161,7 +161,15 @@ function Sidebar({ children }) {
         <button onClick={() => setMobileMenuOpen(true)} className="p-2 hover:bg-white/10 rounded-xl">
           <Menu size={24} />
         </button>
-        <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero Fashion</span>
+        <div>
+          <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero Fashion</span>
+          <div class="text-center text-xs text-gray-500 mt-[-4px]">
+                Powered by 
+                <a href="https://www.syncfusion.com" target="_blank" class="text-blue-500 hover:underline">
+                  Syncfusion
+                </a>
+          </div>
+        </div>
         {/* <div className="w-9 h-9 bg-cyan-800 rounded-full flex items-center justify-center font-bold border border-white/20">{userName[0]}</div> */}
         <div className="flex items-center justify-center font-bold ">{userName}</div>
       </header>
