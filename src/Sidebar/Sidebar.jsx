@@ -178,10 +178,21 @@ function Sidebar({ children }) {
       >
         <div className="h-20 flex items-center justify-between px-6 shrink-0 bg-black/20 border-b border-white/5">
           {(sidebarOpen || mobileMenuOpen) && (
+            <div className="items-center gap-2">
             <div className="flex items-center gap-2">
                <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center font-black shadow-lg text-white">H</div>
                <span className="font-black text-xl tracking-tighter uppercase italic">Hero<span className="text-cyan-400"> ...</span></span>
+               
             </div>
+
+            <div class="text-center text-xs text-gray-500 ">
+              Powered by 
+              <a href="https://www.syncfusion.com" target="_blank" class="text-blue-500 hover:underline">
+                Syncfusion
+              </a>
+            </div>
+            </div>
+            
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95">
              {sidebarOpen ? <X size={18} /> : <Menu size={20} />}
