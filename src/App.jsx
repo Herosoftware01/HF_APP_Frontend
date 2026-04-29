@@ -22,6 +22,7 @@ import Sticker from "./components/Cutting/sticker production/App"
 import Bitcheck from "./components/Cutting/bit checking/App"
 import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
+import In_login from "./components/Incentive&Debit/app/in_main";
 
 function App() {
 
@@ -221,6 +222,17 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Home_hw />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/incdeb/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <In_login />
               </ProtectedLayout>
             </ProtectedRoute>
           }
