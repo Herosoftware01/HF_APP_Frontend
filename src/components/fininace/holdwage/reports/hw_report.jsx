@@ -13,7 +13,7 @@ const HwReport = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    fetch('http://10.1.21.13:8200/reports/report/')
+    fetch('https://hfapi.herofashion.com/reports/report/')
       .then(response => response.json())
       .then(data => {
         setData(data);
@@ -132,14 +132,14 @@ const HwReport = () => {
             <table className="min-w-full table-auto border-collapse">
               <thead className="sticky top-0 z-20 bg-slate-50 shadow-sm">
                 <tr className="text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="px-6 py-3 border-b">S.No</th>
-                  <th className="px-6 py-3 border-b">Aadhaar No</th>
-                  <th className="px-6 py-3 border-b">Code</th>
-                  <th className="px-6 py-3 border-b">Name</th>
-                  <th className="px-6 py-3 border-b">Period</th>
-                  <th className="px-6 py-3 border-b text-right">Hold Amt</th>
-                  <th className="px-6 py-3 border-b text-right">Current</th>
-                  <th className="px-6 py-3 border-b text-right">Total</th>
+                  <th className="px-6 py-3">S.No</th>
+                  <th className="px-6 py-3">Aadhaar No</th>
+                  <th className="px-6 py-3">Code</th>
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Period</th>
+                  <th className="px-6 py-3 text-right">Hold Amt</th>
+                  <th className="px-6 py-3  text-right">Current</th>
+                  <th className="px-6 py-3  text-right">Total</th>
                 </tr>
               </thead>
               

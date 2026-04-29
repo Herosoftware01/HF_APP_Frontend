@@ -145,6 +145,7 @@ export const startSilentRefresh = () => {
   }, 4 * 60 * 1000);
 };
 
+
 // ---------------- REFRESH ON TAB FOCUS ----------------
 document.addEventListener("visibilitychange", async () => {
   if (!document.hidden) {
@@ -171,3 +172,5 @@ document.addEventListener("visibilitychange", async () => {
     }
   }
 });
+
+

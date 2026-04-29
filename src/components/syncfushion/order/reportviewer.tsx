@@ -1,83 +1,110 @@
 /* eslint-disable */
-import React, { useState } from 'react';
- 
+import React, { useEffect, useState } from 'react';
+
 // ✅ Bold Reports styles
-import '@boldreports/javascript-reporting-controls/Content/v2.0/tailwind-light/bold.report-viewer.min.css';
- 
+import '@boldreports/javascript-reporting-controls/Content/v2.0/material-light/bold.report-viewer.min.css';
+
 // ✅ Bold Reports scripts
 import '@boldreports/javascript-reporting-controls/Scripts/v2.0/common/bold.reports.common.min';
 import '@boldreports/javascript-reporting-controls/Scripts/v2.0/common/bold.reports.widgets.min';
 import '@boldreports/javascript-reporting-controls/Scripts/v2.0/bold.report-viewer.min';
- 
+
 // ✅ React wrapper
 import '@boldreports/react-reporting-components/Scripts/bold.reports.react.min';
- 
-// ✅ Declare viewer component
+
 declare let BoldReportViewerComponent: any;
- 
-// ✅ Viewer styling
+
 const viewerStyle = {
-  height: '700px',
-  width: '100%'
+  height: '800px',
+  width: '100%',
+  padding: '10px'
 };
- 
+
 function Report() {
- 
-  // ✅ STATE: Selected report path
-  const [reportPath, setReportPath] = useState(
-    '7ba340e4-9a3a-43e9-8903-269f9f71fa2d'
-  );
- 
+  const [reportPath, setReportPath] = useState('');
+  const [reports, setReports] = useState([]);
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  // ✅ SINGLE INIT (parallel calls)
+  useEffect(() => {
+    const init = async () => {
+      try {
+        setLoading(true);
+
+        const [tokenRes, reportsRes] = await Promise.all([
+          fetch('https://hfapi.herofashion.com/syncfushion/token/'),
+          fetch('https://hfapi.herofashion.com/syncfushion/reports/')
+        ]);
+
+        const tokenData = await tokenRes.json();
+        const reportsData = await reportsRes.json();
+
+        // ✅ token
+        if (tokenData.success) {
+          setToken(tokenData.data.access_token);
+        }
+
+        // ✅ reports
+        const reportList = reportsData.data || reportsData;
+        setReports(reportList);
+
+        // ✅ default report (only once)
+        if (reportList.length > 0) {
+          setReportPath(reportList[0].ReportId);
+        }
+
+      } catch (err) {
+        console.error('Init error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
+  }, []);
+
   return (
     <div>
- 
-      {/* ✅ Dropdown */}
-      <div style={{ marginBottom: '12px' }}>
+
+      {/* ✅ DROPDOWN */}
+      <div style={{ marginBottom: '12px', padding: '5px' }}>
         <label style={{ marginRight: '8px', fontWeight: '500' }}>
           Select Report:
         </label>
- 
+
         <select
           value={reportPath}
           onChange={(e) => setReportPath(e.target.value)}
           style={{ padding: '6px', minWidth: '250px' }}
+          disabled={loading}
         >
-          <option value="7ba340e4-9a3a-43e9-8903-269f9f71fa2d">
-            Sales Report
-          </option>
-          <option value="4b514d8b-233c-488a-867e-c227d35b8c99">
-            Inventory Report
-          </option>
-          <option value="c9876543-4444-5555-6666-cccccccccccc">
-            Purchase Report
-          </option>
+          {reports.map((report: any) => (
+            <option key={report.ReportId} value={report.ReportId}>
+              {report.Name}
+            </option>
+          ))}
         </select>
       </div>
- 
-      {/* ✅ Report Viewer */}
+
+      {/* ✅ VIEWER */}
       <div style={viewerStyle}>
-        <BoldReportViewerComponent
- 
-          /* 🔴 IMPORTANT LINE 🔴
-             Forces re‑initialization when reportPath changes */
-          key={reportPath}
- 
-          id="reportviewer-container"
- 
-          reportServiceUrl="https://api.herofashion.com/reporting/reportservice/api/Viewer"
-          reportServerUrl="https://api.herofashion.com/reporting/api/site/site3"
- 
-          serviceAuthorizationToken={
-            'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHZlYWh0ZWNoLmNvbSIsIm5hbWVpZCI6IjEiLCJ1bmlxdWVfbmFtZSI6ImY0MDM5NmIzLTIzNDAtNDAzOC1iYTk2LWEwNTY0ZmVkY2MxMSIsIklQIjoiMTAuMS4yMS4xMyIsImlzc3VlZF9kYXRlIjoiMTc3NjE2OTk4MyIsIm5iZiI6MTc3NjE2OTk4MywiZXhwIjoxNzc2Nzk2MjAwLCJpYXQiOjE3NzYxNjk5ODMsImlzcyI6Imh0dHBzOi8vYXBpLmhlcm9mYXNoaW9uLmNvbS9yZXBvcnRpbmcvc2l0ZS9zaXRlMyIsImF1ZCI6Imh0dHBzOi8vYXBpLmhlcm9mYXNoaW9uLmNvbS9yZXBvcnRpbmcvc2l0ZS9zaXRlMyJ9.xdtWS_4E9CAcjaV-uHZrJcOBa943BXw0gt9dUbtfLkc'
-      
-          }
- 
-          reportPath={reportPath}
-        />
+        {loading && <p>Loading reports...</p>}
+
+        {!loading && token && reportPath && (
+          <BoldReportViewerComponent
+            key={reportPath} // ✅ only depend on report change
+            id="reportviewer-container"
+            reportServiceUrl="https://api.herofashion.com/reporting/reportservice/api/Viewer"
+            reportServerUrl="https://api.herofashion.com/reporting/api/site/site3"
+            serviceAuthorizationToken={`bearer ${token}`}
+            reportPath={reportPath}
+          />
+        )}
       </div>
- 
+
     </div>
   );
 }
- 
+
 export default Report;

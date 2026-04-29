@@ -1,11 +1,10 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import Defects from "../quality/Defects"
+import Defects from "../pages/mes_details"
 
 export default function ProductionDetails() {
 
-  const { unit, line } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,9 +18,52 @@ export default function ProductionDetails() {
 
   const [isScanning, setIsScanning] = useState(false);
 
-  const canContinue = jobNo && product && pieces;
+   const [bfIroning, setBfIroning] = useState(false);
+const [afIroning, setAfIroning] = useState(false);
+const [alreadyChecked, setAlreadyChecked] = useState(false);
 
 
+  const canContinue = jobNo && product && pieces && !alreadyChecked;
+  
+ 
+
+const checkIroningStatus = async (jobNo, bundleNo) => {
+  try {
+    const res = await fetch(
+      `https://hfapi.herofashion.com/qcapp/check-ironing-status/?jobno=${jobNo}&bundle_no=${bundleNo}`
+    );
+
+    const data = await res.json();
+
+    if (data.status === "new") {
+      setBfIroning(true);
+      setAfIroning(false);
+      setAlreadyChecked(false);
+    }
+
+    if (data.status === "exists") {
+      if (data.bf_ironing && !data.af_ironing) {
+        setBfIroning(false);
+        setAfIroning(true);
+        setAlreadyChecked(false);
+      } 
+      else if (data.bf_ironing && data.af_ironing) {
+        setAlreadyChecked(true);
+        setBfIroning(false);
+        setAfIroning(false);
+      }
+      else {
+        //  fallback safety
+        setBfIroning(true);
+        setAfIroning(false);
+        setAlreadyChecked(false);
+      }
+    }
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const fillBundleData = async (bundle) => {
   if (!bundle) return;
@@ -33,7 +75,7 @@ const fillBundleData = async (bundle) => {
     );
 
     const data = await response.json();
-    // 🔴 If message வந்தா
+    //  If message 
     if (data.message) {
       alert(data.message);
 
@@ -64,6 +106,8 @@ const fillBundleData = async (bundle) => {
     setPieces(item.pc || "");
     setBundleNo(item.Bdl || "");
     setBundleid(item.bundid || "");
+
+    await checkIroningStatus(item.JobNo, item.Bdl);
 
   } catch (error) {
     console.error("API Error:", error);
@@ -102,7 +146,7 @@ const fillBundleData = async (bundle) => {
   const handleContinue = () => {
     if (!canContinue) return;
     // navigate(Defects);
-    navigate(`/qc-admin/defects/${unit}/${line}`, {
+    navigate(`/cut_sample/mes_details/`, {
     state: {
       bundleNo,
       jobNo,
@@ -111,6 +155,8 @@ const fillBundleData = async (bundle) => {
       size,
       pieces,
       bundle_id: bundleid,
+      bf_ironing: bfIroning,
+      af_ironing: afIroning
     },
   });
 
@@ -135,13 +181,42 @@ const fillBundleData = async (bundle) => {
       )}
 
       <div className="w-full max-w-[800px] bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-slate-100">
+        <div className="mt-6 space-y-3">
+
+  {alreadyChecked ? (
+    <div className="text-green-600 font-bold text-lg">
+      ✅ Already Checked
+    </div>
+  ) : (
+    <>
+      <label className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={bfIroning}
+          disabled
+        />
+        Before Ironing
+      </label>
+
+      <label className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={afIroning}
+          disabled
+        />
+        After Ironing
+      </label>
+    </>
+  )}
+
+</div>
 
         {/* Header */}
         <div className="flex justify-between items-start mb-10">
           <div>
-            <h1 className="text-[28px] font-bold text-[#0F172A]">Bundle Details</h1>
-            <p className="text-slate-400 font-medium text-lg">Enter or scan job information</p>
-            <p className="text-blue-600 text-md font-extrabold">Unit - {unit} / Line - {line}</p>
+            <h1 className="text-[28px] font-bold text-[#0F172A]">Order Measurement Details</h1>
+            <p className="text-slate-400 font-medium text-lg">Enter or scan Order information</p>
+           
           </div>
           <button
             onClick={() => setIsScanning(true)}

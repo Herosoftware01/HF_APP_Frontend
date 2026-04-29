@@ -39,7 +39,7 @@ import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent, UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-import './Material 3/Showcase Material3/style.css';
+// import './Material 3/Showcase Material3/style.css';
 // import "../../../App.css";
 // import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { DatePickerComponent, DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
@@ -59,11 +59,13 @@ interface OrderData {
   actdaten: string; actyeardate: string; pono: string; u46: string; u37: string; qltycontroller: string; Print: string; Others1: string;
   mainimagepath: string; finaldelvdate: string; prnclr?: string | null; prnfile1?: string; prnfile2?: string; img_fpath?: string; clr?: string; print_img?: string; Fab_R: string;
   ITS_R: string; Order_R: string; Dy_R: string; Sample_R: string; Week_R: string; FMonth_yr: string; Emb_R: string; Week_R1: string; year: string; wk: string; 
-  prnmeaimg?: string; mpic?: string; FabdyIN?: string;
+ FabdyIN?: string;
   Others2: string; Others3: string; Others4: string; Others5: string; Others6: string; Others7: string,
+  jobno: string; buyerid: number; buyer: string; production_unit: string;  printing_r: string;  hex: string; print_ty: string; print_des: string; part: string;  scr1: string; scr2: string; prnmeaimg: string; clrcomb: string; noclr: number; in_out: string; sup: string;  mpic: string; ordimg: string; tbimg: string; indpart: string; groundclr: string; slno: number;
+
 }
 
-const HeroFashionGrid131: React.FC = () => {
+const HeroFashionGrid1311: React.FC = () => {
   const [dataSource, setDataSource] = useState<OrderData[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [showingCount, setShowingCount] = useState<number>(0);
@@ -167,7 +169,7 @@ const HeroFashionGrid131: React.FC = () => {
       try {
         setLoading(true); setError(null);
         const [orderResponse] = await Promise.all([
-          fetch('https://app.herofashion.com/order_panda'),
+          fetch('https://app.herofashion.com/ord_prn'),
           
         ]);
         if (!orderResponse.ok ) throw new Error("Failed to fetch data from APIs");
@@ -426,98 +428,98 @@ const HeroFashionGrid131: React.FC = () => {
     // { field: 'uom', label: 'UOM', type: 'string' },
     // { field: 'abc', label: 'ABC', type: 'string' }
     
-    // { field: 'fdt', label: 'Fdt', type: 'date' , operators:stringOperator },
-    // { field: 'slno', label: 'Serial No', type: 'number' , operators:stringOperator},
-    // { field: 'insdatenew', label: 'Ins Date New', type: 'string', operators:stringOperator },
+    { field: 'fdt', label: 'FDT ISO', type: 'date' , operators:stringOperator },
+    { field: 'slno', label: 'Serial No', type: 'number' , operators:stringOperator},
+    { field: 'insdatenew', label: 'Ins Date New', type: 'string', operators:stringOperator },
     { field: 'jobno_oms', label: 'Job No OMS', type: 'string', operators:stringOperator },
-    { field: 'printing_R', label: '1-Prints', type: 'string', operators:stringOperator },
-    // { field: 'buyerid', label: 'Buyer ID', type: 'number', operators:stringOperator },
-    // { field: 'mpyear', label: 'MP Year', type: 'number' , operators:stringOperator},
-    // { field: 'number_01_printing', label: 'Printing No', type: 'number', operators:stringOperator },
-    // { field: 'number_03_emb', label: 'Embroidery No', type: 'number', operators:stringOperator },
-    // { field: 'mpdate', label: 'MP Date', type: 'date' , operators:stringOperator},
-    // { field: 'refno', label: 'Ref No', type: 'string', operators:stringOperator },
+    { field: 'printing_R', label: 'Printing Status', type: 'string', operators:stringOperator },
+    { field: 'buyerid', label: 'Buyer ID', type: 'number', operators:stringOperator },
+    { field: 'mpyear', label: 'MP Year', type: 'number' , operators:stringOperator},
+    { field: 'number_01_printing', label: 'Printing No', type: 'number', operators:stringOperator },
+    { field: 'number_03_emb', label: 'Embroidery No', type: 'number', operators:stringOperator },
+    { field: 'mpdate', label: 'MP Date', type: 'date' , operators:stringOperator},
+    { field: 'refno', label: 'Ref No', type: 'string', operators:stringOperator },
     { field: 'stylename', label: 'Style Name', type: 'string', operators:stringOperator },
-    // { field: 'styledesc', label: 'Style Description', type: 'string', operators:stringOperator },
+    { field: 'styledesc', label: 'Style Description', type: 'string', operators:stringOperator },
     { field: 'season', label: 'Season', type: 'string' , operators:stringOperator},
-    // { field: 'jobnoomsnew', label: 'Job No New', type: 'string', operators:stringOperator },
-    // { field: 'Print', label: 'Print Detail', type: 'string', operators:stringOperator },
-    // { field: 'Others1', label: 'Image Link 1', type: 'string', operators:stringOperator },
-    // { field: 'Others2', label: 'Image Link 2', type: 'string', operators:stringOperator },
-    // { field: 'Others3', label: 'Image Link 3', type: 'string', operators:stringOperator },
-    // { field: 'Others4', label: 'Image Link 4', type: 'string', operators:stringOperator },
-    // { field: 'Others5', label: 'Image Link 5', type: 'string', operators:stringOperator },
-    // { field: 'Others6', label: 'Image Link 6', type: 'string', operators:stringOperator },
-    // { field: 'Others7', label: 'Image Link 7', type: 'string', operators:stringOperator },
-    // { field: 'Emb', label: 'Embroidery Detail', type: 'string', operators:stringOperator },
-    // { field: 'mainimagepath', label: 'Main Image Path', type: 'string', operators:stringOperator },
-    // { field: 'ordimg1_pen', label: 'Order Image Pending', type: 'string', operators:stringOperator },
-    // { field: 'seasonyear', label: 'Season Year', type: 'number', operators:stringOperator },
-    // { field: 'styleid', label: 'Style ID', type: 'number', operators:stringOperator },
-    // { field: 'final_delivery_date', label: 'Final Delivery Date', type: 'string', operators:stringOperator },
-    // { field: 'finaldelvdate1', label: 'Final Delv Date ISO', type: 'date', operators:stringOperator },
-    // { field: 'year', label: 'Year', type: 'string', operators:stringOperator },
-    // { field: 'final_year_delivery', label: 'Final Year Delv', type: 'string', operators:stringOperator },
-    // { field: 'final_year_delivery1', label: 'Final Year Delv ISO', type: 'string', operators:stringOperator },
-    // { field: 'ddays', label: 'Delivery Days', type: 'number', operators:stringOperator },
-    // { field: 'fdays', label: 'Final Days', type: 'number', operators:stringOperator },
-    // { field: 'insdays', label: 'Inspection Days', type: 'number', operators:stringOperator },
-    // { field: 'finaldelvdate', label: 'Final Delv Date Str', type: 'string', operators:stringOperator },
-    // { field: 'ourdeldate', label: 'Our Delivery Date', type: 'string', operators:stringOperator },
-    // { field: 'date', label: 'Entry Date', type: 'string', operators:stringOperator },
-    // { field: 'ourdelvdate', label: 'Our Delv Date Short', type: 'string', operators:stringOperator },
-    // { field: 'podate', label: 'PO Date', type: 'string', operators:stringOperator },
-    // { field: 'vessel_dt', label: 'Vessel Date', type: 'date', operators:stringOperator },
-    // { field: 'vessel_yr', label: 'Vessel Year', type: 'string', operators:stringOperator },
-    // { field: 'pono', label: 'PO No', type: 'string', operators:stringOperator },
-    // { field: 'shipmentcompleted', label: 'Shipment Completed', type: 'number', operators:stringOperator },
-    // { field: 'reference', label: 'Production Remarks', type: 'string', operators:stringOperator },
-    // { field: 'no', label: 'Job No Short', type: 'string', operators:stringOperator },
+    { field: 'jobnoomsnew', label: 'Job No New', type: 'string', operators:stringOperator },
+    { field: 'Print', label: 'Print Detail', type: 'string', operators:stringOperator },
+    { field: 'Others1', label: 'Image Link 1', type: 'string', operators:stringOperator },
+    { field: 'Others2', label: 'Image Link 2', type: 'string', operators:stringOperator },
+    { field: 'Others3', label: 'Image Link 3', type: 'string', operators:stringOperator },
+    { field: 'Others4', label: 'Image Link 4', type: 'string', operators:stringOperator },
+    { field: 'Others5', label: 'Image Link 5', type: 'string', operators:stringOperator },
+    { field: 'Others6', label: 'Image Link 6', type: 'string', operators:stringOperator },
+    { field: 'Others7', label: 'Image Link 7', type: 'string', operators:stringOperator },
+    { field: 'Emb', label: 'Embroidery Detail', type: 'string', operators:stringOperator },
+    { field: 'mainimagepath', label: 'Main Image Path', type: 'string', operators:stringOperator },
+    { field: 'ordimg1_pen', label: 'Order Image Pending', type: 'string', operators:stringOperator },
+    { field: 'seasonyear', label: 'Season Year', type: 'number', operators:stringOperator },
+    { field: 'styleid', label: 'Style ID', type: 'number', operators:stringOperator },
+    { field: 'final_delivery_date', label: 'Final Delivery Date', type: 'string', operators:stringOperator },
+    { field: 'finaldelvdate1', label: 'Final Delv Date ISO', type: 'date', operators:stringOperator },
+    { field: 'year', label: 'Year', type: 'string', operators:stringOperator },
+    { field: 'final_year_delivery', label: 'Final Year Delv', type: 'string', operators:stringOperator },
+    { field: 'final_year_delivery1', label: 'Final Year Delv ISO', type: 'string', operators:stringOperator },
+    { field: 'ddays', label: 'Delivery Days', type: 'number', operators:stringOperator },
+    { field: 'fdays', label: 'Final Days', type: 'number', operators:stringOperator },
+    { field: 'insdays', label: 'Inspection Days', type: 'number', operators:stringOperator },
+    { field: 'finaldelvdate', label: 'Final Delv Date Str', type: 'string', operators:stringOperator },
+    { field: 'ourdeldate', label: 'Our Delivery Date', type: 'string', operators:stringOperator },
+    { field: 'date', label: 'Entry Date', type: 'string', operators:stringOperator },
+    { field: 'ourdelvdate', label: 'Our Delv Date Short', type: 'string', operators:stringOperator },
+    { field: 'podate', label: 'PO Date', type: 'string', operators:stringOperator },
+    { field: 'vessel_dt', label: 'Vessel Date', type: 'date', operators:stringOperator },
+    { field: 'vessel_yr', label: 'Vessel Year', type: 'string', operators:stringOperator },
+    { field: 'pono', label: 'PO No', type: 'string', operators:stringOperator },
+    { field: 'shipmentcompleted', label: 'Shipment Completed', type: 'number', operators:stringOperator },
+    { field: 'reference', label: 'Production Remarks', type: 'string', operators:stringOperator },
+    { field: 'no', label: 'Job No Short', type: 'string', operators:stringOperator },
     { field: 'company_name', label: 'Company Name', type: 'string', operators:stringOperator },
-    // { field: 'mer_un', label: 'Merchandiser Unit', type: 'string', operators:stringOperator },
-    // { field: 'image_order', label: 'Order Image URL', type: 'string', operators:stringOperator },
-    { field: 'abc', label: 'ABC', type: 'string', operators:stringOperator },
+    { field: 'mer_un', label: 'Merchandiser Unit', type: 'string', operators:stringOperator },
+    { field: 'image_order', label: 'Order Image URL', type: 'string', operators:stringOperator },
+    { field: 'abc', label: 'ABC Status', type: 'string', operators:stringOperator },
     { field: 'order_follow_up', label: 'Order Follow-up', type: 'string', operators:stringOperator },
     { field: 'quality_controller', label: 'QC Person', type: 'string', operators:stringOperator },
     { field: 'buyer_sh', label: 'Buyer Short', type: 'string', operators:stringOperator },
-    // { field: 'buyer1', label: 'Buyer Code', type: 'string', operators:stringOperator },
-    // { field: 'punit_sh', label: 'Production Unit Short', type: 'string', operators:stringOperator },
-    // { field: 'insdateyear', label: 'Inspection Year', type: 'string', operators:stringOperator },
-    // { field: 'insdate', label: 'Inspection Date', type: 'date', operators:stringOperator },
-    // { field: 'FMonth_yr', label: 'Month Year Ref', type: 'string', operators:stringOperator },
-    // { field: 'quantity', label: 'Qty', type: 'number', operators:stringOperator },
-    // { field: 'production_unit1', label: 'Prod Unit Code', type: 'string', operators:stringOperator },
-    { field: 'styleno', label: 'ST', type: 'string', operators:stringOperator },
-    { field: 'buyer', label: 'Buy', type: 'string', operators:stringOperator },
-    { field: 'merch', label: 'Mer', type: 'string', operators:stringOperator },
-    { field: 'u46', label: '46-Empty', type: 'string', operators:stringOperator },
-    { field: 'u7', label: '7-cust', type: 'string', operators:stringOperator },
-    { field: 'u141', label: '141-sam', type: 'string', operators:stringOperator },
-    { field: 'u45', label: '45-Ord', type: 'string', operators:stringOperator },
-    { field: 'u36', label: '36-CUT', type: 'string', operators:stringOperator },
-    { field: 'u31', label: '31-ITS', type: 'string', operators:stringOperator },
+    { field: 'buyer1', label: 'Buyer Code', type: 'string', operators:stringOperator },
+    { field: 'punit_sh', label: 'Production Unit Short', type: 'string', operators:stringOperator },
+    { field: 'insdateyear', label: 'Inspection Year', type: 'string', operators:stringOperator },
+    { field: 'insdate', label: 'Inspection Date', type: 'date', operators:stringOperator },
+    { field: 'FMonth_yr', label: 'Month Year Ref', type: 'string', operators:stringOperator },
+    { field: 'quantity', label: 'Total Quantity', type: 'number', operators:stringOperator },
+    { field: 'production_unit1', label: 'Prod Unit Code', type: 'string', operators:stringOperator },
+    { field: 'styleno', label: 'Style No', type: 'string', operators:stringOperator },
+    { field: 'buyer', label: 'Buyer Full Name', type: 'string', operators:stringOperator },
+    { field: 'merch', label: 'Merchandiser', type: 'string', operators:stringOperator },
+    { field: 'u46', label: 'U46 Status', type: 'string', operators:stringOperator },
+    { field: 'u7', label: 'U7 Status', type: 'string', operators:stringOperator },
+    { field: 'u141', label: 'U141 Status', type: 'string', operators:stringOperator },
+    { field: 'u45', label: 'U45 Status', type: 'string', operators:stringOperator },
+    { field: 'u36', label: 'U36 Status', type: 'string', operators:stringOperator },
+    { field: 'u31', label: 'U31 Status', type: 'string', operators:stringOperator },
     { field: 'u5', label: 'U5 Status', type: 'string', operators:stringOperator },
-    { field: 'u14', label: '14-dye', type: 'string', operators:stringOperator },
-    { field: 'u8', label: '8-fab', type: 'string', operators:stringOperator },
+    { field: 'u14', label: 'U14 Status', type: 'string', operators:stringOperator },
+    { field: 'u8', label: 'U8 Status', type: 'string', operators:stringOperator },
     { field: 'u37', label: 'U37 Status', type: 'string', operators:stringOperator },
     { field: 'u25', label: 'U25 Status', type: 'string', operators:stringOperator },
-    { field: 'Emb_R', label: '3-Emb', type: 'string', operators:stringOperator },
-    // { field: 'Week_R1', label: 'Week Ref Full', type: 'string', operators:stringOperator },
-    // { field: 'wk', label: 'Week Year', type: 'string', operators:stringOperator },
-    // { field: 'wk113', label: 'Week Detailed', type: 'string', operators:stringOperator },
-    // { field: 'Fab_R', label: 'Fabric Readiness', type: 'string', operators:stringOperator },
-    // { field: 'ITS_R', label: 'ITS Readiness', type: 'string', operators:stringOperator },
-    // { field: 'Order_R', label: 'Order Readiness', type: 'string', operators:stringOperator },
-    // { field: 'Dy_R', label: 'Dyeing Readiness', type: 'string', operators:stringOperator },
-    // { field: 'Sample_R', label: 'Sample Readiness', type: 'string', operators:stringOperator },
-    // { field: 'Week_R', label: 'Week Ref Short', type: 'string', operators:stringOperator },
-    // { field: 'actdaten', label: 'Actual Date ISO', type: 'date', operators:stringOperator },
-    // { field: 'actdate', label: 'Actual Date Str', type: 'string', operators:stringOperator },
-    // { field: 'actyeardate', label: 'Actual Year Date', type: 'string', operators:stringOperator },
-    // { field: 'con_actdate', label: 'Combined Act Date', type: 'string', operators:stringOperator },
-    // { field: 'uom', label: 'Uom', type: 'string', operators:stringOperator },
-    // { field: 'production_unit', label: 'Unit', type: 'string', operators:stringOperator },
-    { field: 'director_sample_order', label: 'Dir', type: 'string', operators:stringOperator }
+    { field: 'Emb_R', label: 'Embroidery Readiness', type: 'string', operators:stringOperator },
+    { field: 'Week_R1', label: 'Week Ref Full', type: 'string', operators:stringOperator },
+    { field: 'wk', label: 'Week Year', type: 'string', operators:stringOperator },
+    { field: 'wk113', label: 'Week Detailed', type: 'string', operators:stringOperator },
+    { field: 'Fab_R', label: 'Fabric Readiness', type: 'string', operators:stringOperator },
+    { field: 'ITS_R', label: 'ITS Readiness', type: 'string', operators:stringOperator },
+    { field: 'Order_R', label: 'Order Readiness', type: 'string', operators:stringOperator },
+    { field: 'Dy_R', label: 'Dyeing Readiness', type: 'string', operators:stringOperator },
+    { field: 'Sample_R', label: 'Sample Readiness', type: 'string', operators:stringOperator },
+    { field: 'Week_R', label: 'Week Ref Short', type: 'string', operators:stringOperator },
+    { field: 'actdaten', label: 'Actual Date ISO', type: 'date', operators:stringOperator },
+    { field: 'actdate', label: 'Actual Date Str', type: 'string', operators:stringOperator },
+    { field: 'actyeardate', label: 'Actual Year Date', type: 'string', operators:stringOperator },
+    { field: 'con_actdate', label: 'Combined Act Date', type: 'string', operators:stringOperator },
+    { field: 'uom', label: 'Unit of Measure', type: 'string', operators:stringOperator },
+    { field: 'production_unit', label: 'Production Unit Name', type: 'string', operators:stringOperator },
+    { field: 'director_sample_order', label: 'Director Status', type: 'string', operators:stringOperator }
 
   ], []);
 
@@ -644,7 +646,7 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   // --- Templates ---
-  const imageFieldTemplate = useCallback((field: 'mainimagepath' | 'Print' | 'print_img' | 'prnmeaimg' | 'img_fpath' | 'Emb' | 'Others1' | 'Others2' | 'Others3' | 'Others4' | 'Others5' | 'Others6' | 'Others7') => (p: OrderData) => {
+  const imageFieldTemplate = useCallback((field: 'ordimg' | 'tbimg' | 'mpic' | 'print_img' | 'img_fpath' | 'Emb' | 'Others1' | 'Others2' | 'Others3' | 'Others4' | 'Others5' | 'Others6' | 'Others7') => (p: OrderData) => {
     if (!p[field]) return <div style={{ color: '#ccc', fontSize: '10px' }}>No Image</div>;
     
     return (
@@ -728,65 +730,21 @@ const HeroFashionGrid131: React.FC = () => {
   }, []);
 
   const orderSummaryTemplate = (p: OrderData) => {
-    let rollno = (p as any).index
     return (
-        <div style={{ 
-          fontSize: '12px', 
-          lineHeight: '1.4', 
-          width: '110px',
-          position: 'relative',
-          border: '1px solid #ccc',
-          // padding: '4px'
-        }}>
-          
-          {/* Count badge */}
-          <span style={{
-            position: 'absolute',
-            top: '4px',
-            right: '4px',
-            background: '#f4a100',
-            color: '#000',
-            borderRadius: '50%',
-            width: '16px',
-            height: '16px',
-            fontSize: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold'
-          }}>
-            {++rollno}
-          </span>
-
-          <b>J:</b> <span style={{ color: 'red', fontWeight: 'bolder' }}>
-            {highlightText(p.jobno_oms)}
-          </span><br />
-
-          <b>Buy:</b> {highlightText(p.buyer1)}<br />
-
-          <b>Mer:</b> {
-            p.merch 
-              ? highlightText(p.merch.includes("Murthy-") 
-                ? p.merch.split("Murthy-h ")[1] 
-                : p.merch) 
-              : ""
-          }<br />
-
-          <b>Unit:</b> 
-          <span style={getPunitStyle(p.punit_sh)}>
-            {highlightText(p.punit_sh)}
-          </span><br />
-
-          <b>Qty:</b> {highlightText(p.quantity)}
-
-        </div>
+      <div style={{ fontSize: '12px', lineHeight: '1.4', width: '90px' }}>
+        <b>OR-</b> {highlightText(p.jobno)}<br />
+        <b>Buy-</b> {highlightText(p.groundclr)}<br />
+        {/* <b>Mer-</b> {p.merch ? highlightText(p.merch.includes("Murthy-") ? p.merch.split("Murthy-h ")[1] : p.merch) : ""}<br /> */}
+        <b>Unit-</b> <span style={getPunitStyle(p.indpart)}>{highlightText(p.indpart)}</span><br />
+        <b>Qty-</b> {highlightText(p.part)}
+      </div>
     );
   }
 
   const orderSummaryHeaderTemplate = (p: OrderData) => {
     return (
       <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>Jobno</b><br/>
+        <b>OR</b><br/>
         <b>Buy</b> <br/>
         <b>Mer</b> <br/>
         <b>Unit</b><br/>
@@ -798,10 +756,9 @@ const HeroFashionGrid131: React.FC = () => {
   
  const udf11 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-        <b>Fab dyIN:</b> {highlightText(p.FabdyIN)}<br />
-        <b>Uom:</b> {highlightText(p.uom)}<br />
-        <b>abc:</b> {highlightText(p.abc)}<br />
-    </div>);
+      <b>FabdyIN:</b> {highlightText(p.FabdyIN)}<br />
+      <b>Fdt_wk:</b> {highlightText(p.Fdt_wk)}<br />
+      </div>);
   
   const ordHeaderTemplate = (p: OrderData) => {
     return (
@@ -835,7 +792,7 @@ const HeroFashionGrid131: React.FC = () => {
           <b>wk</b> <br/>
           <b>yr</b> <br/>
           <b>uom</b> <br/>
-          {/* <b>abc</b> <br/> */}
+          <b>abc</b> <br/>
           {/* <b>order_follow_up</b><br/>
           <b>Qty</b><br/> */}
       </div>
@@ -856,11 +813,11 @@ const HeroFashionGrid131: React.FC = () => {
 
   const udf = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b className='no-highlight'>1-Print:</b> {highlightText(p.printing_R)}<br />
-      <b className='no-highlight'>3-Emb:</b> {highlightText(p.Emb_R)}<br />
-      <b className='no-highlight'>8-Fab:</b> {highlightText(p.Fab_R)}<br />
-      <b className='no-highlight'>14-dye:</b> {highlightText(p.Dy_R)}<br />
-      <b className='no-highlight'>7-cust:</b> {highlightText(p.u7)}<br />
+      <b className='no-highlight'>1-Print-</b> {highlightText(p.printing_R)}<br />
+      <b className='no-highlight'>3-Emb-</b> {highlightText(p.Emb_R)}<br />
+      <b className='no-highlight'>8-Fab-</b> {highlightText(p.Fab_R)}<br />
+      <b className='no-highlight'>14-dye-</b> {highlightText(p.Dy_R)}<br />
+      <b className='no-highlight'>7-cust</b> {highlightText(p.u7)}<br />
       {/* <b>25-week:</b> {highlightText(p.Week_R)}<br /> */}
       {/* <b>Unit:</b> <span style={getPunitStyle(p.punit_sh)}>{highlightText(p.punit_sh)}</span><br />
       <b>Qty:</b> {highlightText(p.quantity)} */}
@@ -869,11 +826,11 @@ const HeroFashionGrid131: React.FC = () => {
 
   const udf2 = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b>31-ITS:</b> {highlightText(p.ITS_R)}<br />
-      <b>36-CUT:</b> {highlightText(p.u36)}<br />
-      <b>45-Ord:</b> {highlightText(p.Order_R)}<br />
-      <b>46-Empty:</b> {highlightText(p.u46)}<br />
-      <b>141-Sam:</b> {highlightText(p.Sample_R)}<br />
+      <b>31-ITS</b> {highlightText(p.ITS_R)}<br />
+      <b>36-CUT</b> {highlightText(p.u36)}<br />
+      <b>45-Ord</b> {highlightText(p.Order_R)}<br />
+      <b>46-Empty</b> {highlightText(p.u46)}<br />
+      <b>141-Sam</b> {highlightText(p.Sample_R)}<br />
       {/* <b>3-Emb:</b> {highlightText(p.number_03_emb)}<br />
       <b>8-Fab:</b> {highlightText(p.u8)}<br />
       <b>14-Fabdy:</b> {highlightText(p.u14)}<br /> */}
@@ -886,9 +843,9 @@ const HeroFashionGrid131: React.FC = () => {
 
   const qualy = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
-      <b>styleno:</b> {highlightText(p.styleno)}<br />
-      <b>styledesc:</b> {highlightText(p.styledesc)}<br />
-      <b>qcontr:</b> {highlightText(p.quality_controller)}<br />
+      <b>styleno-</b> {highlightText(p.styleno)}<br />
+      <b>styledesc-</b> {highlightText(p.styledesc)}<br />
+      <b>qcontr-</b> {highlightText(p.quality_controller)}<br />
 
       {/* <b>36-ITS:</b> {highlightText(p.u36)}<br /> */}
     </div>
@@ -923,9 +880,9 @@ const HeroFashionGrid131: React.FC = () => {
   const deliveryInfoTemplate = (p: OrderData) => (
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br />
-      <b>Dir:</b> {highlightText(p.director_sample_order)}<br />
-      <b>ST:</b> {highlightText(p.styleno)}<br />
-      <b>Uom:</b> {highlightText(p.uom)}<br />
+      <b>print_ty:</b> {highlightText(p.print_ty)}<br />
+      <b>print_des:</b> {highlightText(p.print_des)}<br />
+      <b>clrcomb:</b> {highlightText(p.clrcomb)}<br />
       <b>PType:</b> {highlightText(p.production_type_inside_outside)}
     </div>
   );
@@ -934,12 +891,12 @@ const HeroFashionGrid131: React.FC = () => {
     <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
       {/* <b>Fdt:</b> <span style={getDateStyle(p.Fdt || p.final_delivery_date)}>{highlightText(p.Fdt || p.final_delivery_date)}</span><br /> */}
       {/* <b>Week_R:</b> {highlightText(p.Week_R)}<br /> */}
-      <b>Ft:</b><span style={{color: 'red', fontWeight:'bolder'}}> {highlightText(p.Fdt_wk)}</span> <br />
-      <b>Month:</b> {highlightText(p.FMonth_yr)}<br />
-      <b>Week:</b> {highlightText(p.Week_R)}<br />
-      <b>Year:</b> {highlightText(p.wk)}<br />
+      <b>Month-</b> {highlightText(p.FMonth_yr)}<br />
+      <b>Week-</b> {highlightText(p.Week_R)}<br />
+      <b>Year-</b> {highlightText(p.wk)}<br />
       {/* <b>ST:</b> {highlightText(p.styleno)}<br /> */}
-
+      <b>Uom-</b> {highlightText(p.uom)}<br />
+      <b>abc-</b> {highlightText(p.abc)}<br />
 
     </div>
   );
@@ -1459,12 +1416,12 @@ const HeroFashionGrid131: React.FC = () => {
     }
   },[]);
 
-  // const rollnoTemplate = (props: any) => {
-  //   let rollno = props.index
-  //   if (rollno) {
-  //     return (<span>{++rollno}</span>)
-  //   }
-  // }
+  const rollnoTemplate = (props: any) => {
+    let rollno = props.index
+    if (rollno) {
+      return (<span>{++rollno}</span>)
+    }
+  }
 
   const footerSum = (props: any) => {
     return (<span className='font-bold'>Q: {props.Sum}</span>)
@@ -1791,7 +1748,7 @@ const HeroFashionGrid131: React.FC = () => {
             <div style="display: flex; gap: 6px; max-width: 450px;">
 
               <!-- LEFT BIG IMAGE -->
-              <div style="padding: 4px;">
+              <div style="padding: 12px;">
                 <b>Order Image</b><br />
                 <img 
                   src="${imgSrc}" 
@@ -1800,7 +1757,7 @@ const HeroFashionGrid131: React.FC = () => {
               </div>
 
               <!-- RIGHT DYNAMIC GRID -->
-              <div style="display: flex; gap: 10px; padding: 4px;">
+              <div style="display: flex; gap: 10px; padding: 12px;">
                 ${imagesHtml}
               </div>
             </div>
@@ -1991,17 +1948,17 @@ const HeroFashionGrid131: React.FC = () => {
           load={load}
         >
           <ColumnsDirective>
-            <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="110" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="mainimagepath" headerText="ORD IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="130" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            {/* <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} /> */}
+            <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective field="ordimg" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('ordimg')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="110" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
+            <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="FabdyIN" headerText="FabdyIN"  width="150" maxWidth="150" type="string" template={udf11} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="Print" headerText="Print Chest" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Emb" headerText="Embroidery" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Others1" headerText="Others" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="print_img" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('print_img')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Emb" headerText="Emb" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Others1" headerText="imgs1" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Others2" headerText="AOP-9 img" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others2')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="quantity" headerText="QTY" width="110" textAlign="Center" template={genericHighlighter('quantity')} />
             <ColumnDirective field="director_sample_order" headerText="dir" width="75" maxWidth="100" filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
@@ -2319,4 +2276,4 @@ const HeroFashionGrid131: React.FC = () => {
   );
 };
 
-export default HeroFashionGrid131;
+export default HeroFashionGrid1311;

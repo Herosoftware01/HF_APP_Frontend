@@ -63,7 +63,7 @@ const Lay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://10.1.21.13:8001/get_lay_sp_data/');
+        const res = await fetch('http://10.1.21.13:8200/reports/get_lay_sp_data/');
         const result = await res.json();
         setData(result);
         applyFilter(result, 'Today');
