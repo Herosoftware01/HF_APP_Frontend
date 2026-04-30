@@ -22,7 +22,7 @@ const Cutdel = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://10.1.21.13:8200/reports/cutdel/")
+    fetch("https://hf.herofashion.com/reports/cutdel/")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
