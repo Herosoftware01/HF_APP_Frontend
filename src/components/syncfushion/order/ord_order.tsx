@@ -2013,7 +2013,7 @@ const HeroFashionGrid131: React.FC = () => {
               </AggregateColumnsDirective>
             </AggregateDirective>
           </AggregatesDirective>
-          <Inject services={[Sort, Edit, Filter, Group, Reorder, Search, VirtualScroll, DetailRow, Freeze, Resize, ContextMenu, Page, Toolbar, ColumnChooser, ColumnMenu, Aggregate, PdfExport]} />
+          <Inject services={[Sort, Edit, Filter, Group, Reorder, Search, VirtualScroll, DetailRow, Freeze, Resize, Page, Toolbar, ColumnChooser, ColumnMenu, Aggregate, PdfExport]} />
         </GridComponent></div>
     </TooltipComponent></div></>
   ), [dataSource]);

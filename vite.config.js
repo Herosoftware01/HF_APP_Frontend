@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { VitePWA } from 'vite-plugin-pwa' // Corrected import
 // import { visualizer } from "rollup-plugin-visualizer";
+import { VitePWA } from 'vite-plugin-pwa' // Corrected import
 
 export default defineConfig({
   plugins: [
@@ -14,7 +14,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       workbox: {
-        maximumFileSizeToCacheInBytes: 50000000, // 50MB
+        maximumFileSizeToCacheInBytes: 30000000, // 30MB
       },
       manifest: {
         name: 'HF APP',
