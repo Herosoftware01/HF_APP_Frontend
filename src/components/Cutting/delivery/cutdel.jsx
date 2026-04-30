@@ -22,7 +22,7 @@ const Cutdel = () => {
   }, []);
 
   useEffect(() => {
-    fetch("https://hf.herofashion.com/reports/cutdel/")
+    fetch("https://hfapi.herofashion.com/reports/cutdel/")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
