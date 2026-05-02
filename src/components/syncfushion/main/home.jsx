@@ -39,7 +39,8 @@ import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Pdf from "../order/Pdf/Pdf.tsx"
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
-
+import Xlsheet from '../order/Xlsheet/Xlsheet.tsx'
+import Word from '../order/Word/Word.tsx'
 
 function Home() {
   return (
@@ -84,6 +85,8 @@ function Home() {
         <Route path='/pdf' element={<Pdf />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
         <Route path='/optimize' element={<Optimize />} />
+        <Route path='/xlsheet' element={<Xlsheet />} />
+        <Route path='/word' element={<Word />} />
         
     </Routes>
   );
