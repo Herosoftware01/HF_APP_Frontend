@@ -164,9 +164,9 @@ function Sidebar({ children }) {
         
           <div className="flex">
             <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero</span>
-          <div class="text-center text-xs text-gray-500">
+          <div className="text-center text-xs text-gray-500">
                 Powered by 
-                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" class="text-blue-500 hover:underline text-md">
+                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline text-md">
                   Syncfusion
                 </a></span>
                 
@@ -196,9 +196,9 @@ function Sidebar({ children }) {
                
             </div>
 
-            <div class="text-center text-xs text-gray-500 ">
+            <div className="text-center text-xs text-gray-500 ">
               Powered by 
-              <a href="https://www.syncfusion.com" target="_blank" class="text-blue-500 hover:underline">
+              <a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline">
                 Syncfusion
               </a>
             </div>
