@@ -163,10 +163,10 @@ function Sidebar({ children }) {
         </button>
         
           <div className="flex">
-            <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero</span>
-          <div className="text-center text-xs text-gray-500">
+            <span className="font-black text-lg tracking-widest text-green-500 uppercase">Hero</span>
+          <div className="text-center text-xs text-white ml-8">
                 Powered by 
-                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline text-md">
+                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="text-blue-300 hover:underline text-md">
                   Syncfusion
                 </a></span>
                 
@@ -174,7 +174,7 @@ function Sidebar({ children }) {
           </div>
         
         {/* <div className="w-9 h-9 bg-cyan-800 rounded-full flex items-center justify-center font-bold border border-white/20">{userName[0]}</div> */}
-        <div className="flex items-center justify-center font-bold ">{userName}</div>
+        <div className="flex items-center justify-center font-bold text-sm">{userName}</div>
       </header>
 
       {mobileMenuOpen && (
@@ -192,13 +192,13 @@ function Sidebar({ children }) {
             <div className="items-center gap-2">
             <div className="flex items-center gap-2">
                <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center font-black shadow-lg text-white">H</div>
-               <span className="font-black text-xl tracking-tighter uppercase italic">Hero<span className="text-cyan-400"> ...</span></span>
+               <span className="font-black text-green-600 text-xl tracking-tighter uppercase italic">Hero</span>
                
             </div>
 
-            <div className="text-center text-xs text-gray-500 ">
-              Powered by 
-              <a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline">
+            <div className="text-center text-xs text-white ">
+              Powered by
+              <a href="https://www.syncfusion.com" target="_blank" className="text-blue-300 text-bold hover:underline ml-1">
                 Syncfusion
               </a>
             </div>

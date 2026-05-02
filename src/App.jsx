@@ -25,6 +25,9 @@ import Home_hw from "./components/fininace/holdwage/entry/hw_main";
 const BoldBi = lazy(()=>import("./components/syncfushion/DashboardListing/DashboardListing")) 
 const BoldReport = lazy(()=>import("./components/syncfushion/order/reportviewer")) 
 import Cut_sample from "./components/cutting_sample/main/cut_main"
+import Word from "./components/syncfushion/order/Word/Word"
+import Pdf from "./components/syncfushion/order/Pdf/Pdf"
+import Xlsheet from './components/syncfushion/order/Xlsheet/Xlsheet'
 
 function App() {
 
@@ -255,6 +258,39 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Cut_sample />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/word/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Word />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/xlsheet/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Xlsheet />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pdf/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Pdf />
               </ProtectedLayout>
             </ProtectedRoute>
           }
