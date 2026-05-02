@@ -12,9 +12,6 @@ import SubMenuPermissionPage from "./components/user_control/SubMenuPermissionPa
 import QualityApp from "./components/quality_app/main/Quality_main"
 import Qc_entry from "./components/quality_app/quality/Qc"
 import Syncfushion from "./components/syncfushion/main/home"
-// const Syncfushion = lazy(() =>
-//   import("./components/syncfushion/main/home")
-// );
 import Visuva from "./components/syncfushion/order/ord_pagination";
 import GreyRollChecking from "./components/GreyrollChecking/main/App";
 import FabricForm from "./components/syncfushion/fabric/Fabric";
@@ -262,8 +259,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
-
       </Routes>
     </HashRouter>
   );
