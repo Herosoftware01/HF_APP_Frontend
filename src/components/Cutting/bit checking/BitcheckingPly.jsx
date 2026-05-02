@@ -158,28 +158,52 @@ const handleQrScan = async (qr) => {
     }
 
     try {
-      for (let tab of tabs) {
-        const values = selected[tab] || [];
-        if (values.length === 0) continue; // skip empty
+       const requests = tabs.map((tab) => {
+
+        const values = (selected[tab] || []).filter(
+          v => v !== undefined && v !== null && v !== 0
+        );
+
+        const outValues = unique.filter(
+          num => !values.includes(num)
+        );
+
         const payload = {
           emp_id: empValue,
           qr_id: qrValue,
           total_pcs: totalPcs,
-          category: `${tab} - ${values.join(",")}`,
+          category: values.length > 0
+          ? `${tab} - ${values.join(",")}` : `${tab} - 0`,
           result: unique.join(","), 
-          final_tpcs: unique.length
+          final_tpcs: unique.length,
+          out: `ok outpcs - ${outValues.join(",")}`,
+          mistake_pcs: values.length,
+          ok_pcs: outValues.length
         };
 
-        await fetch("https://app.herofashion.com/bit_ply/", {
+        return fetch("https://app.herofashion.com/bit_ply/", {   
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify(payload)
         });
+      });
+
+      const responses = await Promise.all(requests);
+      const hasError = responses.some(res => !res.ok);
+
+      if (hasError) {
+        alert("Save Failed ❌");
+      } else {
+        alert("Saved Successfully ✅");
       }
 
-      alert("Saved successfully ✅");
+      setQrValue(""); 
+
+      if(qrInputRef.current){
+        qrInputRef.current.value=""
+      }
 
     } catch (error) {
       console.error(error);
@@ -332,7 +356,7 @@ const handleQrScan = async (qr) => {
               <div
                 key={num}
                 onClick={() => toggleSelect(num)}
-                className={`w-10 h-10 md:w-15 md:h-15 lg:w-20 lg:h-20 flex items-center justify-center border rounded cursor-pointer text-sm border-none
+                className={`w-10 h-10 md:w-15 md:h-15 lg:w-20 lg:h-20 flex items-center justify-center border-none rounded cursor-pointer text-sm
                   ${
                     selected[activeTab]?.includes(num)
                       ? "bg-yellow-400"

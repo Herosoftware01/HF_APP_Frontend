@@ -42,14 +42,16 @@ const Sticker = () => {
     size: '',
     lotno: '',
     ratio: '',
-    sizeid: ''
+    sizeid: '',
+    porid: '',
+    pordesc: ''
   });
 
   const [isTabletOrBelow, setIsTabletOrBelow] = useState(false);
 
   useEffect(() => {
     const checkScreen = () => {
-      setIsTabletOrBelow(window.innerWidth <= 1024); 
+      setIsTabletOrBelow(window.innerWidth <= 1100); 
       // 1024px = tablet breakpoint (adjust if needed)
     };
 
@@ -160,7 +162,9 @@ const Sticker = () => {
         size: match.size,
         lotno: match.lotno,
         ratio: match.ratio,
-        sizeid: match.sizeid
+        sizeid: match.sizeid,
+        porid: match.porid,
+        pordesc: match.pordesc
       });
 
       setTableData(prev => [...prev, match]);
@@ -190,7 +194,9 @@ const Sticker = () => {
       size: "",
       lotno: "",
       ratio: "",
-      sizeid: ""
+      sizeid: "",
+      pordesc: "",
+      porid: ""
     });
 
     // clear update lock
@@ -240,6 +246,8 @@ const Sticker = () => {
           employee_name: selectedEmp.name,
           topbottom_des: row.topbottom_des,
           size: row.size,
+          porid: row.porid,
+          pordesc: row.pordesc
         };
 
         const res = await fetch("https://app.herofashion.com/stick_dtls/", {
@@ -279,7 +287,9 @@ const Sticker = () => {
         size: "",
         lotno: "",
         ratio: "",
-        sizeid: ""
+        sizeid: "",
+        pordesc: "",
+        porid: ""
       });
       setTableData([]);
       setSearchCode("");
@@ -332,7 +342,7 @@ const Sticker = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-2 border-2 border-blue-800 rounded-sm overflow-hidden lg:mt-21">
+          <div className="grid grid-cols-2 border-2 border-blue-800 rounded-sm overflow-hidden lg:mt-20">
             <div className="bg-blue-800 text-white p-2 flex flex-col items-center justify-center">
               <span className="text-[10px] uppercase font-bold">No. of Rows</span>
               <span className="text-xl font-black">{noOfRows}</span>
@@ -365,7 +375,7 @@ const Sticker = () => {
               </datalist>
             </div>
 
-            <div className="col-span-7">
+            <div className="col-span-6">
               <label className="block text-blue-700 font-bold mb-1">Employee Name</label>
               <input readOnly value={selectedEmp.name} className="w-full border border-gray-300 p-3 bg-gray-50" />
             </div>
@@ -386,12 +396,22 @@ const Sticker = () => {
               <input readOnly value={formData.topbottom_des} className="w-full border border-gray-300 p-3 bg-gray-50" />
             </div>
 
-            <div className="col-span-6">
+            <div className="col-span-3">
               <label className="block text-blue-700 font-bold mb-1">Combo Colour</label>
               <input readOnly value={formData.clrcombo} className="w-full border border-gray-300 p-3 bg-gray-50" />
             </div>
 
-            <div className="col-span-6">
+            <div className="col-span-3">
+              <label className="block text-blue-700 font-bold mb-1">Portion Id</label>
+              <input readOnly value={formData.porid} className="w-full border border-gray-300 p-3 bg-gray-50" />
+            </div>
+
+            <div className="col-span-3">
+              <label className="block text-blue-700 font-bold mb-1">Portion Desc</label>
+              <input readOnly value={formData.pordesc} className="w-full border border-gray-300 p-3 bg-gray-50" />
+            </div>
+
+            <div className="col-span-3">
               <label className="block text-blue-700 font-bold mb-1">Size</label>
               <input readOnly value={formData.size} className="w-full border border-gray-300 p-3 bg-gray-50" />
             </div>
@@ -451,7 +471,7 @@ const Sticker = () => {
 
       {/* Footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-100 p-2 flex justify-end gap-2 border-t border-gray-300">
-        <button
+        {/* <button
           onClick={() => {
             fetch('https://app.herofashion.com/stick_dtls/')
               .then(res => res.json())
@@ -464,7 +484,7 @@ const Sticker = () => {
           className="px-6 py-1 bg-white border border-gray-400 hover:bg-red-50"
         >
           Show Details
-        </button>
+        </button> */}
 
         <button onClick={handleClearForm} className="px-6 py-1 bg-blue-600 text-white hover:bg-blue-700">
           Clear Form 
