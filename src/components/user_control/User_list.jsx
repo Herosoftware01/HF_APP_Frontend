@@ -352,7 +352,7 @@ const User_list = () => {
           <div
             key={emp.code}
             onClick={() => {
-              setFormData({ ...formData, username: emp.name, password: "1234" });
+              setFormData({ ...formData, username: emp.code, password: "1234" });
               setShowEmployeeDropdown(false);
               setSearchTerm("");
             }}
