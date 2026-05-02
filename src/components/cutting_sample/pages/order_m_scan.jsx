@@ -18,9 +18,9 @@ export default function ProductionDetails() {
 
   const [isScanning, setIsScanning] = useState(false);
 
-   const [bfIroning, setBfIroning] = useState(false);
-const [afIroning, setAfIroning] = useState(false);
-const [alreadyChecked, setAlreadyChecked] = useState(false);
+  const [bfIroning, setBfIroning] = useState(false);
+  const [afIroning, setAfIroning] = useState(false);
+  const [alreadyChecked, setAlreadyChecked] = useState(false);
 
 
   const canContinue = jobNo && product && pieces && !alreadyChecked;
@@ -322,9 +322,7 @@ const fillBundleData = async (bundle) => {
             Continue
           </button>
         </div>
-
       </div>
-
     </div>
   );
 }
