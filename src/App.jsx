@@ -11,8 +11,7 @@ import MenuPage from "./components/user_control/MenuPage";
 import SubMenuPermissionPage from "./components/user_control/SubMenuPermissionPage";
 import QualityApp from "./components/quality_app/main/Quality_main"
 import Qc_entry from "./components/quality_app/quality/Qc"
-import Syncfushion from "./components/syncfushion/main/home"
-import Visuva from "./components/syncfushion/order/ord_pagination";
+import Syncfushion from "./components/syncfushion/main/home";
 import GreyRollChecking from "./components/GreyrollChecking/main/App";
 import FabricForm from "./components/syncfushion/fabric/Fabric";
 import Machine_Allocate from "./components/machine_allocate/main"
@@ -28,6 +27,13 @@ import Cut_sample from "./components/cutting_sample/main/cut_main"
 import Word from "./components/syncfushion/order/Word/Word"
 import Pdf from "./components/syncfushion/order/Pdf/Pdf"
 import Xlsheet from './components/syncfushion/order/Xlsheet/Xlsheet'
+import GanttChart from "./components/syncfushion/order/Gantt Chart/GanttChart";
+import Kanban from './components/syncfushion/order/Kanban/Kanban';
+import Pivot from "./components/syncfushion/order/pivot/Pivotview";
+import WebSocket from './components/syncfushion/order/web_order';
+import BlockEditor from './components/syncfushion/order/BlockEditor/eblockeditor.tsx';
+import Oms from './components/syncfushion/order/excel';
+import Calendar from './components/syncfushion/order/Schedule.tsx'
 
 function App() {
 
@@ -100,17 +106,6 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Syncfushion />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/ord_page/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Visuva />
               </ProtectedLayout>
             </ProtectedRoute>
           }
@@ -295,6 +290,84 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/websocket/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <WebSocket />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sy-order/block_edit/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <BlockEditor/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sy-order/ganttchart/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <GanttChart/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sy-order/calendar/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Calendar/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sy-order/oms/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Oms/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pivot/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Pivot/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/kanban/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Kanban/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </HashRouter>
   );
