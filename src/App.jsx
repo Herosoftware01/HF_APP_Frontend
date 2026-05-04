@@ -31,9 +31,11 @@ import GanttChart from "./components/syncfushion/order/Gantt Chart/GanttChart";
 import Kanban from './components/syncfushion/order/Kanban/Kanban';
 import Pivot from "./components/syncfushion/order/pivot/Pivotview";
 import WebSocket from './components/syncfushion/order/web_order';
-import BlockEditor from './components/syncfushion/order/BlockEditor/eblockeditor.tsx';
+import BlockEditor from './components/syncfushion/order/BlockEditor/eblockeditor';
 import Oms from './components/syncfushion/order/excel';
-import Calendar from './components/syncfushion/order/Schedule.tsx'
+import Calendar from './components/syncfushion/order/Schedule'
+import Form from './components/syncfushion/order/Form/Form'
+import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
 
 function App() {
 
@@ -363,6 +365,27 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Kanban/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sy-order/formbuilder/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <FormBuilder/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sy-order/form_detail/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Form/>
               </ProtectedLayout>
             </ProtectedRoute>
           }
