@@ -163,15 +163,15 @@ function Sidebar({ children }) {
           <Menu size={20} />
         </button>
         
-          <div className="flex">
-            <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero</span>
-          <div className="text-center text-xs text-gray-500">
-                Powered by 
-                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline text-md">
-                  Syncfusion
-                </a></span>
-                
-          </div>
+          <div className="flex justify-evenly">
+            <span className="font-bold text-lg text-center" style={{color: '#75c15b'}}>HeroFashion</span>
+            <div className="text-center text-xs text-white ml-2">
+                  Powered by 
+                  <span className="font-bold text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="hover:underline text-md" style={{color: '#75c15b'}}>
+                    Syncfusion
+                  </a></span>
+                  
+            </div>
           </div>
         
         {/* <div className="w-9 h-9 bg-cyan-800 rounded-full flex items-center justify-center font-bold border border-white/20">{userName[0]}</div> */}
@@ -199,9 +199,6 @@ function Sidebar({ children }) {
                
             </div>
 
-            <div className="text-center text-xs text-gray-500 ">
-              Powered by 
-              <a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline">
             <div className="text-center text-xs text-white ">
               Powered by
               <a href="https://www.syncfusion.com" target="_blank" className="font-bold hover:underline ml-1 text-lg italic" style={{color: '#75c15b'}}>

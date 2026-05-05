@@ -138,18 +138,6 @@ function App() {
           }
         />
         
-
-        <Route
-          path="/ord_page/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Visuva />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-
         <Route
           path="/qc-admin/*"
           element={

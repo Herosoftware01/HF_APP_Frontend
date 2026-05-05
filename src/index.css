@@ -1,8 +1,8 @@
 @import "@syncfusion/ej2-react-form-renderer/styles/material.css";
 @import "tailwindcss";
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 /* 
 
@@ -124,8 +124,3 @@ app-root {
   cursor: pointer;
   width: 100% !important
 } */
-
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
