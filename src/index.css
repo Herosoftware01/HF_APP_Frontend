@@ -124,3 +124,8 @@ app-root {
   cursor: pointer;
   width: 100% !important
 } */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

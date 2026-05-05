@@ -21,6 +21,9 @@ import Sticker from "./components/Cutting/sticker production/App"
 import Bitcheck from "./components/Cutting/bit checking/App"
 import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
+import In_login from "./components/Incentive&Debit/app/in_main";
+import Emp from "../src/components/production/pro_main";
+import Re_home from "../src/components/hr/reports/re_main";
 const BoldBi = lazy(()=>import("./components/syncfushion/DashboardListing/DashboardListing")) 
 const BoldReport = lazy(()=>import("./components/syncfushion/order/reportviewer")) 
 import Cut_sample from "./components/cutting_sample/main/cut_main"
@@ -108,6 +111,40 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Syncfushion />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/allunit/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Emp />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+         <Route
+          path="/hr/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Re_home />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        
+
+        <Route
+          path="/ord_page/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Visuva />
               </ProtectedLayout>
             </ProtectedRoute>
           }

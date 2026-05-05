@@ -234,7 +234,7 @@ const Cutdel = () => {
                     status === 'without_plan' ? 'bg-amber-50/50 border-amber-200' : ''
                   }`}>
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                      <div className="shrink-0 w-12 h-12 bg-linear-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center">
                         <span className="text-white font-black text-lg">{idx + 1}</span>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -296,8 +296,8 @@ const Cutdel = () => {
               <table className="w-full text-left border-collapse relative">
                 <thead>
                   <tr className="bg-slate-50 sticky top-0 z-20">
-                    <th className="py-4 px-4 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap  bg-slate-50 sticky left-0 z-30 border-r border-slate-200 w-20">SL NO</th>
-                    <th className="py-4 px-4 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap sticky left-15 bg-slate-50 z-30 border-r border-slate-200 min-w-[120px]">
+                    <th className="py-4 px-4 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap  bg-slate-50 sticky left-0 z-30  w-20">SL NO</th>
+                    <th className="py-4 px-4 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap sticky left-15 bg-slate-50 z-30   min-w-30">
                       Job No
                     </th>
                     {[
