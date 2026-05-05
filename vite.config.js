@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { VitePWA } from 'vite-plugin-pwa' // Corrected import
 // import { visualizer } from "rollup-plugin-visualizer";
+import { VitePWA } from 'vite-plugin-pwa' // Corrected import
 
 export default defineConfig({
   plugins: [

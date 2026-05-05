@@ -4,7 +4,7 @@ import IframeBold from "../order/sync_iframe.jsx"
 import HrReportGrid from "../order/ord1 ok.tsx"
 import TallyBalanceReport from "../order/tally.tsx"
 import OrdPagination from "../order/ord_pagination.tsx"
-import PrnReportGrid from "../order/print.tsx"
+import PrnReportGrid from "../order/Print.tsx"
 import CardGrid from './Card.jsx';
 import Card1 from '../order/card/Card.jsx';
 import Card2 from '../order/card/Card2.jsx';
@@ -32,14 +32,14 @@ import Form from "../order/Form/Form.tsx";
 import Websocket from "../order/websocket.jsx"
 import Weborder from "../order/web_order.tsx"
 import "../order/Global.tsx"
-import Report from '../order/reportviewer.tsx'; 
 import Formbuilder from '../order/FormBuilder/formbuilder.tsx'; 
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Pdf from "../order/Pdf/Pdf.tsx"
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
-
+import Xlsheet from '../order/Xlsheet/Xlsheet.tsx'
+import Word from '../order/Word/Word.tsx'
 
 function Home() {
   return (
@@ -76,14 +76,14 @@ function Home() {
         <Route path='/websocket' element={<Websocket />} />
         <Route path='/Weborder' element={<Weborder />} />
         <Route path='/form' element={<Form />} />
-        <Route path='/Report' element={<Report />} />
-        <Route path='/Report' element={<Report />} />
         <Route path='/Formbuilder' element={<Formbuilder />} />
         <Route path='/Embedd' element={<Embedd />} />
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/pdf' element={<Pdf />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
         <Route path='/optimize' element={<Optimize />} />
+        <Route path='/xlsheet' element={<Xlsheet />} />
+        <Route path='/word' element={<Word />} />
         
     </Routes>
   );

@@ -8,6 +8,7 @@ import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { UserContext } from "../../../../UserContext";
+import './kanban.css'
 
 function App() {
     const [kanbanData, setKanbanData] = useState([]);

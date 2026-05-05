@@ -1,0 +1,4 @@
+.e-kanban .e-kanban-table.e-content-table .e-content-row:not(.e-swimlane-row) td {
+    background: none !important;
+}
+ 
