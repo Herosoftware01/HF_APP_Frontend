@@ -150,6 +150,36 @@ function App() {
             });
         }
     };
+
+    const updateCardValue = (passedData?: any) => {    
+    const currentData = kanbanData;
+    // Define type for counts
+    type Counts = { InProgress: number; Testing: number; Ordinary: number; Close: number };
+    const counts: Counts = {
+      InProgress: 0,
+      Testing: 0,
+      Ordinary: 0,
+      Close: 0,
+    };
+    currentData.forEach((item: { worktype1: keyof Counts }) => {
+      counts[item.worktype1]++;
+    });
+    updateCardElement('.detailcontainertodo', counts.Ordinary, 0);
+    updateCardElement('.detailcontainertodo', counts.InProgress, 1);
+    updateCardElement('.detailcontainertodo', counts.Testing, 2);
+    updateCardElement('.detailcontainertodo', counts.Close, 3);
+  }
+  function updateCardElement(selector: string, count: number, indexNumber: number): void {
+    const cardElement = document.querySelectorAll(selector)[indexNumber];
+    const countTodoElement = cardElement?.querySelector('.counttodo');
+    if (countTodoElement) {
+      countTodoElement.innerHTML = count.toString();
+    }
+  }
+  const kanbanDataBound = () => {
+    updateCardValue();
+  }
+
     const KanbanDialogFormTemplate = (props: any) => {
         const [assigneeData, setAssigneeData] = useState([]);
         const [assignorData, setAssignorData] = useState([]);
@@ -412,7 +442,38 @@ function App() {
                     </div>
                 </div>
             </div>
-            <div className="datasource-filter-container">
+
+          <div className="datasource-filter-container">
+                       <div className="card-container">
+              <div className="inner-cadr">
+                <div className="mainimagetodo"></div>
+                <div className="detailcontainertodo">
+                  <div className="texttodo">TO DO</div>
+                  <div className="counttodo">0</div>
+                </div>
+              </div>
+              <div className="inner-cadr">
+                <div className="mainimageprogress"></div>
+                <div className="detailcontainertodo">
+                  <div className="texttodo change-font">In Progress</div>
+                  <div className="counttodo">0</div>
+                </div>
+              </div>
+              <div className="inner-cadr">
+                <div className="mainimagetest"></div>
+                <div className="detailcontainertodo">
+                  <div className="texttodo">Testing</div>
+                  <div className="counttodo">0</div>
+                </div>
+              </div>
+              <div className="inner-cadr">
+                <div className="mainimagedone"></div>
+                <div className="detailcontainertodo">
+                  <div className="texttodo">Done</div>
+                  <div className="counttodo">0</div>
+                </div>
+              </div>
+            </div>
 
                 <div id="image-container" className="custom-dropdown">
                     <img src="https://app.herofashion.com/staff_images/10006.jpg" alt="PREMAVATHI.N" className="circular-image" title="Martin Tamer" style={{ width: '35px', height: '35px' }} />
@@ -436,6 +497,7 @@ function App() {
                     template: cardTemplate,
                     grabberField: 'color',
                 }}
+                dataBound={kanbanDataBound} 
                 dialogSettings={{ template: dialogTemplate }}
             >
                 <ColumnsDirective>
