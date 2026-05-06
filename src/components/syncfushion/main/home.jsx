@@ -40,6 +40,13 @@ import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
 import Xlsheet from '../order/Xlsheet/Xlsheet.tsx'
 import Word from '../order/Word/Word.tsx'
+import Smartpaste from '../order/Smart Paste/Smartpaste.tsx'
+import Speech from '../order/Speak/Speech.tsx'
+import Explorer from '../order/DocumentExplorer/Explorer.tsx';
+import Floor from '../order/Floor Plan/Floor.tsx';
+import ImageEditor from '../order/Image Editor/ImageEditor.tsx';
+import LogicCircut from '../order/Logic Circut/LogicCircut.tsx';
+import Webmail from '../order/Web Mail/Webmail.tsx';
 
 function Home() {
   return (
@@ -84,6 +91,13 @@ function Home() {
         <Route path='/optimize' element={<Optimize />} />
         <Route path='/xlsheet' element={<Xlsheet />} />
         <Route path='/word' element={<Word />} />
+        <Route path='/smart' element={<Smartpaste />} />
+        <Route path='/speak' element={<Speech />} />
+        <Route path='/explor' element={<Explorer />} />
+        <Route path='/floor' element={<Floor />} />
+        <Route path='/imgedit' element={<ImageEditor />} />
+        <Route path='/circut' element={<LogicCircut />} />
+        <Route path='/webmail' element={<Webmail />} />
         
     </Routes>
   );
