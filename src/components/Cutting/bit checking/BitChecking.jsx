@@ -78,7 +78,7 @@ const BitChecking = () => {
                 const list = Array.isArray(data) ? data : [data];
                 setStickList(list);
 
-                console.log("Stick List Loaded:", list); // debug safety
+                // console.log("Stick List Loaded:", list); // debug safety
             })
             .catch(err => console.error("Stick list fetch error:", err));
     }, []);
@@ -157,8 +157,9 @@ const BitChecking = () => {
             sizeid: match.sizeid || '',
             plansl: match.plansl || '',
             planno: match.planno || '',
-            pc: match.pc || ''
-
+            pc: match.pc || '',
+            porid: match.porid || '',
+            portion_des: match.portion_des || ''
         }));
 
         try {
@@ -213,8 +214,7 @@ const BitChecking = () => {
 
         try {
 
-            for (const part of bitParts) {
-
+            const requests = bitParts.map((part) => {
                 const mistakeValue = mistakes[part] || 0;
 
                 const payload = {
@@ -224,6 +224,8 @@ const BitChecking = () => {
                     ind_part: part,
                     mistake: mistakeValue,
                     time: scanTime,
+                    porid: formData.porid || '0',
+                    portion_des: formData.portion_des,
                     emp_name: selectedEmp.name,
                     job_no: formData.jobno,
                     tobbot_des: formData.topbottom_des,
@@ -237,16 +239,21 @@ const BitChecking = () => {
                     ok_pcs: okPcs
                 };
 
-                console.log("POSTING:", payload);
-
-                await fetch("https://app.herofashion.com/bit_checking/", {
+                return fetch("https://app.herofashion.com/bit_checking/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 });
-            }
+            });
 
-            toast.success("Saved Successfully");
+            const responses = await Promise.all(requests);
+            const hasError = responses.some(res => !res.ok);
+
+            if (hasError) {
+                toast.error("Save Faild");
+            } else {
+                toast.success("Saved Successfully");
+            }
 
             setFormData({});
             setMistakes({});
@@ -314,7 +321,7 @@ const BitChecking = () => {
                 {/* Second Row: Job Details */}
                 <div className="grid grid-cols-10 gap-2 mb-6">
                     <div className="col-span-2">
-                        <label className="block text-blue-700 font-bold mb-1">RATIO QR CODE ID</label>
+                        <label className="block text-blue-700 font-bold mb-1">RATIO ID</label>
                         <input type="text"
                             ref={qrInputRef}
                             onKeyUp={(e) => {
@@ -336,7 +343,15 @@ const BitChecking = () => {
                         <label className="block text-blue-700 font-bold mb-1">Colour/Combo</label>
                         <input readOnly value={formData.clrcombo || ''} className="w-full border border-gray-300 p-1" />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-2">
+                        <label className="block text-blue-700 font-bold mb-1">Portion_Id</label>
+                        <input readOnly value={formData.porid || ''} className="w-full border border-gray-300 p-1" />
+                    </div>
+                    <div className="col-span-2">
+                        <label className="block text-blue-700 font-bold mb-1">Portion_Desc</label>
+                        <input readOnly value={formData.portion_des || ''} className="w-full border border-gray-300 p-1" />
+                    </div>
+                    <div className="col-span-2">
                         <label className="block text-blue-700 font-bold mb-1">Size</label>
                         <input readOnly value={formData.size || ''} className="w-full border border-gray-300 p-1" />
                     </div>
@@ -478,7 +493,7 @@ const BitChecking = () => {
                             onClick={() => {
                                 if (btn === "Update") handleUpdate();
                                 if (btn === "Refresh") window.location.reload();
-                                if (btn === "BiChart") navigate("/bit-checking/bit-chart");
+                                if (btn === "BiChart") navigate("/stick-prod/bit-chart");
                                 if (btn === "Clear") {
                                     setFormData({});
                                     setMistakes({});
