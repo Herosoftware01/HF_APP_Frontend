@@ -1,4 +1,4 @@
-import {  Routes, Route, } from 'react-router-dom';
+import { Routes, Route, } from 'react-router-dom';
 import HeroFashionGrid13 from "../order/ord_order.tsx"
 import IframeBold from "../order/sync_iframe.jsx"
 import HrReportGrid from "../order/ord1 ok.tsx"
@@ -24,7 +24,7 @@ import OrderDetails from '../order/OrderDetails.tsx';
 import MasterDetail from '../order/masterdtls.tsx';
 import Ordloadbalan from '../order/ordloadbalan.tsx';
 import ForeignKeyColumn from '../order/SyncForignkey.tsx';
-import Pivot from '../order/pivot/Pivotview.tsx'; 
+import Pivot from '../order/pivot/Pivotview.tsx';
 import Adaptive from '../order/AdaptiveCardSync.tsx';
 import Kanban from '../order/Kanban/Kanban.jsx';
 import Quary from '../order/sync_quarybuilder.tsx';
@@ -32,54 +32,55 @@ import Form from "../order/Form/Form.tsx";
 import Websocket from "../order/websocket.jsx"
 import Weborder from "../order/web_order.tsx"
 import "../order/Global.tsx"
-import Report from '../order/reportviewer.tsx'; 
-import Formbuilder from '../order/formbuilder.tsx'; 
+import Report from '../order/reportviewer.tsx';
+import Formbuilder from '../order/formbuilder.tsx';
 import Dashboard from '../DashboardListing/DashboardListing.jsx'
 import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Spreadsheet from '../order/Spreadsheet/Spreadsheet.tsx';
-
+import Pdf from "../order/Pdf/Pdf.tsx"
 
 function Home() {
   return (
     <Routes>
-        <Route path="/" element={<CardGrid />} />
-        <Route path="/order" element={<HeroFashionGrid13 />} />
-        <Route path="/sync_iframe" element={<IframeBold />} />
-        <Route path="/HrReportGrid" element={<HrReportGrid />} /> 
-        <Route path="/OrdPagination" element={<OrdPagination />} /> 
-        <Route path='/store' element= {<StoreGrid />} />
-        <Route path="/TallyBalanceReport" element={<TallyBalanceReport />} /> 
-        <Route path="/PrnReportGrid" element={<PrnReportGrid />} /> 
-        <Route path="/card1" element={<Card1 />} /> 
-        <Route path="/card2" element={<Card2 />} /> 
-        <Route path="/sample" element={<Sample />} /> 
-        <Route path="/mulitquality" element={<MultiQuality/>} />
-        <Route path="/Schedule" element={<Schedule />} /> 
-        <Route path="/PRN" element={<PRN />} /> 
-        <Route path="/Excel" element={<Excel />} />
-        <Route path="/MasterDetail" element={<MasterDetail />} />
-        <Route path="/TemplateGallery" element={<TemplateGallery />} /> 
-        <Route path="/fabric" element={<FabricForm />} /> 
-        <Route path='/signup' element={<Signin1 />} />
-        <Route path='/order_oms' element={<OrderOms />} />
-        <Route path='/HeroFashionGrid131' element={<HeroFashionGrid131 />} />
-        <Route path='/chart' element={<GanttChart />} />
-        <Route path='/order_detail' element={<OrderDetails />} />
-        <Route path='/forign' element={<ForeignKeyColumn />} />
-        <Route path='/pivot' element={<Pivot />} />
-        <Route path='/ordloadbalan' element={<Ordloadbalan />} />
-        <Route path='/adaptive' element={<Adaptive />} />
-        <Route path='/kanban' element={<Kanban />} />
-        <Route path='/quary' element={<Quary />} />
-        <Route path='/websocket' element={<Websocket />} />
-        <Route path='/Weborder' element={<Weborder />} />
-        <Route path='/form' element={<Form />} />
-        <Route path='/Report' element={<Report />} />
-        <Route path='/Report' element={<Report />} />
-        <Route path='/Formbuilder' element={<Formbuilder />} />
-        <Route path='/Embedd' element={<Embedd />} />
-        <Route path='/Dashboard' element={<Dashboard />} />
-        <Route path='/spreadsheet' element={ <Spreadsheet />} />
+      <Route path="/" element={<CardGrid />} />
+      <Route path="/order" element={<HeroFashionGrid13 />} />
+      <Route path="/sync_iframe" element={<IframeBold />} />
+      <Route path="/HrReportGrid" element={<HrReportGrid />} />
+      <Route path="/OrdPagination" element={<OrdPagination />} />
+      <Route path='/store' element={<StoreGrid />} />
+      <Route path="/TallyBalanceReport" element={<TallyBalanceReport />} />
+      <Route path="/PrnReportGrid" element={<PrnReportGrid />} />
+      <Route path="/card1" element={<Card1 />} />
+      <Route path="/card2" element={<Card2 />} />
+      <Route path="/sample" element={<Sample />} />
+      <Route path="/mulitquality" element={<MultiQuality />} />
+      <Route path="/Schedule" element={<Schedule />} />
+      <Route path="/PRN" element={<PRN />} />
+      <Route path="/Excel" element={<Excel />} />
+      <Route path="/MasterDetail" element={<MasterDetail />} />
+      <Route path="/TemplateGallery" element={<TemplateGallery />} />
+      <Route path="/fabric" element={<FabricForm />} />
+      <Route path='/signup' element={<Signin1 />} />
+      <Route path='/order_oms' element={<OrderOms />} />
+      <Route path='/HeroFashionGrid131' element={<HeroFashionGrid131 />} />
+      <Route path='/chart' element={<GanttChart />} />
+      <Route path='/order_detail' element={<OrderDetails />} />
+      <Route path='/forign' element={<ForeignKeyColumn />} />
+      <Route path='/pivot' element={<Pivot />} />
+      <Route path='/ordloadbalan' element={<Ordloadbalan />} />
+      <Route path='/adaptive' element={<Adaptive />} />
+      <Route path='/kanban' element={<Kanban />} />
+      <Route path='/quary' element={<Quary />} />
+      <Route path='/websocket' element={<Websocket />} />
+      <Route path='/Weborder' element={<Weborder />} />
+      <Route path='/form' element={<Form />} />
+      <Route path='/Report' element={<Report />} />
+      <Route path='/Report' element={<Report />} />
+      <Route path='/Formbuilder' element={<Formbuilder />} />
+      <Route path='/Embedd' element={<Embedd />} />
+      <Route path='/Dashboard' element={<Dashboard />} />
+      <Route path='/pdf' element={<Pdf />} />
+      <Route path='/spreadsheet' element={<Spreadsheet />} />
     </Routes>
   );
 }

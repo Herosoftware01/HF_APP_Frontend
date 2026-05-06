@@ -22,6 +22,7 @@ import Sticker from "./components/Cutting/sticker production/App"
 import Bitcheck from "./components/Cutting/bit checking/App"
 import BitCheckingUI from "./components/Cutting/bit checking/BitcheckingPly";
 import Home_hw from "./components/fininace/holdwage/entry/hw_main";
+import Pdf from "./components/syncfushion/order/Pdf/Pdf"
 
 function App() {
 
@@ -174,7 +175,7 @@ function App() {
           }
         />
 
-         <Route
+        <Route
           path="/advance/*"
           element={
             <ProtectedRoute>
@@ -184,7 +185,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-          <Route
+        <Route
           path="/stick-prod/*"
           element={
             <ProtectedRoute>
@@ -215,7 +216,7 @@ function App() {
           }
         />
 
-         <Route
+        <Route
           path="/holdwage/*"
           element={
             <ProtectedRoute>
@@ -225,8 +226,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
-        
+
+        <Route
+          path="/pdf/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Pdf />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </HashRouter>
