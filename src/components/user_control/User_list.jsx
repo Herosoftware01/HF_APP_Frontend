@@ -8,13 +8,14 @@ import {
   Edit3, 
   Trash2, 
   Shield, 
-  Calendar,
   X,
   Save,
   Loader2,
   Hash,
   Search,
-  ChevronRight
+  ChevronRight,
+  Eye,      // Added Eye icon
+  EyeOff    // Added EyeOff icon
 } from "lucide-react";
 
 const User_list = () => {
@@ -24,6 +25,7 @@ const User_list = () => {
   const [submitting, setSubmitting] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const [submenus, setSubmenus] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
@@ -123,6 +125,7 @@ const User_list = () => {
     setEditingUser(null);
     setShowCreateModal(false);
     setShowEmployeeDropdown(false);
+    setShowPassword(false); // Reset visibility when closing
     setSearchTerm("");
     setFormData({ username: "", password: "", role_id: "", default_submenu_id: "" });
   };
@@ -223,67 +226,69 @@ const User_list = () => {
         </div>
 
         {/* --- DESKTOP TABLE --- */}
-        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Staff Info</th>
-                  <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Role</th>
-                  <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Menu</th>
-                  <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="px-6 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Operations</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs uppercase group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                          {user.username.substring(0, 2)}
-                        </div>
-                        <div>
-                          <p className="text-[13px] font-bold text-slate-700 leading-none mb-1">{user.username}</p>
-                          <p className="text-[10px] text-slate-400 font-medium tracking-tight italic">ID: #{user.id}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Shield size={14} className="text-slate-300" />
-                        <span className="text-[12px] font-semibold capitalize tracking-tight">{user.role || "No Role"}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`text-[12px] font-semibold capitalize tracking-tight px-2 py-1 rounded-md ${user.default_submenu ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
-                        {user.default_submenu ? user.default_submenu.name : "No Menu"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[9px] font-black uppercase border ${user.is_active ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-rose-50 text-rose-600 border-rose-100"}`}>
-                        {user.is_active ? "Live" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button onClick={() => toggleStatus(user.id, user.is_active)} className="p-1.5 rounded-lg border text-slate-400 hover:text-indigo-600">
-                          {user.is_active ? <UserMinus size={15} /> : <UserCheck size={15} />}
-                        </button>
-                        <button onClick={() => openEditModal(user)} className="p-1.5 text-slate-400 hover:text-indigo-600">
-                          <Edit3 size={15} />
-                        </button>
-                        <button onClick={() => deleteUser(user.id)} className="p-1.5 text-slate-400 hover:text-rose-600">
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+  {/* Set a max-height and enable vertical scrolling */}
+  <div className="max-h-[calc(110vh-250px)] overflow-y-auto overflow-x-auto relative scrollbar-thin scrollbar-thumb-slate-200">
+    <table className="w-full border-collapse">
+      <thead>
+        {/* 'sticky top-0' keeps the header fixed while scrolling */}
+        <tr className="bg-slate-50 sticky top-0 z-10 border-b border-slate-100 shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
+          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50">Staff Info</th>
+          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50">Role</th>
+          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50">Menu</th>
+          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50">Status</th>
+          <th className="px-6 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50">Operations</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-slate-50">
+        {users.map((user) => (
+          <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+            <td className="px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs uppercase group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                  {user.username.substring(0, 2)}
+                </div>
+                <div>
+                  <p className="text-[13px] font-bold text-slate-700 leading-none mb-1">{user.username}</p>
+                  <p className="text-[10px] text-slate-400 font-medium tracking-tight italic">ID: #{user.id}</p>
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4">
+              <div className="flex items-center gap-2 text-slate-600">
+                <Shield size={14} className="text-slate-300" />
+                <span className="text-[12px] font-semibold capitalize tracking-tight">{user.role || "No Role"}</span>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <span className={`text-[12px] font-semibold capitalize tracking-tight px-2 py-1 rounded-md ${user.default_submenu ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+                {user.default_submenu ? user.default_submenu.name : "No Menu"}
+              </span>
+            </td>
+            <td className="px-6 py-4">
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[9px] font-black uppercase border ${user.is_active ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-rose-50 text-rose-600 border-rose-100"}`}>
+                {user.is_active ? "Live" : "Inactive"}
+              </span>
+            </td>
+            <td className="px-6 py-4 text-right">
+              <div className="flex items-center justify-end gap-1.5">
+                <button onClick={() => toggleStatus(user.id, user.is_active)} className="p-1.5 rounded-lg border text-slate-400 hover:text-indigo-600">
+                  {user.is_active ? <UserMinus size={15} /> : <UserCheck size={15} />}
+                </button>
+                <button onClick={() => openEditModal(user)} className="p-1.5 text-slate-400 hover:text-indigo-600">
+                  <Edit3 size={15} />
+                </button>
+                <button onClick={() => deleteUser(user.id)} className="p-1.5 text-slate-400 hover:text-rose-600">
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
       </div>
 
       {/* --- MODAL --- */}
@@ -325,99 +330,99 @@ const User_list = () => {
                   </div>
 
                   {showEmployeeDropdown && (
-  <div className="absolute z-[110] mt-2 w-full bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
-    
-    {/* Search Header */}
-    <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex items-center gap-2">
-      <Search size={14} className="text-slate-400 ml-1" />
-      <input
-        type="text"
-        autoFocus
-        placeholder="Quick search staff..."
-        className="w-full bg-transparent text-[13px] font-medium outline-none placeholder:text-slate-400 placeholder:font-normal"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </div>
+                    <div className="absolute z-[110] mt-2 w-full bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex items-center gap-2">
+                        <Search size={14} className="text-slate-400 ml-1" />
+                        <input
+                          type="text"
+                          autoFocus
+                          placeholder="Quick search staff..."
+                          className="w-full bg-transparent text-[13px] font-medium outline-none placeholder:text-slate-400 placeholder:font-normal"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </div>
 
-    {/* List Container */}
-    <div className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
-      {employees
-        .filter(emp => 
-          emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          emp.code.toString().includes(searchTerm)||
-          emp.dept.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map((emp) => (
-          <div
-            key={emp.code}
-            onClick={() => {
-              setFormData({ ...formData, username: emp.code, password: "1234" });
-              setShowEmployeeDropdown(false);
-              setSearchTerm("");
-            }}
-            className="px-4 py-3 hover:bg-indigo-600 group cursor-pointer border-b border-slate-50 last:border-0 flex justify-between items-center transition-all duration-200"
-          >
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">
-                {emp.name}
-              </span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-black group-hover:bg-indigo-500 group-hover:text-indigo-100 transition-colors">
-                  ID: {emp.code}
-                </span>
-                <span className="text-[10px] bg-yellow-100 text-slate-500 px-1.5 py-0.5 rounded font-black group-hover:bg-indigo-500 group-hover:text-indigo-100 transition-colors">
-                  Dept : {emp.dept}
-                </span>
-                <span className="text-[10px] text-slate-400 group-hover:text-indigo-200">
-                  • Employee
-                </span>
-              </div>
-            </div>
+                      <div className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
+                        {employees
+                          .filter(emp => 
+                            emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            emp.code.toString().includes(searchTerm)||
+                            emp.dept.toLowerCase().includes(searchTerm.toLowerCase())
+                          )
+                          .map((emp) => (
+                            <div
+                              key={emp.code}
+                              onClick={() => {
+                                setFormData({ ...formData, username: emp.name, password: "1234" });
+                                setShowEmployeeDropdown(false);
+                                setSearchTerm("");
+                              }}
+                              className="px-4 py-3 hover:bg-indigo-600 group cursor-pointer border-b border-slate-50 last:border-0 flex justify-between items-center transition-all duration-200"
+                            >
+                              <div className="flex flex-col">
+                                <span className="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">
+                                  {emp.name}
+                                </span>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-black group-hover:bg-indigo-500 group-hover:text-indigo-100 transition-colors">
+                                    ID: {emp.code}
+                                  </span>
+                                  <span className="text-[10px] bg-yellow-100 text-slate-500 px-1.5 py-0.5 rounded font-black group-hover:bg-indigo-500 group-hover:text-indigo-100 transition-colors">
+                                    Dept : {emp.dept}
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 group-hover:text-indigo-200">
+                                    • Employee
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <div className="h-7 w-7 rounded-full bg-slate-50 overflow-hidden flex items-center justify-center group-hover:bg-indigo-500 transition-all">
+                                   <img src={emp.photo} alt="" className="object-cover h-full w-full" />
+                                </div>
+                                <div className="h-7 w-7 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-indigo-500 transition-all">
+                                  <ChevronRight size={14} className="text-slate-400 group-hover:text-white" />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
 
-            <div className="flex gap-2">
-              <div className="h-7 w-7 rounded-full bg-slate-50 flex items-right justify-right group-hover:bg-indigo-500 transition-all">
-                <div className="items-right justify-right">
-                  <img src={emp.photo} alt="" />
-                </div>
-              </div>
-
-            
-              <div className="h-7 w-7 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-indigo-500 transition-all">
-                <ChevronRight size={14} className="text-slate-400 group-hover:text-white" />
-              </div>
-            </div>
-          </div>
-        ))}
-
-      {/* Empty State */}
-      {employees.filter(emp => 
-          emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          emp.dept.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          emp.code.toString().includes(searchTerm)
-        ).length === 0 && (
-        <div className="py-10 flex flex-col items-center justify-center gap-2">
-          <div className="p-3 bg-slate-50 rounded-full">
-            <Users size={20} className="text-slate-300" />
-          </div>
-          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">No matching staff found</p>
-        </div>
-      )}
-    </div>
-
-  </div>
-)}
+                        {employees.filter(emp => 
+                            emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            emp.dept.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            emp.code.toString().includes(searchTerm)
+                          ).length === 0 && (
+                          <div className="py-10 flex flex-col items-center justify-center gap-2">
+                            <div className="p-3 bg-slate-50 rounded-full">
+                              <Users size={20} className="text-slate-300" />
+                            </div>
+                            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">No matching staff found</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
+                {/* --- PASSWORD FIELD WITH EYE TOGGLE --- */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Password</label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 ring-indigo-50"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 pr-12 text-sm outline-none focus:ring-2 ring-indigo-50"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

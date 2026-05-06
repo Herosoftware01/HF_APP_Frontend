@@ -4,6 +4,7 @@ import { api } from "../auth/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logoutUser } from "../auth/auth";
 import { UserContext } from "../UserContext";
+import image from "../assets/Hero Logo.png" 
 
 // --- Custom Component to handle API Image Icons or Default Lucide Icons ---
 const MenuIcon = ({ iconData, isActive }) => {
@@ -157,24 +158,24 @@ function Sidebar({ children }) {
       <style>{`.no-scrollbar::-webkit-scrollbar { display:none }`}</style>
 
       {/* MOBILE HEADER */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-10 bg-cyan-950 text-white flex items-center justify-between px-4 z-[90] shadow-xl">
-        <button onClick={() => setMobileMenuOpen(true)} className="p-2 hover:bg-white/10 rounded-xl">
-          <Menu size={24} />
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-10 bg-cyan-950 text-white flex items-center justify-between px-2 z-[90] shadow-xl">
+        <button onClick={() => setMobileMenuOpen(true)} className=" hover:bg-white/10 rounded-xl">
+          <Menu size={20} />
         </button>
         
-          <div className="flex">
-            <span className="font-black text-lg tracking-widest text-cyan-400 uppercase">Hero</span>
-          <div className="text-center text-xs text-gray-500">
-                Powered by 
-                <span className="font-black text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline text-md">
-                  Syncfusion
-                </a></span>
-                
-          </div>
+          <div className="flex justify-evenly">
+            <span className="font-bold text-lg text-center" style={{color: '#75c15b'}}>HeroFashion</span>
+            <div className="text-center text-xs text-white ml-2">
+                  Powered by 
+                  <span className="font-bold text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="hover:underline text-md" style={{color: '#75c15b'}}>
+                    Syncfusion
+                  </a></span>
+                  
+            </div>
           </div>
         
         {/* <div className="w-9 h-9 bg-cyan-800 rounded-full flex items-center justify-center font-bold border border-white/20">{userName[0]}</div> */}
-        <div className="flex items-center justify-center font-bold ">{userName}</div>
+        <div className="flex items-center justify-center font-bold text-sm">{userName}</div>
       </header>
 
       {mobileMenuOpen && (
@@ -189,21 +190,35 @@ function Sidebar({ children }) {
       >
         <div className="h-20 flex items-center justify-between px-6 shrink-0 bg-black/20 border-b border-white/5">
           {(sidebarOpen || mobileMenuOpen) && (
-            <div className="items-center gap-2">
             <div className="flex items-center gap-2">
-               <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center font-black shadow-lg text-white">H</div>
-               <span className="font-black text-xl tracking-tighter uppercase italic">Hero<span className="text-cyan-400"> ...</span></span>
+               <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg">
+                <img src={image} alt="Herofashion logo" />
+               </div>
+<<<<<<< HEAD
+               <span className="font-bold text-green-500 text-lg italic" style={{color: '#75c15b'}}>Herofashion</span>
                
             </div>
 
-            <div className="text-center text-xs text-gray-500 ">
-              Powered by 
-              <a href="https://www.syncfusion.com" target="_blank" className="text-blue-500 hover:underline">
+            <div className="text-center text-xs text-white ">
+              Powered by
+              <a href="https://www.syncfusion.com" target="_blank" className="font-bold hover:underline ml-1 text-lg italic" style={{color: '#75c15b'}}>
                 Syncfusion
               </a>
             </div>
             </div>
             
+=======
+               <div className="flex flex-col gap-1">
+                 <span className="font-bold text-green-500 text-lg italic" style={{color: '#75c15b'}}>Herofashion</span>
+                 <div className="text-center text-xs text-white">
+                   Powered by
+                   <a href="https://www.syncfusion.com" target="_blank" className="font-bold hover:underline ml-1 text-lg italic" style={{color: '#75c15b'}}>
+                     Syncfusion
+                   </a>
+                 </div>
+               </div>
+          </div>
+>>>>>>> nandha
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95">
              {sidebarOpen ? <X size={18} /> : <Menu size={20} />}

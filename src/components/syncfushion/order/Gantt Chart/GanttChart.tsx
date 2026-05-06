@@ -34,7 +34,7 @@ const GanttChart = () => {
   return (
     <div className='control-pane'>
       <div className='control-section'>
-        <GanttComponent id='Default' ref={gantt => ganttInstance = gantt} dataSource={projectNewData} treeColumnIndex={1}
+        <GanttComponent id='Default' ref={(gantt: GanttComponent) => { ganttInstance = gantt; }} dataSource={projectNewData} treeColumnIndex={1}
           taskFields={taskFields} splitterSettings={splitterSettings} labelSettings={labelSettings} height='650px' taskbarHeight={25} rowHeight={46}
           projectStartDate={projectStartDate} projectEndDate={projectEndDate} created={onCreated}>
           <ColumnsDirective>

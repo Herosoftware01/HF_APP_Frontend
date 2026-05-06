@@ -16,12 +16,12 @@ function Schedule() {
     crossDomain: true
   });
 
-  const onDataBinding = (e) => {
+  const onDataBinding = (e: { result: any }) => {
     let items = e.result || [];
     if (!Array.isArray(items)) items = items.items || items.result || [];
 
-    let schedulerData = [];
-    items.forEach(item => {
+    let schedulerData: any = [];
+    items.forEach((item: { finaldelvdate: string | number | Date; id: any; jobno_oms: any; mainimagepath: any; quantity: any; buyer1: any; punit_sh: any; }) => {
       let startDate = item.finaldelvdate ? new Date(item.finaldelvdate) : null;
       
       if (startDate) {
@@ -48,7 +48,7 @@ function Schedule() {
   };
 
   // Template to show details inside the event (as requested in your orderSummary snippet)
-  const eventTemplate = (props) => {
+  const eventTemplate = (props: { ImagePath: string | undefined; Subject: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; Qty: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }) => {
     return (
       <div style={{ display: 'flex', alignItems: 'center', padding: '4px', height: '100%' }}>
         {props.ImagePath && (
