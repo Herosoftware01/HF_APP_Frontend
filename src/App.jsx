@@ -140,8 +140,6 @@ function App() {
           }
         />
         
-<<<<<<< HEAD
-=======
 
         {/* <Route
           path="/ord_page/*"
@@ -154,7 +152,6 @@ function App() {
           }
         /> */}
 
->>>>>>> nandha
         <Route
           path="/qc-admin/*"
           element={
