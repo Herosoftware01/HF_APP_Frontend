@@ -165,7 +165,7 @@ function Sidebar({ children }) {
         
           <div className="flex justify-evenly">
             <span className="font-bold text-lg text-center" style={{color: '#75c15b'}}>HeroFashion</span>
-            <div className="text-center text-xs text-white ml-2">
+            <div className="text-center text-xs text-white ml-4 flex items-center justify-center">
                   Powered by 
                   <span className="font-bold text-lg pl-2 text-cyan-400"><a href="https://www.syncfusion.com" target="_blank" className="hover:underline text-md" style={{color: '#75c15b'}}>
                     Syncfusion
