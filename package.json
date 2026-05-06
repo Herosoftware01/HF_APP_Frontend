@@ -32,6 +32,7 @@
     "@syncfusion/ej2-react-querybuilder": "^33.1.46",
     "@syncfusion/ej2-react-schedule": "*",
     "@syncfusion/ej2-react-treegrid": "*",
+    "@syncfusion/ej2-react-spreadsheet": "*",
     "@tailwindcss/vite": "^4.2.1",
     "@types/create-react-class": "^15.6.9",
     "@yudiel/react-qr-scanner": "^2.5.1",
