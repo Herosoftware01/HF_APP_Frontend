@@ -18,14 +18,19 @@ function App() {
     console.log(username)
     const data = new DataManager(kanbanData);
     const [query, setQuery] = useState(new Query());
-
-    const filterMyData = () => {
-        if (username) {
-            setQuery(
-                new Query().where('asgby_name', 'contains', username, true)
+    const myTaskClick = () => {
+        if (username) {      
+         setQuery(
+                new Query().where('field_empname', 'contains', username, true)
             );
         }
-    };
+    }
+    const myTeamTaskClick = () => {
+        if (username) {
+          setQuery(new Query().where('asgby_name', 'contains', username, true)
+            );
+        }
+    }
 
     useEffect(() => {
         loadData();
@@ -471,8 +476,19 @@ function App() {
                             >
                                 Reset
                             </ButtonComponent>
-                            <ButtonComponent onClick={filterMyData}>
+                            <ButtonComponent
+                                id="my_task"
+                                className="e-btn"
+                                onClick={myTaskClick}
+                            >
                                 My Task
+                            </ButtonComponent>
+                            <ButtonComponent
+                                id="my_team_task"
+                                className="e-btn"
+                                onClick={myTeamTaskClick}
+                            >
+                                My Team Task
                             </ButtonComponent>
                         </div>
                     </div>
