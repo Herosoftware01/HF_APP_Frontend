@@ -39,6 +39,8 @@ import Oms from './components/syncfushion/order/excel';
 import Calendar from './components/syncfushion/order/Schedule'
 import Form from './components/syncfushion/order/Form/Form'
 import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
+import Fi_home  from "./components/fininace/reports/fi_main";
+import Del_home from "./components/Cutting/delivery/cut_main";
 
 function App() {
 
@@ -138,6 +140,21 @@ function App() {
           }
         />
         
+<<<<<<< HEAD
+=======
+
+        {/* <Route
+          path="/ord_page/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Visuva />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        /> */}
+
+>>>>>>> nandha
         <Route
           path="/qc-admin/*"
           element={
@@ -222,6 +239,29 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/finance_report/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Fi_home />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cutdel/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Del_home />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/bit-checking/*"
           element={

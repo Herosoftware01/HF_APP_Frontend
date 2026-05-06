@@ -190,11 +190,11 @@ function Sidebar({ children }) {
       >
         <div className="h-20 flex items-center justify-between px-6 shrink-0 bg-black/20 border-b border-white/5">
           {(sidebarOpen || mobileMenuOpen) && (
-            <div className="items-center gap-2">
             <div className="flex items-center gap-2">
                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg">
                 <img src={image} alt="Herofashion logo" />
                </div>
+<<<<<<< HEAD
                <span className="font-bold text-green-500 text-lg italic" style={{color: '#75c15b'}}>Herofashion</span>
                
             </div>
@@ -207,6 +207,18 @@ function Sidebar({ children }) {
             </div>
             </div>
             
+=======
+               <div className="flex flex-col gap-1">
+                 <span className="font-bold text-green-500 text-lg italic" style={{color: '#75c15b'}}>Herofashion</span>
+                 <div className="text-center text-xs text-white">
+                   Powered by
+                   <a href="https://www.syncfusion.com" target="_blank" className="font-bold hover:underline ml-1 text-lg italic" style={{color: '#75c15b'}}>
+                     Syncfusion
+                   </a>
+                 </div>
+               </div>
+          </div>
+>>>>>>> nandha
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95">
              {sidebarOpen ? <X size={18} /> : <Menu size={20} />}
