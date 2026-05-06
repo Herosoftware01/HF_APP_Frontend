@@ -3,7 +3,7 @@ import axios from "axios";
 const BASE_URL = "https://hfapi.herofashion.com/";
 
 // const BASE_URL = "http://127.0.0.1:8000/";
-// const BASE_URL = "http://10.1.21.133:7003/";
+// const BASE_URL = "http://10.1.21.93:7003/";
 
 // ---------------- TOKEN HELPERS ----------------
 export const setTokens = (access, refresh) => {

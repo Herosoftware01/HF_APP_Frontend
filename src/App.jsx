@@ -28,6 +28,7 @@ import Home_hw from "./components/fininace/holdwage/entry/hw_main";
 const BoldBi = lazy(()=>import("./components/syncfushion/DashboardListing/DashboardListing")) 
 const BoldReport = lazy(()=>import("./components/syncfushion/order/reportviewer")) 
 import Cut_sample from "./components/cutting_sample/main/cut_main"
+import Cutting_measurement from "./components/cutting_mesurement_check/main/main"
 
 function App() {
 
@@ -258,6 +259,16 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Cut_sample />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cutting_mes/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Cutting_measurement />
               </ProtectedLayout>
             </ProtectedRoute>
           }
