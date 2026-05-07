@@ -41,6 +41,7 @@ import Form from './components/syncfushion/order/Form/Form'
 import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
 import Fi_home  from "./components/fininace/reports/fi_main";
 import Del_home from "./components/Cutting/delivery/cut_main";
+import Imp_home from "./components/implemantation_reports/imp_main";
 
 function App() {
 
@@ -448,6 +449,16 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Form/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/imp/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Imp_home/>
               </ProtectedLayout>
             </ProtectedRoute>
           }

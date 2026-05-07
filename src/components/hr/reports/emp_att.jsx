@@ -78,7 +78,7 @@ const LegendBtn = ({ active, color, label, onClick }) => (
 
 /* ─── Chart Card ─────────────────────────────────────────── */
 const ChartCard = ({ title, accent, datasets, labels, commonOptions, toggles, visibility, chartId, toggleDataset }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col p-6 h-[440px]">
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col p-6 h-110">
     <div className="flex items-center gap-3 mb-4 shrink-0">
       <span className="w-1 h-6 rounded-full" style={{ background: accent }} />
       <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">{title}</h2>
@@ -248,7 +248,7 @@ const AttendanceDashboard = () => {
         <div className="flex flex-col xl:flex-row justify-between gap-5">
           {/* Brand */}
           <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+            <div className="w-11 h-11 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
               <Users size={20} className="text-white" />
             </div>
             <div>
@@ -287,10 +287,10 @@ const AttendanceDashboard = () => {
             <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm">
               <Calendar size={14} className="text-gray-400 mr-1" />
               <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
-                className="bg-transparent border-none text-gray-600 text-sm focus:ring-0 p-0 w-[130px]" />
+                className="bg-transparent border-none text-gray-600 text-sm focus:ring-0 p-0 w-32.5" />
               <span className="text-gray-300 mx-1">–</span>
               <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
-                className="bg-transparent border-none text-gray-600 text-sm focus:ring-0 p-0 w-[130px]" />
+                className="bg-transparent border-none text-gray-600 text-sm focus:ring-0 p-0 w-32.5" />
             </div>
 
             {/* Quick Ranges */}
@@ -309,7 +309,7 @@ const AttendanceDashboard = () => {
             </button>
 
             <button onClick={exportAttendanceExcel}
-              className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-all">
+              className="flex items-center gap-2 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-all">
               <Download size={14} /> Export
             </button>
             <button onClick={handelNavi}
@@ -337,7 +337,7 @@ const AttendanceDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Daily Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-[460px]">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-115">
           <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
             <span className="w-1 h-5 rounded-full bg-blue-500" />
             <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Daily Log</span>
@@ -486,7 +486,7 @@ const AttendanceDashboard = () => {
           <span className="w-1 h-5 rounded-full bg-indigo-500" />
           <h2 className="text-sm font-black text-gray-800 uppercase tracking-widest">Comprehensive Analysis</h2>
         </div>
-        <div className="relative w-full h-[340px]">
+        <div className="relative w-full h-85">
           <Bar
             data={{
               labels,
