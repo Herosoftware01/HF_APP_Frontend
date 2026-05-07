@@ -23,7 +23,7 @@ const Fi_home = () => {
       title: "Payment Status",
       desc: "Track transactions & history.",
       icon: <PieChart size={32} />,
-      path: "/finance_report/payment-status",
+      path: "/finance_report/pass",
       color: "blue",
     },
     {
