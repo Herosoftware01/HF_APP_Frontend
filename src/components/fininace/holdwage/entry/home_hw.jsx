@@ -26,7 +26,7 @@ const Home_hw = () => {
         
         {/* Entry Card */}
         <button 
-          onClick={() => handleNavigate('/holdwage/hold')}
+          onClick={() => handleNavigate('/hold')}
           className="group relative bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-blue-500 transition-all duration-300 text-left"
         >
           <div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors">
@@ -41,7 +41,7 @@ const Home_hw = () => {
 
         {/* Report Card */}
         <button 
-          onClick={() => handleNavigate('/holdwage/reports/hw_report')}
+          onClick={() => handleNavigate('/hw_report')}
           className="group relative bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-green-500 transition-all duration-300 text-left"
         >
           <div className="bg-green-100 text-green-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors">
@@ -56,7 +56,7 @@ const Home_hw = () => {
 
         {/* Paid Report Card */}
         <button 
-          onClick={() => handleNavigate('/holdwage/reports/paid_report')}
+          onClick={() => handleNavigate('/paid_report')}
           className="group relative bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-purple-500 transition-all duration-300 text-left"
         >
           <div className="bg-purple-100 text-purple-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors">
