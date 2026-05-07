@@ -10,7 +10,8 @@ export default function LineDetail() {
             title: 'First Piece Output',
             subtitle: 'Quality Assurance Protocol',
             icon: "📄",
-            qc_type: "first_piece"
+            qc_type: "first_piece",
+            seq: "first_piece"
         },
         {
             id: 'rowing-qc',
@@ -23,7 +24,7 @@ export default function LineDetail() {
     ];
 
     const handleSelect = async (inspection) => {
-    const { id, qc_type } = inspection;
+    const { id, qc_type,seq } = inspection;
 
     // =========================
     //  FIRST PIECE LOGIC
@@ -31,7 +32,7 @@ export default function LineDetail() {
     if (id === "first-piece") {
         try {
             const res = await fetch(
-                `https://hfapi.herofashion.com/qcapp/get_last_bundle/?unit=${unit}&line=${line}&qc_type=${qc_type}`
+                `https://hfapi.herofashion.com/qcapp/get_last_bundle/?unit=${unit}&line=${line}&qc_type=${qc_type}&seq=${seq}`
             );
             const data = await res.json();
 

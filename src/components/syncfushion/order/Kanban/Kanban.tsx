@@ -18,14 +18,19 @@ function App() {
     console.log(username)
     const data = new DataManager(kanbanData);
     const [query, setQuery] = useState(new Query());
-
-    const filterMyData = () => {
-        if (username) {
-            setQuery(
-                new Query().where('asgby_name', 'contains', username, true)
+    const myTaskClick = () => {
+        if (username) {      
+         setQuery(
+                new Query().where('field_empname', 'contains', username, true)
             );
         }
-    };
+    }
+    const myTeamTaskClick = () => {
+        if (username) {
+          setQuery(new Query().where('asgby_name', 'contains', username, true)
+            );
+        }
+    }
 
     useEffect(() => {
         loadData();
@@ -367,84 +372,9 @@ function App() {
     };
 
     return (
-        <div style={{ marginTop: '100px' }}>
-            <div className="col-lg-3 property-section" id="searchFilterProperty">
-                <div title="Filtering">Filtering
-                    <table className="e-filter-table">
-                        <tbody>
-                            <tr>
-                                <td className="e-filter-label">
-                                    <div>Priority</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <DropDownListComponent
-                                            id="priority_filter"
-                                            ref={priorityObj}
-                                            dataSource={priorityData}
-                                            select={prioritySelect}
-                                            value={value}
-                                            placeholder="Select a priority"
-                                        ></DropDownListComponent>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="e-filter-label">
-                                    <div>Status</div>
-                                </td>
-                                <td>
-                                    <DropDownListComponent
-                                        id="status_filter"
-                                        ref={statusObj}
-                                        dataSource={statusData}
-                                        select={statusSelect}
-                                        value={value}
-                                        fields={fields}
-                                        placeholder="Select a status"
-                                    ></DropDownListComponent>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p className="property-panel-header" style={{ width: '100%', padding: '22px 0 0 0' }}>Searching</p>
-                    <div className="filtering property-panel-content">
-                        <table className="e-filter-table">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <TextBoxComponent
-                                                id="search_text"
-                                                ref={textBoxObj}
-                                                showClearButton={true}
-                                                placeholder="Enter search text"
-                                                onFocus={onFocus}
-                                                input={searchClick}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="e-reset-button">
-                            <ButtonComponent
-                                id="reset_filter"
-                                className="e-btn"
-                                onClick={resetClick}
-                            >
-                                Reset
-                            </ButtonComponent>
-                            <ButtonComponent onClick={filterMyData}>
-                                My Task
-                            </ButtonComponent>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div className='m-4'>
           <div className="datasource-filter-container">
-                       <div className="card-container">
+            <div className="card-container">
               <div className="inner-cadr">
                 <div className="mainimagetodo"></div>
                 <div className="detailcontainertodo">
@@ -473,7 +403,7 @@ function App() {
                   <div className="counttodo">0</div>
                 </div>
               </div>
-            </div>
+             </div>
 
                 <div id="image-container" className="custom-dropdown">
                     <img src="https://app.herofashion.com/staff_images/10006.jpg" alt="PREMAVATHI.N" className="circular-image" title="Martin Tamer" style={{ width: '35px', height: '35px' }} />
@@ -483,6 +413,88 @@ function App() {
                     <img src="https://app.herofashion.com/staff_images/10028.jpg" alt="THANGADURAI.P" className="circular-image" title="Davolio Fuller" style={{ width: '35px', height: '35px' }} />
                 </div>
             </div>
+            <div className="col-lg-3 property-section" id="searchFilterProperty">
+                <div title="Filtering">Filtering
+                    <table className="e-filter-table">
+                        <tbody>
+                            <tr>
+                                <td className="e-filter-label">
+                                    <div>Priority</div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <DropDownListComponent
+                                            id="priority_filter"
+                                            ref={priorityObj}
+                                            dataSource={priorityData}
+                                            select={prioritySelect}
+                                            value={value}
+                                            placeholder="Select a priority"
+                                        ></DropDownListComponent>
+                                    </div>
+                                </td>
+                                <td className="e-filter-label">
+                                    <div>Status</div>
+                                </td>
+                                <td>
+                                    <DropDownListComponent
+                                        id="status_filter"
+                                        ref={statusObj}
+                                        dataSource={statusData}
+                                        select={statusSelect}
+                                        value={value}
+                                        fields={fields}
+                                        placeholder="Select a status"
+                                    ></DropDownListComponent>
+                                </td>
+                                <td>
+                                 <p className="property-panel-header">Searching</p>
+                                </td>
+                                <td>
+                                    <div>
+                                        <TextBoxComponent
+                                            id="search_text"
+                                            ref={textBoxObj}
+                                            showClearButton={true}
+                                            placeholder="Enter search text"
+                                            onFocus={onFocus}
+                                            input={searchClick}
+                                        />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className="filtering property-panel-content">
+                        <div className="e-reset-button">
+                            <ButtonComponent
+                                id="reset_filter"
+                                className="e-btn"
+                                onClick={resetClick}
+                            >
+                                Reset
+                            </ButtonComponent>
+                            <ButtonComponent
+                                id="my_task"
+                                className="e-btn"
+                                onClick={myTaskClick}
+                            >
+                                My Task
+                            </ButtonComponent>
+                            <ButtonComponent
+                                id="my_team_task"
+                                className="e-btn"
+                                onClick={myTeamTaskClick}
+                            >
+                                My Team Task
+                            </ButtonComponent>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <KanbanComponent
                 id="kanban"
                 keyField="worktype1"

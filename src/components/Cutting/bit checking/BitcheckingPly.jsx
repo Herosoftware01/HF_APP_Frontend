@@ -56,7 +56,7 @@ export default function BitCheckingUI() {
   }, []);
 
 
-  // 🔹 QR Scan Logic
+  // QR Scan Logic
 const handleQrScan = async (qr) => {
   setQrValue(qr);
 
@@ -172,11 +172,11 @@ const handleQrScan = async (qr) => {
           emp_id: empValue,
           qr_id: qrValue,
           total_pcs: totalPcs,
-          category: values.length > 0
-          ? `${tab} - ${values.join(",")}` : `${tab} - 0`,
+          category: tab,
+          mistake_ply: values.length > 0 ? values.join(",") : "0",
           result: unique.join(","), 
           final_tpcs: unique.length,
-          out: `ok outpcs - ${outValues.join(",")}`,
+          out_ply: `${outValues.join(",")}`,
           mistake_pcs: values.length,
           ok_pcs: outValues.length
         };
@@ -378,7 +378,7 @@ const handleQrScan = async (qr) => {
             num => !currentValues.includes(num)
           );
           return (
-            <div key={tab} className="bg-white p-3 rounded-2xl shadow ">
+            <div key={tab} className="bg-white p-3 rounded-2xl shadow">
               <p className="text-gray-500 text-sm capitalize">{tab} :<span className="font-semibold text-black">{" "}{currentValues.join(", ")}</span>
               <span className="font-semibold text-grey float-right">Mistake pcs : {currentValues.length}</span></p><br />
               <p className="text-gray-500 text-sm capitalize">Out {tab} :<span className="font-semibold text-black">{" "}{outValues.join(", ")}</span>

@@ -99,11 +99,20 @@ export default function Rowing_defects() {
     }
 
     const defectsArray = Object.entries(counts).map(([id, count]) => {
+      // const defect = qcdatas.find((item) => item.id === Number(id));
+      // return {
+      //   mistake_name: defect.name,
+      //   mistake_count: count,
+      //   category: defect.category,
+      // };
+
+
       const defect = qcdatas.find((item) => item.id === Number(id));
+
       return {
-        mistake_name: defect.name,
+        mistake_name: defect?.name || "unknown",
         mistake_count: count,
-        category: defect.category,
+        category: defect?.category || "unknown",
       };
     }).filter(d => d.mistake_count > 0);
 
@@ -143,6 +152,7 @@ export default function Rowing_defects() {
       setCounts({});
       setRemarks(""); // Reset remarks for next piece
     } catch (err) {
+      alert(JSON.stringify(err));
       alert("Failed to save piece ❌");
     }
   };
