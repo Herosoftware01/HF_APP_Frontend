@@ -56,7 +56,7 @@ export default function BitCheckingUI() {
   }, []);
 
 
-  // 🔹 QR Scan Logic
+  // QR Scan Logic
 const handleQrScan = async (qr) => {
   setQrValue(qr);
 

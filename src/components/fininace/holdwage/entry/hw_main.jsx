@@ -20,10 +20,10 @@ function Hw_main() {
       <Route path="home" element={<Home_hw />} />
 
       {/* /holdwage/reports/hw_report */}
-      <Route path="reports/hw_report" element={<Hw_report />} />
+      <Route path="hw_report" element={<Hw_report />} />
 
       {/* /holdwage/reports/paid_report */}
-      <Route path="reports/paid_report" element={<Paid_report />} />
+      <Route path="paid_report" element={<Paid_report />} />
     </Routes>
   );
 }
