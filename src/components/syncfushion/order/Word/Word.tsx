@@ -12,54 +12,66 @@ DocumentEditorContainerComponent.Inject(Toolbar, Ribbon);
 function Word() {
     const container = useRef<DocumentEditorContainerComponent | null>(null);
 
-    const formatMap: Record<
-        string,
-        { format: 'Docx' | 'Dotx' | 'Txt' | 'Sfdt'; extension: string; mime: string }
-    > = {
-        saveas_sfdt: {
-            format: 'Sfdt',
-            extension: 'sfdt',
-            mime: 'application/json'
-        },
+    type SaveFormat = 'Docx' | 'Dotx' | 'Txt' | 'Sfdt';
+
+    interface SaveConfig {
+        format: SaveFormat;
+        extension: string;
+        mime: string;
+        description: string;
+    }
+
+    const SAVE_FORMATS: Record<string, SaveConfig> = {
         saveas_docx: {
             format: 'Docx',
             extension: 'docx',
             mime:
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            description: 'Word Document'
         },
+
         saveas_dotx: {
             format: 'Dotx',
             extension: 'dotx',
             mime:
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.template'
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+            description: 'Word Template'
         },
+
         saveas_txt: {
             format: 'Txt',
             extension: 'txt',
-            mime: 'text/plain'
+            mime: 'text/plain',
+            description: 'Plain Text'
+        },
+
+        saveas_sfdt: {
+            format: 'Sfdt',
+            extension: 'sfdt',
+            mime: 'application/json',
+            description: 'Syncfusion Document Text'
         }
     };
 
+
     const fileMenuItemClick = async (args: any) => {
-        if (!container.current) {
-            return;
-        }
+        if (!container.current) return;
 
-        const saveConfig = formatMap[args.item?.id];
-        if (!saveConfig) {
-            return;
-        }
+        const config = SAVE_FORMATS[args.item?.id];
+        if (!config) return;
 
-        const blob = await container.current.documentEditor.saveAsBlob(saveConfig.format);
+        const { format, extension, mime, description } = config;
+
+        const blob = await container.current.documentEditor.saveAsBlob(format);
 
         if ('showSaveFilePicker' in window) {
             const handle = await (window as any).showSaveFilePicker({
-                suggestedName: `sample.${saveConfig.extension}`,
+                suggestedName: `sample.${extension}`,
                 types: [
                     {
-                        description: `${saveConfig.extension.toUpperCase()} File`,
+                        description,
                         accept: {
-                            [saveConfig.mime]: [`.${saveConfig.extension}`]
+                            [mime]: [`.${extension}`]
                         }
                     }
                 ]
@@ -69,7 +81,7 @@ function Word() {
             await writable.write(blob);
             await writable.close();
         } else {
-            container.current.documentEditor.save('sample', saveConfig.format);
+            container.current.documentEditor.save('sample', format);
         }
     };
 

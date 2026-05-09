@@ -19,7 +19,7 @@ import Signin1 from '../layout/Signup.tsx';
 import OrderOms from "../order/Order_oms.tsx";
 import HeroFashionGrid131 from "../order/ord_parent.tsx";
 import Schedule from "../order/Schedule.tsx"
-import GanttChart from '../order/Gantt Chart/GanttChart.tsx';
+import GanttChart from '../order/Gantt_Chart/GanttChart.tsx';
 import OrderDetails from '../order/OrderDetails.tsx';
 import MasterDetail from '../order/masterdtls.tsx';
 import Ordloadbalan from '../order/ordloadbalan.tsx';
@@ -40,13 +40,14 @@ import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
 import Xlsheet from '../order/Xlsheet/Xlsheet.tsx'
 import Word from '../order/Word/Word.tsx'
-import Smartpaste from '../order/Smart Paste/Smartpaste.tsx'
+import Smartpaste from '../order/Smart_Paste/Smartpaste.tsx'
 import Speech from '../order/Speak/Speech.tsx'
 import Explorer from '../order/DocumentExplorer/Explorer.tsx';
-import Floor from '../order/Floor Plan/Floor.tsx';
-import ImageEditor from '../order/Image Editor/ImageEditor.tsx';
-import LogicCircut from '../order/Logic Circut/LogicCircut.tsx';
-import Webmail from '../order/Web Mail/Webmail.tsx';
+import Floor from '../order/Floor_Plan/Floor.tsx';
+import ImageEditor from '../order/Image_Editor/ImageEditor.tsx';
+import LogicCircut from '../order/Logic_Circut/LogicCircut.tsx';
+import Webmail from '../order/Web_Mail/Webmail.tsx';
+import Rk from '../order/Rk.tsx';
 
 function Home() {
   return (
@@ -98,6 +99,7 @@ function Home() {
         <Route path='/imgedit' element={<ImageEditor />} />
         <Route path='/circut' element={<LogicCircut />} />
         <Route path='/webmail' element={<Webmail />} />
+        <Route path='/rk' element={<Rk />} />
         
     </Routes>
   );
