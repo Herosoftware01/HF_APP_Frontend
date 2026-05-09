@@ -30,7 +30,7 @@ import Cut_sample from "./components/cutting_sample/main/cut_main"
 import Word from "./components/syncfushion/order/Word/Word"
 import Pdf from "./components/syncfushion/order/Pdf/Pdf"
 import Xlsheet from './components/syncfushion/order/Xlsheet/Xlsheet'
-import GanttChart from "./components/syncfushion/order/Gantt Chart/GanttChart";
+import GanttChart from "./components/syncfushion/order/Gantt_Chart/GanttChart";
 import Kanban from './components/syncfushion/order/Kanban/Kanban';
 import Pivot from "./components/syncfushion/order/pivot/Pivotview";
 import WebSocket from './components/syncfushion/order/web_order';
@@ -39,7 +39,6 @@ import Oms from './components/syncfushion/order/excel';
 import Calendar from './components/syncfushion/order/Schedule'
 import Form from './components/syncfushion/order/Form/Form'
 import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
-
 
 function App() {
 
@@ -285,7 +284,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+{/* 
         <Route
           path="/word/*"
           element={
@@ -295,9 +294,9 @@ function App() {
               </ProtectedLayout>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
-        <Route
+        {/* <Route
           path="/xlsheet/*"
           element={
             <ProtectedRoute>
@@ -306,9 +305,9 @@ function App() {
               </ProtectedLayout>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
-        <Route
+        {/* <Route
           path="/pdf/*"
           element={
             <ProtectedRoute>
@@ -317,9 +316,9 @@ function App() {
               </ProtectedLayout>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
-        <Route
+        {/* <Route
           path="/websocket/*"
           element={
             <ProtectedRoute>
@@ -328,7 +327,7 @@ function App() {
               </ProtectedLayout>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/sy-order/block_edit/*"

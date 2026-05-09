@@ -1,10 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 
-// ✅ jQuery import + GLOBAL expose
-import $ from 'jquery'
-window.$ = window.jQuery = $
-
 // ✅ Bold Reports styles
 import '@boldreports/javascript-reporting-controls/Content/v2.0/material-light/bold.report-viewer.min.css';
 
