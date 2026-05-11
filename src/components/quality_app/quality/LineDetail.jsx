@@ -77,19 +77,19 @@ export default function LineDetail() {
             );
             const data = await res.json();
 
-            // 👉 New entry
+            //  New entry
             if (!data.bundle_id) {
                 navigate(`/qc-admin/qc-entry/${unit}/${line}/roving-qc`);
                 return;
             }
 
-            // 👉 Completed
+            //  Completed
             if (data.is_completed) {
                 navigate(`/qc-admin/qc-entry/${unit}/${line}/roving-qc`, {
                     state: { bundle_id: data.bundle_id }
                 });
             }
-            // 👉 Incomplete → DIFFERENT PAGE
+            //  Incomplete → DIFFERENT PAGE
             else {
                 navigate(`/qc-admin/rowing_defects/${unit}/${line}`, {
                     state: {
