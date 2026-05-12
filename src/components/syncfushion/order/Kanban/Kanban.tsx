@@ -503,7 +503,7 @@ function App() {
                 ref={kanbanObj}
                 query={query}
                 actionComplete={handleActionComplete}
-                swimlaneSettings={{ keyField: "asgby_code" }}
+                swimlaneSettings={{ keyField: "field_empname" }}
                 cardSettings={{
                     headerField: "entryno",
                     template: cardTemplate,
