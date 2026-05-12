@@ -7,6 +7,7 @@ function Spreadsheet() {
 
   const spreadsheetRef = React.useRef<SpreadsheetComponent>(null);
   const [data, setData] = React.useState<any[]>([]);
+  const [topOffset, setTopOffset] = React.useState<number>(45);
 
   // Fetch data on mount
   React.useEffect(() => {
@@ -43,9 +44,25 @@ function Spreadsheet() {
     document.body.removeChild(anchor);
   }
 
-  return (<SpreadsheetComponent
+  React.useEffect(() => {
+    const updateOffset = () => {
+      const hdr = document.querySelector('header');
+      if (!hdr) {
+        return;
+      }
+      //Calculate the header element height.
+      const offset = hdr ? Math.ceil((hdr as HTMLElement).getBoundingClientRect().height) : 56;
+      setTopOffset(offset + 6);
+    };
+    //Update margin top for the parent element of Spreadsheet based on header element height.
+    updateOffset();
+    window.addEventListener('resize', updateOffset);
+    return () => window.removeEventListener('resize', updateOffset);
+  }, []);
+
+  return (<div style={{ marginTop: topOffset }}>
+    <SpreadsheetComponent
     ref={spreadsheetRef}
-    height={600}
     openUrl="http://localhost:6002/api/spreadsheet/open"
     saveUrl="http://localhost:6002/api/spreadsheet/save"
     created={onCreated}
@@ -67,7 +84,8 @@ function Spreadsheet() {
         </ColumnsDirective>
       </SheetDirective>
     </SheetsDirective>
-  </SpreadsheetComponent>);
+  </SpreadsheetComponent>
+</div>);
 }
 
 export default Spreadsheet;
