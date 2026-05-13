@@ -380,7 +380,7 @@ const Roll = () => {
                       </AreaChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="h-full flex items-center justify-center bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
+                    <div className="h-full flex items-center justify-center bg-slate-50 rounded-4xl border-2 border-dashed border-slate-200">
                       <p className="text-slate-300 font-black text-xs uppercase tracking-widest">
                         Waiting for source...
                       </p>

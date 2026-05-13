@@ -48,7 +48,7 @@ const Imp_home = () => {
     <div className="min-h-screen bg-[#F1F5F9] text-slate-900 font-sans">
       {/* Top Navigation */}
       <nav className="sticky top-0 z-30 bg-white border-b border-slate-200">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex justify-between items-center">
+        <div className="max-w-400 mx-auto px-4 sm:px-6 h-16 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-indigo-600 p-1.5 rounded-lg">
               <Globe className="text-white" size={18} />
@@ -71,7 +71,7 @@ const Imp_home = () => {
         </div>
       </nav>
 
-      <main className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto">
+      <main className="p-4 sm:p-6 lg:p-8 max-w-400mx-auto">
         <header className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">

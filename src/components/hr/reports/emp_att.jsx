@@ -3,22 +3,46 @@ import axios from 'axios';
 import { Bar, Line } from 'react-chartjs-2';
 import * as XLSX from 'xlsx';
 import {
-  FileSpreadsheet, Users, X, TrendingUp, TrendingDown,
-  Download, RefreshCw, Calendar, ChevronDown,ChevronLeft
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  LineController,
+  BarController,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import {
+  FileSpreadsheet,
+  Users,
+  X,
+  TrendingUp,
+  TrendingDown,
+  Download,
+  RefreshCw,
+  Calendar,
+  ChevronDown,
+  ChevronLeft
 } from 'lucide-react';
 import { format, subMonths, isSunday, parseISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  Chart as ChartJS,
-  CategoryScale, LinearScale, BarElement,
-  PointElement, LineElement, Title, Tooltip, Legend,
-} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
-  CategoryScale, LinearScale, BarElement,
-  PointElement, LineElement, Title, Tooltip, Legend, ChartDataLabels
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  LineController,
+  BarController,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels
 );
 
 const API_BASE = "https://hfapi.herofashion.com/reports";

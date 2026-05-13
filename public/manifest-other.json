@@ -1,0 +1,23 @@
+{
+  "name": "OTHER APP",
+  "short_name": "OTHER APP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "lang": "en",
+  "scope": "/",
+  "description": "Development",
+  "icons": [
+    {
+      "src": "/icons/pwa-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/pwa-icon.jpeg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

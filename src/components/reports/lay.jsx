@@ -355,7 +355,7 @@ const Lay = () => {
               </span>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left min-w-[700px]">
+              <table className="w-full text-left min-w-175">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
                     {[
@@ -444,8 +444,8 @@ const Lay = () => {
                   ✕
                 </button>
               </div>
-              <div className="overflow-x-auto max-h-[500px]">
-                <table className="w-full text-left text-xs border-collapse min-w-[800px]">
+              <div className="overflow-x-auto max-h-125">
+                <table className="w-full text-left text-xs border-collapse min-w-200">
                   <thead className="sticky top-0 bg-slate-100 text-slate-600 font-bold uppercase z-10">
                     <tr>
                       <th className="px-4 py-3 border-b">JobNO</th>
