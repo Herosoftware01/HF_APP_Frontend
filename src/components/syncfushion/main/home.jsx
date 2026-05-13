@@ -39,6 +39,7 @@ import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Spreadsheet from '../order/Spreadsheet/Spreadsheet.tsx';
 import Pdf from "../order/Pdf/Pdf.tsx"
 import CuttingDeliveryGrid from '../order/CuttingGrid/cuttingGrid.tsx';
+import ShowCase from '../order/Document_Explorer/ShowCase.tsx'
 
 function Home() {
   return (
@@ -83,6 +84,7 @@ function Home() {
       <Route path='/pdf' element={<Pdf />} />
       <Route path='/spreadsheet' element={<Spreadsheet />} />
       <Route path='/cutting-delivery' element={<CuttingDeliveryGrid />} />
+      <Route path='/explor/*' element={<ShowCase />} />
     </Routes>
   );
 }
