@@ -8,6 +8,10 @@ import { SwitchComponent } from "@syncfusion/ej2-react-buttons";
 import { HeaderCellInfoEventArgs, QueryCellInfoEventArgs } from '@syncfusion/ej2-grids'
 import { registerLicense } from "@syncfusion/ej2-base";
 
+registerLicense(
+  "Ngo9BigBOggjGyl/VkV+XU9AclRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3hTdUdlWX1feXZXQWVaVE91XA==",
+);
+
 let pivotObj: PivotViewComponent;
 
 const dataSourceSettings: DataSourceSettings = {
