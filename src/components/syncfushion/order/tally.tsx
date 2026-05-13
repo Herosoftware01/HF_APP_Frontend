@@ -10,10 +10,6 @@ import {
   Reorder,
   Search,
 } from '@syncfusion/ej2-react-grids';
-import { registerLicense } from '@syncfusion/ej2-base';
-
-// Syncfusion License Key
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf0x0Q3xbf1x2ZFBMYVlbQHBPMyBoS35Rc0RhW3hedXVQQ2heWUB2VEFf');
 
 interface TallyReportData {
   ledgername: string | null;
@@ -89,7 +85,7 @@ const TallyBalanceReport: React.FC = () => {
   const updateCounts = () => {
     if (gridRef.current) {
       const records = gridRef.current.getFilteredRecords();
-      setShowingCount(records ? records.length : 0);
+      setShowingCount(Array.isArray(records) ? records.length : 0);
     }
   };
 

@@ -35,16 +35,16 @@ import {
 } from '@syncfusion/ej2-react-grids';
 import { ColumnsModel, QueryBuilderComponent } from '@syncfusion/ej2-react-querybuilder';
 import { TooltipComponent, DialogComponent } from '@syncfusion/ej2-react-popups';
-import { Ajax, registerLicense, Browser } from '@syncfusion/ej2-base';
+import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent, UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-// import "../../../App.css";
-// import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
-import { DatePickerComponent, DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { DatePickerComponent} from '@syncfusion/ej2-react-calendars';
 import { DateRangePicker } from '@syncfusion/ej2-calendars';
 import { DataUtil, DataManager, Query } from '@syncfusion/ej2-data';
+
 MultiSelect.Inject(CheckBoxSelection);
+
 interface OrderData {
   slno1?: number; // Added SL No field
   jobno_oms: string; company_name: string; buyer1: string; stylename: string; uom: string;

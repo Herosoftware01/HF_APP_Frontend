@@ -1,4 +1,4 @@
-// import './index.css';
+
 import * as React from 'react';
 import {
   PivotViewComponent,
@@ -16,9 +16,6 @@ import {
 } from '@syncfusion/ej2-react-pivotview';
 import { SwitchComponent } from '@syncfusion/ej2-react-buttons';
 import { createElement } from '@syncfusion/ej2-base';
-import { registerLicense } from '@syncfusion/ej2-base';
-
-registerLicense('Ngo9BigBOggjGyl/VkV+XU9AclRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3hTdUdlWX1feXZXQWVaVE91XA==');
 
 let pivotObj: PivotViewComponent;;
 

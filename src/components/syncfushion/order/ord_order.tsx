@@ -40,8 +40,6 @@ import { TextBoxComponent, UploaderComponent } from '@syncfusion/ej2-react-input
 import { DropDownListComponent, MultiSelect, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import './Material 3/Showcase Material3/style.css';
-// import "../../../App.css";
-// import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { DatePickerComponent, DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { DateRangePicker } from '@syncfusion/ej2-calendars';
 import { DataUtil, DataManager, Query } from '@syncfusion/ej2-data';

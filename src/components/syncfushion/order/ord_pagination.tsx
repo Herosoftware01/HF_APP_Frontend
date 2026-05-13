@@ -36,14 +36,10 @@ import {
   recordClick
 }from '@syncfusion/ej2-react-grids';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { Ajax, registerLicense, Browser } from '@syncfusion/ej2-base';
+import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons'
-import "../../../App.css"
-import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
-
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
 
 interface OrderData {
   slno1?: number; // Added SL No field

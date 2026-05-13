@@ -1,4 +1,7 @@
+/* Syncfusion Pivot Table - Order Management Dashboard
+   Features: Sort, Filter, Group, Export, Conditional Formatting */
 import * as React from "react";
+import { useState } from "react";
 import { PivotViewComponent, Inject, FieldList, CalculatedField, Toolbar, ToolbarItems, PDFExport, ExcelExport } from "@syncfusion/ej2-react-pivotview";
 import { ConditionalFormatting, NumberFormatting, IDataSet, FieldOptions, ColumnRenderEventArgs, DataSourceSettings } from "@syncfusion/ej2-react-pivotview";
 import { SwitchComponent } from "@syncfusion/ej2-react-buttons";
@@ -11,7 +14,7 @@ const dataSourceSettings: DataSourceSettings = {
   columns: [{ name: "Process" }],
   valueSortSettings: { headerDelimiter: " - " },
   rows: [
-    { name: "OrderNo", caption: "Order" },
+    { name: "img1" },
     { name: "Buyer", caption: "Order Details" }
   ],
   values: [
@@ -28,6 +31,7 @@ const dataSourceSettings: DataSourceSettings = {
   filterSettings: [
     { name: "OrderNo", items: ["J7031A", "J6946A", "J6959A", "J7174A"] }
   ],
+  
   formatSettings: [
     { name: 'ReqQty', format: 'N2' },
     { name: 'PoDcQty', format: 'N2' },
@@ -51,7 +55,9 @@ const dataSourceSettings: DataSourceSettings = {
   ]
 } as DataSourceSettings;
 
-function PivotView() {
+function PivotTableExporting() {
+  const [showTooltip, setShowTooltip] = useState<boolean>(true);
+
   // Fetch order data from API - Change URL to your endpoint
   React.useEffect(() => {
     fetch("https://app.herofashion.com/pivot_dtls/")
@@ -191,14 +197,6 @@ function PivotView() {
       .replace(/-highContrast/i, "HighContrast");
   };
 
-  // Order product images - replace with your image URLs
-  const imageUrl = [
-    'https://app.herofashion.com/order_image/7045.jpg',
-    'https://app.herofashion.com/order_image/7055-AOP.jpg',
-    'https://app.herofashion.com/order_image/7063_AOP.jpg',
-    'https://app.herofashion.com/order_image/7064-AOP.jpg'
-  ]
-  let imageIndex = 0;
 
   // Custom cell rendering - modifies row headers and value cell display
   const queryCellInfo = (args: QueryCellInfoEventArgs) => {
@@ -208,35 +206,69 @@ function PivotView() {
       let currentCellElement: HTMLElement = args.cell as HTMLElement;
       if (!currentCellData || !currentCellElement) { return; }
       let datasource: IDataSet[] = pivotObj.dataSourceSettings.dataSource as IDataSet[];
-
       let cell = pivotObj.pivotValues[currentCellData.rowIndex][currentCellData.colIndex];
-
       let indexCell = pivotObj.pivotValues[currentCellData.rowIndex][pivotObj.engineModule.rowMaxLevel - 1];
       let indexObject: any = indexCell.indexObject;
       let indexes: any = Object.keys(indexObject || {});
-
+      const valuesArray = (pivotObj.dataSourceSettings.values as any[]) || [];
+      const lastValueFieldName = valuesArray.length > 0 ? valuesArray[valuesArray.length - 1].name : null;
       if (cell.axis === "row") {
         if (cell.rowSpan) {
           const element: HTMLElement = currentCellElement.firstElementChild as HTMLElement;
-          // Level 0: Order number cell with image
-          if (cell.level === 0) {
+          // Apply border to value header cells (last value field) to visually separate groups
+          if (cell.type === 'value' && cell.actualText === lastValueFieldName) {
+            (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
+            (args.cell as HTMLElement).style.background = 'aliceblue';
+            (args.cell as HTMLElement).style.fontWeight = 'bold';
+          }
+
+          // Check if this cell contains an image URL (img1 field)
+          const cellText = cell.formattedText || cell.actualText || '';
+          const isImageUrl = (cellText as string).toLowerCase().includes('http') &&
+            ((cellText as string).toLowerCase().includes('.jpg') ||
+              (cellText as string).toLowerCase().includes('.jpeg') ||
+              (cellText as string).toLowerCase().includes('.png') ||
+              (cellText as string).toLowerCase().includes('.gif'));
+          // Inserting image element for img1 field, styled to fit within cell
+          if (isImageUrl && element) {
+            element.innerHTML = '';
+            element.textContent = '';
+            const img = document.createElement('img');
+            img.src = cellText as string;
+            img.alt = "Order Image";
+            img.width = 75;
+            img.height = 75;
+            img.style.borderRadius = "4px";
+            img.style.objectFit = "cover";
+            img.onerror = function () { img.src = 'https://via.placeholder.com/75?text=No+Image'; };
+            element.appendChild(img);
+            element.style.display = "flex";
+            element.style.flexDirection = "column";
+            element.style.justifyContent = "center";
+            element.style.alignItems = "center";
+
+            // Apply border-bottom only to img1 level
+            (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
+            (args.cell as HTMLElement).style.background = 'transparent';
+          }
+          else if (cell.level === 0) {
             if (element) {
-              element.innerHTML = `<div>
-                <a href="#" target="_blank"style="display:block;margin-bottom:5px;color:#007bff">${cell.formattedText}</a>
-                <img src="${imageUrl[imageIndex]}" alt="No Img" width="75" height="75" />
-              </div>`;
+              element.innerHTML = '';
+              element.textContent = cell.formattedText as string;
+              element.style.color = "#007bff";
+              element.style.fontWeight = "bold";
               element.style.display = "flex";
               element.style.flexDirection = "column";
               element.style.justifyContent = "center";
               element.style.alignItems = "center";
             }
-            imageIndex = (imageIndex + 1) % 4;
+            // Apply border-bottom to parent group level
+            (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
+            (args.cell as HTMLElement).style.background = 'transparent';
           }
-          // Level 1: Order details card - modify HTML to show/hide fields
           else if (cell.level === 1) {
             const idx = indexes[0];
             const data = datasource[idx];
-            // Helper: format date to dd-mm-yyyy
             const formatDate = (dateStr: any) => {
               if (!dateStr) return 'N/A';
               const date = new Date(dateStr);
@@ -259,9 +291,14 @@ function PivotView() {
                 <div><a href="#" style="color:#007bff;font-weight:bold;">Comments (3)</a></div>
               </div>
             `;
+            // Apply border-bottom to Order Details row to align with image
+            (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
+            (args.cell as HTMLElement).style.background = 'aliceblue';
           }
+        } else {
+          // Child rows - no border, light background
+          (args.cell as HTMLElement).style.background = 'aliceblue';
         }
-        (args.cell as HTMLElement).style.background = 'aliceblue';
       }
       // Value cells: append units (Kgs/%) to numeric values
       else if (cell.axis === "value") {
@@ -282,6 +319,33 @@ function PivotView() {
           element.textContent = value;
         }
         (args.cell as HTMLElement).style.background = 'aliceblue';
+
+        // Get all row axis cells to find parent group boundaries
+        const rowAxisColumns = pivotObj.engineModule.rowMaxLevel;
+        const rowIndexInfo = pivotObj.pivotValues[currentCellData.rowIndex][rowAxisColumns - 1];
+        const nextRowData = pivotObj.pivotValues[currentCellData.rowIndex + 1];
+
+        // Check if this is the last row of a parent group
+        let isLastRowOfGroup = false;
+
+        if (nextRowData) {
+          const nextRowIndexInfo = nextRowData[rowAxisColumns - 1];
+          // Get the parent level info (img1 or level 0)
+          const currentParent = pivotObj.pivotValues[currentCellData.rowIndex][0];
+          const nextParent = nextRowData[0];
+
+          // If parent cell is different, we're at group boundary
+          if (currentParent && nextParent && currentParent.formattedText !== nextParent.formattedText) {
+            isLastRowOfGroup = true;
+          }
+        } else {
+          // Last row in table
+          isLastRowOfGroup = true;
+        }
+
+        if (isLastRowOfGroup) {
+          (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
+        }
       }
     }
   };
@@ -315,19 +379,34 @@ function PivotView() {
     }
   }
 
+  // Toggle tooltip visibility
+  function onTooltipToggle(args: any) {
+    if (pivotObj) {
+      pivotObj.showTooltip = args.checked;
+    }
+  }
+
   return (
     <div style={{ height: "100vh" }}>
       <div id="pivot-table-section">
-        <div className="tabular-layout-switch">
-          <label id="layout-label" htmlFor="layout-switch">Classic Layout</label>
-          <SwitchComponent id="layout-switch" checked={true}
-            cssClass="pivot-layout-switch" change={onChange}>
-          </SwitchComponent>
+        <div className="tabular-layout-switch" style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <label id="layout-label" htmlFor="layout-switch">Classic Layout</label>
+            <SwitchComponent id="layout-switch" checked={true}
+              cssClass="pivot-layout-switch" change={onChange}>
+            </SwitchComponent>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <label id="tooltip-label" htmlFor="tooltip-switch">Show Tooltip</label>
+            <SwitchComponent id="tooltip-switch" checked={showTooltip}
+              cssClass="pivot-tooltip-switch" change={onTooltipToggle}>
+            </SwitchComponent>
+          </div>
         </div>
         <div style={{ height: "95vh", overflow: "hidden" }}>
           <PivotViewComponent id="PivotView" ref={(scope: any) => { pivotObj = scope; }}
             dataSourceSettings={dataSourceSettings} width={"100%"} height={"100%"}
-            showFieldList={true} showToolbar={true}
+            showFieldList={true} showToolbar={true} showTooltip={showTooltip}
             allowExcelExport={true} allowPdfExport={true}
             allowNumberFormatting={true} allowConditionalFormatting={true}
             allowCalculatedField={true}
@@ -356,4 +435,4 @@ function PivotView() {
   );
 }
 
-export default PivotView;
+export default PivotTableExporting;

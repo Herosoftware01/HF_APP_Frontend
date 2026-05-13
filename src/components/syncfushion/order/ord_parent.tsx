@@ -36,16 +36,11 @@ import {
   ExcelExport
 } from '@syncfusion/ej2-react-grids';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { registerLicense, Browser} from '@syncfusion/ej2-base';
+import {Browser} from '@syncfusion/ej2-base';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent, ChipListComponent } from '@syncfusion/ej2-react-buttons';
 import { TabComponent } from '@syncfusion/ej2-react-navigations';
-import "../../../App.css";
-
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
-
-// --- INTERFACES ---
 
 interface PrintingRow {
   jobno?: string;
