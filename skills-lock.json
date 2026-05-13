@@ -1,0 +1,401 @@
+{
+  "version": 1,
+  "skills": {
+    "syncfusion-react-3d-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-3d-chart/SKILL.md",
+      "computedHash": "79d40d466e21caab60e1bcb5a93fd22303df6816d058611ad080deca56284b25"
+    },
+    "syncfusion-react-3d-circular-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-3d-circular-chart/SKILL.md",
+      "computedHash": "1d5ed010533fc9f30bf6a3300f37a167c3bce7383990bfc5ceec5a02dd749164"
+    },
+    "syncfusion-react-accordion": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-accordion/SKILL.md",
+      "computedHash": "50cbf8180b2c8cdc48a5867c862838944d06904eca68251939403d51da78c749"
+    },
+    "syncfusion-react-accumulation-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-accumulation-chart/SKILL.md",
+      "computedHash": "a1c73189e128a5e2aa32c7fb8b41075e983019c9266bb13f7f6e18a6990eab38"
+    },
+    "syncfusion-react-ai-assistview": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-ai-assistview/SKILL.md",
+      "computedHash": "043246ccb92ba883f14889916ca3dbaf2cff7a5231001d11d6238b47a18b127e"
+    },
+    "syncfusion-react-appbar": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-appbar/SKILL.md",
+      "computedHash": "248750833992f5adfb9118aedce09731a55f4421fa71afd84a8e0721a2127e78"
+    },
+    "syncfusion-react-barcode": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-barcode/SKILL.md",
+      "computedHash": "1e803fbe3a65d67674a5e3d1a135c448df7d98bd9124edb01aadbdb8626f114b"
+    },
+    "syncfusion-react-blockeditor": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-blockeditor/SKILL.md",
+      "computedHash": "4865312d8f0b72990b9cf1969b3e2a3f240cf49f4598c14654a7e426239a4b69"
+    },
+    "syncfusion-react-breadcrumb": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-breadcrumb/SKILL.md",
+      "computedHash": "9091691badf6347d9ee6b006a4d59402c030a5d8d05edaa3ad6fd41d123b1148"
+    },
+    "syncfusion-react-bullet-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-bullet-chart/SKILL.md",
+      "computedHash": "56128a5a2ca4786e986a77328b6607d94d567626c0ccb1d8fa38b6d908a71a9d"
+    },
+    "syncfusion-react-buttons": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-buttons/SKILL.md",
+      "computedHash": "dc2074b0b65f108c3ac2ef0c7573506bfd2409f9b5233785f298bb729a19f405"
+    },
+    "syncfusion-react-calendar": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-calendar/SKILL.md",
+      "computedHash": "692e5ee51da12e6635cd6351a5b95dfded7aeb72efee6578bec2c443fe77d65c"
+    },
+    "syncfusion-react-cards": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-cards/SKILL.md",
+      "computedHash": "744e87b3792035238b7e873d9c0878e668a9223bdb1b911a6869d2c27835da68"
+    },
+    "syncfusion-react-carousel": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-carousel/SKILL.md",
+      "computedHash": "3d34f5ad85560a0bc88b07bb0ce41cfda24123f453fbc4388dc1ee05fefddf90"
+    },
+    "syncfusion-react-charts": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-charts/SKILL.md",
+      "computedHash": "3d27467bae0f253e5e9421c7daf1f14106a978dba20f0566b2acffd001b496da"
+    },
+    "syncfusion-react-chat-ui": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-chat-ui/SKILL.md",
+      "computedHash": "4bf1197b528ceac9f36df7710d7b477f9ee3dbecd3985e48a1321b6b70dfd656"
+    },
+    "syncfusion-react-circular-gauge": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-circular-gauge/SKILL.md",
+      "computedHash": "81018a80d6ed70aa5d3af6f9da4bdf0878cff8d742a7f7f684267a37f4f9b09e"
+    },
+    "syncfusion-react-common": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-common/SKILL.md",
+      "computedHash": "b505721871196e5213eb39c8aff4bce3db8540f4df4167c740d3be9ab7e26c3c"
+    },
+    "syncfusion-react-context-menu": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-context-menu/SKILL.md",
+      "computedHash": "e26e21e180e22a9e536f87606c03a00f8ca9b8e6564f87412dfa59dc184cd898"
+    },
+    "syncfusion-react-dashboard-layout": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-dashboard-layout/SKILL.md",
+      "computedHash": "4ddeebab17eba855df0563056bd1460c1e7e4e34f4338f2225e0d8bf3de5797d"
+    },
+    "syncfusion-react-data-manager": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-data-manager/SKILL.md",
+      "computedHash": "8c76de4427f338c189c4c6e8828770b14ec6fd3564fa9b3ff40d3107017dfd2b"
+    },
+    "syncfusion-react-datepicker": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-datepicker/SKILL.md",
+      "computedHash": "8ef49ad4b30c8581fb29ce7b5067bdbd65d9b9fb537e20440c0f66d6cc66bab1"
+    },
+    "syncfusion-react-daterangepicker": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-daterangepicker/SKILL.md",
+      "computedHash": "e9b68d0dcc0c0571e29308c62a301ad09c8cacddf042ff9b2b5f632ecde51085"
+    },
+    "syncfusion-react-datetimepicker": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-datetimepicker/SKILL.md",
+      "computedHash": "e7d9ae46b0c47a41383ad5f4af5b84fe2c5d8c1a1af348d20e6a9c9e0ec5c858"
+    },
+    "syncfusion-react-diagram": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-diagram/SKILL.md",
+      "computedHash": "432751adaa07d840e595f72d6c973f021c0702e0b8450a91e44131cca98596d4"
+    },
+    "syncfusion-react-dropdown-tree": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-dropdown-tree/SKILL.md",
+      "computedHash": "54c43dccef1c9c7f46432dc70e224ff0f78f5382c72c6d0260919d05a2880d64"
+    },
+    "syncfusion-react-dropdowns": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-dropdowns/SKILL.md",
+      "computedHash": "ce1c2b627408ee52654492bd6db01f3fe4309b78fa3fd5b4ad1e9a04d3c4efb9"
+    },
+    "syncfusion-react-file-manager": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-file-manager/SKILL.md",
+      "computedHash": "6f6bfcb3cd74c23a8ce70acb0f89e25161635055d56469adf2002956d757450b"
+    },
+    "syncfusion-react-gantt-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-gantt-chart/SKILL.md",
+      "computedHash": "1c40eeadcc31c0a128c4c7ba6fff87b1fef280bf6f74b80f8976367cc9d6bc5f"
+    },
+    "syncfusion-react-grid": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-grid/SKILL.md",
+      "computedHash": "b632cdd8d1a134094d7e527b899e749977ae513fabba495bfd43fb248818de24"
+    },
+    "syncfusion-react-heatmap": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-heatmap/SKILL.md",
+      "computedHash": "4e9d0fb6e253f617f23bc2c06f50b3e2c725ddcc3cefd30e3d95ba5333860a93"
+    },
+    "syncfusion-react-image-editor": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-image-editor/SKILL.md",
+      "computedHash": "aa9cfd1cfaeb0dc8bf51773d83a7e1cfd8308d4284b610457cb31d960dce56f8"
+    },
+    "syncfusion-react-inline-ai-assist": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-inline-ai-assist/SKILL.md",
+      "computedHash": "2acfd821c0ece980b25fdf097088d67a25da527e5a441fec0aa3ec78e0c2ff8f"
+    },
+    "syncfusion-react-inputs": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-inputs/SKILL.md",
+      "computedHash": "e084e99de3dfafccd1c0a8802f0b18e6ce83cb462c330d5250e2233099724ee3"
+    },
+    "syncfusion-react-kanban": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-kanban/SKILL.md",
+      "computedHash": "faad533b65f4e8b7e6b1e3159a014d6533dd217732bf1c131e4411cf866ad0e2"
+    },
+    "syncfusion-react-license": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-license/SKILL.md",
+      "computedHash": "4b6eaf7383f4401cde048b42c6b17e4852efeeaa2ecf8d3dacb10aa188a1813f"
+    },
+    "syncfusion-react-linear-gauge": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-linear-gauge/SKILL.md",
+      "computedHash": "99d60fe1394a9a1c59e56139846dea9ee060ff65bd15a8cedac00a6321cacbc9"
+    },
+    "syncfusion-react-listview": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-listview/SKILL.md",
+      "computedHash": "c94ee4793a9af753e5c6de852774340dca680ed7308bd796f869760b0744be8c"
+    },
+    "syncfusion-react-maps": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-maps/SKILL.md",
+      "computedHash": "7803871dfae217e70a5af5dbc26669cd9c418054ebbaa5754949b934e01ea96d"
+    },
+    "syncfusion-react-markdown-converter": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-markdown-converter/SKILL.md",
+      "computedHash": "858f24e4eb2895bd1bf66dc136149fe1438a21262061ddf48ce394b7a516a586"
+    },
+    "syncfusion-react-menu": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-menu/SKILL.md",
+      "computedHash": "6d504c2add539d4a0b55614fcf402dbdbbd42fb14d933a7590fc81889f3bbdbc"
+    },
+    "syncfusion-react-notifications": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-notifications/SKILL.md",
+      "computedHash": "8f4766f717ad4a57b3a41983da5c168da0e41f8d38b77646a46452495373147a"
+    },
+    "syncfusion-react-pivot-table": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-pivot-table/SKILL.md",
+      "computedHash": "96ca09b2fb8d687e67ec0cb5d0b9c82540c38d21af3d9a1276cbc7901176bcd9"
+    },
+    "syncfusion-react-popups": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-popups/SKILL.md",
+      "computedHash": "ad0070b0f49407ad49879722545a18dca064d14fc093fed269ac7c9c2842d299"
+    },
+    "syncfusion-react-progress-bar": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-progress-bar/SKILL.md",
+      "computedHash": "c5c630ea2aac22a6c2473e6af6ea113ff3b6fef71eb99e335f8695513540775e"
+    },
+    "syncfusion-react-query-builder": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-query-builder/SKILL.md",
+      "computedHash": "64b49666d006e3f15d0939ded6d2be5cc529f1a40c43dbed5469e30805358bcb"
+    },
+    "syncfusion-react-range-navigator": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-range-navigator/SKILL.md",
+      "computedHash": "a40dac27cd0bb0841f4a703a4da22a1c2cebf36c3d73d67910b4dc50c4006af9"
+    },
+    "syncfusion-react-ribbon": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-ribbon/SKILL.md",
+      "computedHash": "4c329d86f7774492c406084b47c512b7d63c85d3cbc6410878096a290c8af698"
+    },
+    "syncfusion-react-rich-text-editor": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-rich-text-editor/SKILL.md",
+      "computedHash": "82d77e315feb320b46193eaf5503ab07cb8698014a50bd75445a94dcb93758d8"
+    },
+    "syncfusion-react-sankey": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-sankey/SKILL.md",
+      "computedHash": "840598cf322b68cd80dd5310c5de5536fef312d90f903b244121b6f6d89d3127"
+    },
+    "syncfusion-react-scheduler": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-scheduler/SKILL.md",
+      "computedHash": "cd2874eae91f4dbb3f117086b5255d5ada940b53dd4d24aee8a52d0daf2cf7e9"
+    },
+    "syncfusion-react-sidebar": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-sidebar/SKILL.md",
+      "computedHash": "7d89aa9abbbb796ecf6e2b68302a8a389344667060548a3a33e0a2a1d1bc5e0c"
+    },
+    "syncfusion-react-smithchart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-smithchart/SKILL.md",
+      "computedHash": "9f4dbfec79615fee3459c9250e28485f55ac2c211c63a4c5046ffa73ef075a39"
+    },
+    "syncfusion-react-sparkline": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-sparkline/SKILL.md",
+      "computedHash": "7a66e0a618910f739a1ad4748419da4bb9a769b80615a60e4f90a3c121a25815"
+    },
+    "syncfusion-react-speech-to-text": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-speech-to-text/SKILL.md",
+      "computedHash": "ea25e5402d0de2d0270732db6437d0aaa809a28f484395f3500d5b0165e87717"
+    },
+    "syncfusion-react-splitter": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-splitter/SKILL.md",
+      "computedHash": "8d2f604fd1145a93e78b1894d27bd922d9fa2ca14e27a3e7e7a1206f0ebd94cb"
+    },
+    "syncfusion-react-stepper": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-stepper/SKILL.md",
+      "computedHash": "9d2bc3185bef30de2b6a33bea9b769e6dab0b8bb811f66b20ee9cfb9a08b9329"
+    },
+    "syncfusion-react-stock-chart": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-stock-chart/SKILL.md",
+      "computedHash": "6fba44f456971f5db7f70a1bef95971cda6380e41ebda7a8655e1a0ced746bb4"
+    },
+    "syncfusion-react-tabs": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-tabs/SKILL.md",
+      "computedHash": "6382825fdd74c78eb90e65639959b011ebac457f795c0ef6a32f3dd348689423"
+    },
+    "syncfusion-react-themes": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-themes/SKILL.md",
+      "computedHash": "5a4712323e34be907e0ee9b399e3cd413cd26a7a93952e4e5567d456c1992530"
+    },
+    "syncfusion-react-timeline": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-timeline/SKILL.md",
+      "computedHash": "770923aec7f969bfb8c5453eb340a02ba68495a438591c8a6f33ee276038cfc5"
+    },
+    "syncfusion-react-timepicker": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-timepicker/SKILL.md",
+      "computedHash": "491a8dccb7221cf0ad9fc15d2a95a616513ff6f40ff1cf818d3355b585c26915"
+    },
+    "syncfusion-react-toolbar": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-toolbar/SKILL.md",
+      "computedHash": "2fd8b80b1bd94a5cd9ca10ecac1bf91befb96be20d781ccf9d8d7a58325a1b1d"
+    },
+    "syncfusion-react-treegrid": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-treegrid/SKILL.md",
+      "computedHash": "503487b8fee0ace2b95ba992b86c91615110d77b52180ed907b333516cf194fc"
+    },
+    "syncfusion-react-treemaps": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-treemaps/SKILL.md",
+      "computedHash": "c8dda114a6fca97fe97a2529aa54faca302e636445391abf9a055dea4f4f07b4"
+    },
+    "syncfusion-react-treeview": {
+      "source": "syncfusion/react-ui-components-skills",
+      "sourceType": "github",
+      "skillPath": "skills/syncfusion-react-treeview/SKILL.md",
+      "computedHash": "eb60e29e7af34c121cefbe80f550e57ba1f25a55349d26fb161882fa8f8ed4c4"
+    }
+  }
+}

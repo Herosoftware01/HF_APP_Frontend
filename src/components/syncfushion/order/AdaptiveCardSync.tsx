@@ -1,6 +1,5 @@
 import { ColumnDirective, ColumnsDirective, GridComponent, Inject, EditSettingsModel, ToolbarItems, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
 import { Filter, Sort, Edit, Toolbar, Page } from '@syncfusion/ej2-react-grids';
-import * as React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { DataManager, WebApiAdaptor, Query } from '@syncfusion/ej2-data';
 

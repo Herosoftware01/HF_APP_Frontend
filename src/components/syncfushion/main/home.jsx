@@ -1,3 +1,6 @@
+import '../order/style/style.css'
+import '../../../App.css'
+
 import {  Routes, Route, } from 'react-router-dom';
 import HeroFashionGrid13 from "../order/ord_order.tsx"
 import IframeBold from "../order/sync_iframe.jsx"
@@ -21,8 +24,6 @@ import HeroFashionGrid131 from "../order/ord_parent.tsx";
 import Schedule from "../order/Schedule.tsx"
 import GanttChart from '../order/Gantt_Chart/GanttChart.tsx';
 import OrderDetails from '../order/OrderDetails.tsx';
-import MasterDetail from '../order/masterdtls.tsx';
-import Ordloadbalan from '../order/ordloadbalan.tsx';
 import ForeignKeyColumn from '../order/SyncForignkey.tsx';
 import Pivot from '../order/pivot/Pivotview.tsx'; 
 import Adaptive from '../order/AdaptiveCardSync.tsx';
@@ -38,7 +39,7 @@ import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Pdf from "../order/Pdf/Pdf.tsx"
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
-import Xlsheet from '../order/Xlsheet/Xlsheet.tsx'
+import Sheet from '../order/Spreadsheet/Spreadsheet.tsx'
 import Word from '../order/Word/Word.tsx'
 import Smartpaste from '../order/Smart_Paste/Smartpaste.tsx'
 import Speech from '../order/Speak/Speech.tsx'
@@ -48,6 +49,7 @@ import ImageEditor from '../order/Image_Editor/ImageEditor.tsx';
 import LogicCircut from '../order/Logic_Circut/LogicCircut.tsx';
 import Webmail from '../order/Web_Mail/Webmail.tsx';
 import Rk from '../order/Rk.tsx';
+import CuttingDeliveryGrid from '../order/CuttingGrid/CuttingGrid.tsx';
 
 function Home() {
   return (
@@ -67,7 +69,6 @@ function Home() {
         <Route path="/Schedule" element={<Schedule />} /> 
         <Route path="/PRN" element={<PRN />} /> 
         <Route path="/Excel" element={<Excel />} />
-        <Route path="/MasterDetail" element={<MasterDetail />} />
         <Route path="/TemplateGallery" element={<TemplateGallery />} /> 
         <Route path="/fabric" element={<FabricForm />} /> 
         <Route path='/signup' element={<Signin1 />} />
@@ -77,7 +78,6 @@ function Home() {
         <Route path='/order_detail' element={<OrderDetails />} />
         <Route path='/forign' element={<ForeignKeyColumn />} />
         <Route path='/pivot' element={<Pivot />} />
-        <Route path='/ordloadbalan' element={<Ordloadbalan />} />
         <Route path='/adaptive' element={<Adaptive />} />
         <Route path='/kanban' element={<Kanban />} />
         <Route path='/quary' element={<Quary />} />
@@ -90,7 +90,7 @@ function Home() {
         <Route path='/pdf' element={<Pdf />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
         <Route path='/optimize' element={<Optimize />} />
-        <Route path='/xlsheet' element={<Xlsheet />} />
+        <Route path='/xlsheet' element={<Sheet />} />
         <Route path='/word' element={<Word />} />
         <Route path='/smart' element={<Smartpaste />} />
         <Route path='/speak' element={<Speech />} />
@@ -100,6 +100,7 @@ function Home() {
         <Route path='/circut' element={<LogicCircut />} />
         <Route path='/webmail' element={<Webmail />} />
         <Route path='/rk' element={<Rk />} />
+        <Route path='/cutting-delivery' element={<CuttingDeliveryGrid />} />
         
     </Routes>
   );
