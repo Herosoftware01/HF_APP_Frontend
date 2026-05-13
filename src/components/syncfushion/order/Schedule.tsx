@@ -4,8 +4,8 @@ import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
 import { registerLicense } from '@syncfusion/ej2-base';
 
 // Theme imports...
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-react-schedule/styles/material.css';
+import '@syncfusion/ej2-base/styles/tailwind3.css';
+import '@syncfusion/ej2-react-schedule/styles/tailwind3.css';
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
 
