@@ -19,7 +19,7 @@ const MenuIcon = ({ iconData, isActive }) => {
         src={iconData}
         alt="icon"
         className={`w-5 h-5 object-contain transition-all duration-300 ${
-          isActive ? "brightness-125 scale-110" : "brightness-100 opacity-60 group-hover:opacity-100"
+          isActive ? "brightness-125 scale-110" : "brightness-100 group-hover:opacity-100"
         }`}
         onError={(e) => {
           e.target.style.display = 'none'; 
@@ -230,7 +230,7 @@ function Sidebar({ children }) {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto no-scrollbar py-2 space-y-1">
+        <div className="flex-1 overflow-y-auto py-2 space-y-1">
           {filteredMenus.map((menu) => {
             const hasChildren = (menu.submenus || menu.children || []).length > 0;
             const isActive = isChildActive(menu);
@@ -244,14 +244,14 @@ function Sidebar({ children }) {
                     if (menu.path) { navigate(menu.path); if (mobileMenuOpen) setMobileMenuOpen(false); }
                   }}
                   className={`flex items-center justify-between p-3.5 rounded-xl cursor-pointer transition-all duration-300 group
-                    ${isActive ? "bg-white/10 text-white shadow-lg ring-1 ring-white/10" : "text-white/50 hover:bg-white/5 hover:text-white"}`}
+                    ${isActive ? "bg-white/10 text-white shadow-lg ring-1 ring-white/10" : "text-white/80 hover:bg-white/5 hover:text-white"}`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 flex items-center justify-center">
                        <MenuIcon iconData={menu.icon} isActive={isActive} />
                     </div>
                     {(sidebarOpen || mobileMenuOpen) && (
-                      <span className={`text-[13px] tracking-wide ${isActive ? "font-bold" : "font-medium opacity-80 group-hover:opacity-100"}`}>
+                      <span className={`text-[13px] tracking-wide ${isActive ? "font-bold" : "font-medium group-hover:opacity-100"}`}>
                         {menu.name}
                       </span>
                     )}
