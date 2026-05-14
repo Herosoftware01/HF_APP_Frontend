@@ -310,13 +310,13 @@ const Bit_report = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col flex-1 min-h-[400px] md:min-h-0 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col flex-1 min-h-100 md:min-h-0 overflow-hidden">
         <div className="p-3 md:p-4 border-b border-slate-50 shrink-0">
           <h3 className="text-sm md:text-base font-semibold">Detailed Production Log</h3>
         </div>
         
         <div className="flex-1 overflow-auto relative"> 
-          <table className="w-full min-w-[700px] text-left border-collapse">
+          <table className="w-full min-w-175 text-left border-collapse">
             <thead className="bg-slate-50/95 backdrop-blur sticky top-0 z-10 text-slate-500 uppercase text-xs font-bold">
               <tr>
                 <th className="px-4 md:px-6 py-3 md:py-4">Employee</th>

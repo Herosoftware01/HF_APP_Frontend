@@ -36,15 +36,13 @@ import {
   recordClick
 }from '@syncfusion/ej2-react-grids';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { Ajax, registerLicense, Browser } from '@syncfusion/ej2-base';
+import { Ajax, Browser } from '@syncfusion/ej2-base';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent, MultiSelect } from '@syncfusion/ej2-react-dropdowns';
-import "../../../App.css"
-import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { ButtonComponent, ChipListComponent } from '@syncfusion/ej2-react-buttons';
 import { TabComponent } from '@syncfusion/ej2-react-navigations';
-registerLicense('Ngo9BigBOggjGyl/VkV+XU9AclRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3hTdUdlWX1feXZXQWVaVE91XA==');
+
 interface OrderData {
   slno1?: number; // Added SL No field
   jobno_oms: string; company_name: string; buyer1: string; stylename: string; uom: string;
@@ -388,14 +386,29 @@ const [savedSettings, setSavedSettings] = useState<SavedSetting[]>([]);
     alert('Failed to delete setting');
   }
 };
- const detailTemplate = (props: OrderData) => {
-    const printingRows = Array.isArray(props.Printing) ? props.Printing : [];
+ const tabDetailTemplate = (props: OrderData) => {
+    const printingRows: OrderData[] = [];
     const printGroups = groupByPrint(printingRows);
     
     // Helper for chips
     const chipTags = (tags: string[]) => {
         return (<ChipListComponent chips={tags} cssClass={'e-outline'} />);
     };
+
+   function getUniqueColours(rows: any[]= []) {
+     const seen = new Set<string>();
+     return rows
+       .filter((r: any) => {
+         const key = `${r?.colour || ""}-${r?.rgb || ""}`;
+         if (seen.has(key)) return false;
+         seen.add(key);
+         return true;
+       })
+       .map((r: any) => ({
+         colour: r?.colour || "",
+         rgb: r?.rgb || "",
+       }));
+   }
 
     return (
       <div>

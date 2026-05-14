@@ -94,11 +94,11 @@ const Mistake = () => {
       </div>
 
       {/* 3. Table Container */}
-      <main className="flex-grow overflow-hidden p-2 md:p-4 bg-slate-100">
+      <main className="grow overflow-hidden p-2 md:p-4 bg-slate-100">
         {/* Inner wrapper allows both vertical and horizontal scroll while keeping rounded corners */}
         <div className="bg-white rounded-xl shadow-md border border-slate-200 h-full overflow-auto relative">
           {/* min-w-[900px] forces horizontal scroll on small screens to prevent text squishing */}
-          <table className="w-full min-w-[900px] border-separate border-spacing-0">
+          <table className="w-full min-w-225 border-separate border-spacing-0">
             <thead className="sticky top-0 z-20">
               <tr className="bg-slate-800">
                 {[ 'Job No','Position', 'Qrid', 'Ratio' , 'Lot No', 'Operator Name', 'Color Combo', 'Mist PC', 'Individual Parts'].map((header) => (

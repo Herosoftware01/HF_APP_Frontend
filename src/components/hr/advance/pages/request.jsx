@@ -10,16 +10,31 @@ import "react-toastify/dist/ReactToastify.css";
 const BASE = "https://hfapi.herofashion.com/advance";
 
 const Request = () => {
-  const [empList,        setEmpList      ] = useState([]);
-  const [selectedEmp,    setSelectedEmp  ] = useState(null);
-  const [date,           setDate         ] = useState(() => new Date().toISOString().split("T")[0]);
-  const [amount,         setAmount       ] = useState("");
-  const [remarks,        setRemarks      ] = useState("");
-  const [isSubmitting,   setIsSubmitting ] = useState(false);
-  const [eligibleAmt,    setEligibleAmt  ] = useState(null);
-  const [loadingEligible,setLoadingEligible]= useState(false);
-  const [submittedId,   setSubmittedId   ] = useState(null);
-  const [isSendingMail, setIsSendingMail ] = useState(false);
+  const [empList,         setEmpList      ] = useState([]);
+  const [selectedEmp,     setSelectedEmp  ] = useState(null);
+  const [date,            setDate         ] = useState(() => new Date().toISOString().split("T")[0]);
+  const [amount,          setAmount       ] = useState("");
+  const [remarks,         setRemarks      ] = useState("");
+  const [isSubmitting,    setIsSubmitting ] = useState(false);
+  const [eligibleAmt,     setEligibleAmt  ] = useState(null);
+  const [loadingEligible, setLoadingEligible] = useState(false);
+  const [submittedId,     setSubmittedId  ] = useState(null);
+  const [isSendingMail,   setIsSendingMail] = useState(false);
+
+  // ─── Track Completed IDs (Survives Page Refresh) ─────────
+  const [completedIds, setCompletedIds] = useState(() => {
+    const saved = localStorage.getItem("completedAdvances");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const markAsCompleted = (id) => {
+    setCompletedIds((prev) => {
+      if (prev.includes(id)) return prev;
+      const updated = [...prev, id];
+      localStorage.setItem("completedAdvances", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   // ─── Fetch Employee List ───────────────────────────────
   useEffect(() => {
@@ -56,8 +71,6 @@ const Request = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("✅ Eligible API response:", JSON.stringify(data));
-
         const row = Array.isArray(data) ? data[0] : data;
 
         const eligible = parseFloat(
@@ -111,6 +124,8 @@ const Request = () => {
       return;
     }
 
+    // Capture the ID securely before processing
+    const currentEmpId = selectedEmp.value; 
     setIsSubmitting(true);
 
     try {
@@ -119,8 +134,8 @@ const Request = () => {
 
       const payload = {
         dt: date + " 00:00:00",
-        empid: selectedEmp.value,
-        amt: parseFloat(amount) || 0, // Fallback to 0 if NaN
+        empid: currentEmpId,
+        amt: parseFloat(amount) || 0,
         remarks: remarks,
         smon: month,
         syear: year,
@@ -145,7 +160,11 @@ const Request = () => {
       if (response.status === 400) {
         const err = await response.json();
         toast.error(err.error || "Advance already submitted for this month");
-        setIsSubmitting(false); // MUST RESET STATE BEFORE RETURN
+        
+        // Hide this employee moving forward and clear form
+        markAsCompleted(currentEmpId);
+        handleClear();
+        setIsSubmitting(false); 
         return;
       }
 
@@ -179,7 +198,8 @@ const Request = () => {
         toast.warning("⚠️ Saved successfully, but email service unavailable");
       }
 
-      // Success - clear form
+      // Success - Hide employee and clear form
+      markAsCompleted(currentEmpId);
       handleClear();
 
     } catch (err) {
@@ -191,34 +211,14 @@ const Request = () => {
         toast.error(`❌ Save failed: ${err.message}`);
       }
     } finally {
-      // Ensure button is re-enabled regardless of success or general error
       setIsSubmitting(false);
     }
   };
 
-  const handleSendMail = async () => {
-    if (!submittedId) return;
-    setIsSendingMail(true);
-
-    try {
-      const res = await fetch(`${BASE}/send-advance-mail/`, {
-        method : "POST",
-        headers: { "Content-Type": "application/json" },
-        body   : JSON.stringify({ entryno: submittedId }),
-      });
-
-      if (!res.ok) throw new Error("Mail failed");
-
-      toast.success("📧 Mail sent to manager!");
-      setSubmittedId(null);
-      handleClear();           // clear form only after mail sent
-
-    } catch {
-      toast.error("Failed to send mail");
-    } finally {
-      setIsSendingMail(false);
-    }
-  };
+  // ─── Filter Options Dynamically ────────────────────────
+  const availableOptions = empList.filter(
+    (emp) => !completedIds.includes(emp.value)
+  );
 
   // ─── Select Styles ─────────────────────────────────────
   const selectStyles = {
@@ -229,7 +229,7 @@ const Request = () => {
       padding        : "2px",
       boxShadow      : state.isFocused ? "0 0 0 3px rgba(99,102,241,0.1)" : "none",
       backgroundColor: "white",
-      minHeight      : "48px", // Fixed height for mobile
+      minHeight      : "48px",
       "&:hover"      : { borderColor: "#6366f1" },
     }),
     option: (base, state) => ({
@@ -237,7 +237,7 @@ const Request = () => {
       backgroundColor: state.isSelected ? "#6366f1" : state.isFocused ? "#f0f3ff" : "white",
       color          : state.isSelected ? "white" : "#1e293b",
       cursor         : "pointer",
-      padding        : "12px 16px", // Better mobile touch targets
+      padding        : "12px 16px",
     }),
     menu: (base) => ({
       ...base,
@@ -248,7 +248,7 @@ const Request = () => {
     menuList: (base) => ({
       ...base,
       padding: "4px",
-      maxHeight: "300px", // Limit height on mobile
+      maxHeight: "300px",
     }),
   };
 
@@ -259,10 +259,10 @@ const Request = () => {
         position="top-center" 
         theme="colored" 
         autoClose={4000}
-        containerClassName="mt-16 md:mt-20" // Account for fixed header
+        containerClassName="mt-16 md:mt-20"
       />
 
-      {/* HEADER - Mobile Optimized */}
+      {/* HEADER */}
       <nav className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex items-center justify-between shrink-0 z-50 sticky top-0 backdrop-blur-sm supports-[backdrop-filter:blur()]:bg-white/90">
         <div className="flex items-center gap-3 flex-1">
           <button
@@ -299,7 +299,7 @@ const Request = () => {
         </div>
       </nav>
 
-      {/* BANNER - Mobile Responsive */}
+      {/* BANNER */}
       <div className="bg-[#66D0BC] px-4 sm:px-6 py-6 sm:py-8 shrink-0">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight">
@@ -311,35 +311,40 @@ const Request = () => {
         </div>
       </div>
 
-      {/* MAIN CONTENT - Perfect Mobile Flow */}
+      {/* MAIN CONTENT */}
       <main className="flex-1 pb-20 sm:pb-6 relative px-4 sm:px-0">
         <div className="max-w-6xl mx-auto h-full pt-2 sm:-mt-6">
-          {/* Mobile: Stacked Layout | Desktop: Side-by-Side */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 h-full pb-6">
             
-            {/* LEFT — Employee Picker — Full width on mobile */}
+            {/* LEFT — Employee Picker */}
             <div className="lg:col-span-4 w-full flex flex-col min-h-0 mb-6 lg:mb-0">
               <div className="bg-white rounded-2xl shadow-xl border border-slate-200 flex flex-col h-100 overflow-hidden">
                 <div className="p-4 sm:p-5 border-b border-slate-100 shrink-0">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 block">
-                    1. Target Employee
-                  </label>
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest block">
+                      1. Target Employee
+                    </label>
+                    <span className="text-[10px] font-bold text-indigo-400 bg-indigo-50 px-2 py-0.5 rounded-full">
+                      {availableOptions.length} Available
+                    </span>
+                  </div>
                   <div className="relative">
                     <Select
-                      options={empList}
+                      options={availableOptions} // <--- Filtered options used here
                       value={selectedEmp}
                       onChange={(emp) => {
                         setSelectedEmp(emp);
                         setAmount("");
                         setEligibleAmt(null);
                       }}
-                      placeholder="Search employee..."
+                      placeholder={availableOptions.length > 0 ? "Search employee..." : "No employees left..."}
                       styles={selectStyles}
                       isClearable
                       isSearchable
                       menuPlacement="auto"
                       menuPortalTarget={document.body}
                       classNamePrefix="mobile-select"
+                      isDisabled={availableOptions.length === 0}
                     />
                   </div>
                 </div>
@@ -391,11 +396,10 @@ const Request = () => {
               </div>
             </div>
 
-            {/* RIGHT — Request Form — Full width on mobile */}
+            {/* RIGHT — Request Form */}
             <div className="lg:col-span-8 w-full flex flex-col min-h-0">
               <div className="bg-white rounded-2xl shadow-xl border border-slate-200 flex flex-col h-full overflow-hidden">
                 
-                {/* Card Header */}
                 <div className="px-4 sm:px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 bg-indigo-600 rounded-lg text-white shrink-0">
@@ -410,14 +414,11 @@ const Request = () => {
                   )}
                 </div>
 
-                {/* Scrollable Form Body */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
                   <div className="space-y-4 sm:space-y-6">
                     
-                    {/* Date & Eligible Amount - Mobile Stacked */}
                     <div className="grid grid-cols-1 gap-4 sm:gap-6">
                       
-                      {/* Date */}
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1.5">
                           <Calendar size={12} className="text-indigo-500 shrink-0" />
@@ -434,7 +435,6 @@ const Request = () => {
                         />
                       </div>
 
-                     {/* Eligible Amount Card */}
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1.5">
                           <IndianRupee size={12} className="text-green-500 shrink-0" />
@@ -447,7 +447,6 @@ const Request = () => {
                           </div>
                         ) : eligibleAmt !== null && eligibleAmt > 0 ? (
                           <>
-                            {/* Full eligible — green block */}
                             <div className="bg-green-50 border border-green-200 px-4 py-3.5 rounded-xl">
                               <p className="text-[10px] text-green-600 font-bold uppercase">
                                 Full Eligible
@@ -458,8 +457,6 @@ const Request = () => {
                                 })}
                               </p>
                             </div>
-
-                            {/* Max advance — small line below */}
                             <div className="px-1 flex items-center justify-between">
                               <p className="text-[10px] text-orange-500 font-bold uppercase">
                                 Max Advance (70%)
@@ -483,7 +480,6 @@ const Request = () => {
                       </div>
                     </div>
 
-                    {/* Amount Input - Full Width */}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1.5">
@@ -512,7 +508,6 @@ const Request = () => {
                       )}
                     </div>
 
-                    {/* Remarks - Full Width with Better Mobile Sizing */}
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1.5">
                         <FileText size={12} className="text-indigo-500 shrink-0" />
@@ -529,7 +524,6 @@ const Request = () => {
                   </div>
                 </div>
 
-                {/* Footer Buttons - Mobile Optimized */}
                 <div className="p-4 sm:p-6 bg-white border-t border-slate-100 shrink-0">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                     <button

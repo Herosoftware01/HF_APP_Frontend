@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { lazy, useEffect } from "react";
 import { startSilentRefresh, getRefreshToken } from "./auth/auth";
 
+
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
@@ -11,8 +12,6 @@ import MenuPage from "./components/user_control/MenuPage";
 import SubMenuPermissionPage from "./components/user_control/SubMenuPermissionPage";
 import QualityApp from "./components/quality_app/main/Quality_main"
 import Qc_entry from "./components/quality_app/quality/Qc"
-
-import Visuva from "./components/syncfushion/order/ord_pagination";
 import Syncfushion from "./components/syncfushion/main/home";
 import GreyRollChecking from "./components/GreyrollChecking/main/App";
 import FabricForm from "./components/syncfushion/fabric/Fabric";
@@ -30,13 +29,7 @@ const BoldBi = lazy(()=>import("./components/syncfushion/DashboardListing/Dashbo
 const BoldReport = lazy(()=>import("./components/syncfushion/order/reportviewer")) 
 import Cut_sample from "./components/cutting_sample/main/cut_main"
 import Cutting_measurement from "./components/cutting_mesurement_check/main/main"
-import Word from "./components/syncfushion/order/Word/Word"
-import Pdf from "./components/syncfushion/order/Pdf/Pdf"
-import Xlsheet from './components/syncfushion/order/Xlsheet/Xlsheet'
 import GanttChart from "./components/syncfushion/order/Gantt_Chart/GanttChart";
-import Kanban from './components/syncfushion/order/Kanban/Kanban';
-import Pivot from "./components/syncfushion/order/pivot/Pivotview";
-import WebSocket from './components/syncfushion/order/web_order';
 import BlockEditor from './components/syncfushion/order/BlockEditor/eblockeditor';
 import Oms from './components/syncfushion/order/excel';
 import Calendar from './components/syncfushion/order/Schedule'
@@ -346,51 +339,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-                
-{/* 
-        <Route
-          path="/word/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Word />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />  */}
-
-        {/* <Route
-          path="/xlsheet/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Xlsheet />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* <Route
-          path="/pdf/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Pdf />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* <Route
-          path="/websocket/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <WebSocket />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        /> */}
 
         <Route
           path="/sy-order/block_edit/*"
@@ -436,27 +384,6 @@ function App() {
           }
         />
 
-        <Route
-          path="/pivot/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Pivot/>
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/kanban/*"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Kanban/>
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/sy-order/formbuilder/*"
           element={

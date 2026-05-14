@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 
 const BASE = "https://hfapi.herofashion.com/imp_reports";
 
-const pick = (obj, ...keys) => {
-  for (const k of keys) {
-    if (obj[k] !== undefined && obj[k] !== null && obj[k] !== "") return obj[k];
-  }
-  return null;
-};
-
 const Bundel = () => {
-  const [pendingApi, setPendingApi]       = useState([]);
-  const [completeApi, setCompleteApi]     = useState([]);
-  const [unitSummaries, setUnitSummaries] = useState([]);
-  const [allUnits, setAllUnits]           = useState([]);
-  const [selectedUnit, setSelectedUnit]   = useState(null);
-  const [modalFilter, setModalFilter]     = useState("pending");
-  const [searchUnit, setSearchUnit]       = useState("All");
-  const [loading, setLoading]             = useState(true);
+  // ── API data ──
+  // receivePendingApi  ← unit_bundle/           (Receive Pending section only)
+  // bundleDataApi      ← get_unit_bundle_data/  (Pending cards scan=0 + Complete scan=1)
+  const [receivePendingApi, setReceivePendingApi] = useState([]);
+  const [bundleDataApi, setBundleDataApi]         = useState([]);
+
+  const [unitSummaries, setUnitSummaries]     = useState([]);
+  const [allUnits, setAllUnits]               = useState([]);
+  const [selectedUnit, setSelectedUnit]       = useState(null);
+  const [modalFilter, setModalFilter]         = useState("pending");
+  const [searchUnit, setSearchUnit]           = useState("All");
+  const [loading, setLoading]                 = useState(true);
 
   const [modalPendingRows, setModalPendingRows]     = useState([]);
   const [modalCompletedRows, setModalCompletedRows] = useState([]);
@@ -29,31 +26,31 @@ const Bundel = () => {
   const [unitModalCounts, setUnitModalCounts] = useState({});
 
   const todayISO = () => new Date().toISOString().split("T")[0];
+  const today    = new Date().toISOString().split("T")[0];
 
-  const [filterStart, setFilterStart] = useState(todayISO());
-  const [filterEnd,   setFilterEnd]   = useState(todayISO());
-
-  const getWeekStart = () => {
-    const d = new Date();
-    const day = d.getDay();
-    const diff = day === 0 ? -6 : 1 - day;
-    const mon = new Date(d);
-    mon.setDate(d.getDate() + diff);
-    return mon.toISOString().split("T")[0];
-  };
-  const getWeekEnd = () => {
-    const s = new Date(getWeekStart());
-    s.setDate(s.getDate() + 6);
-    return s.toISOString().split("T")[0];
-  };
-  const [weekStart] = useState(getWeekStart());
-  const [weekEnd]   = useState(getWeekEnd());
+  // Empty string = no date filter (show all time)
+  const [filterStart, setFilterStart] = useState("");
+  const [filterEnd,   setFilterEnd]   = useState("");
 
   useEffect(() => { fetchData(); }, []);
-  useEffect(() => { buildRows(); },           [pendingApi, completeApi, searchUnit, filterStart, filterEnd]);
-  useEffect(() => { buildReceivePending(); },  [pendingApi, completeApi, searchUnit, filterStart, filterEnd]);
-  useEffect(() => { buildModalRows(); },       [pendingApi, completeApi, filterStart, filterEnd, selectedUnit]);
-  useEffect(() => { buildAllUnitModalCounts(); }, [pendingApi, completeApi, filterStart, filterEnd, allUnits]);
+  useEffect(() => { buildRows(); },               [bundleDataApi, searchUnit, filterStart, filterEnd, allUnits]);
+  useEffect(() => { buildReceivePending(); },     [receivePendingApi, searchUnit, filterStart, filterEnd]);
+  useEffect(() => { buildModalRows(); },          [bundleDataApi, filterStart, filterEnd, selectedUnit]);
+  useEffect(() => { buildAllUnitModalCounts(); }, [bundleDataApi, filterStart, filterEnd, allUnits]);
+
+  // ─────────────────────────────────────────────────────────────
+  // FIXED UNIT MAP  unit_id → display label
+  // ─────────────────────────────────────────────────────────────
+  const UNIT_ID_MAP = {
+    1:   "UNIT-1",
+    53:  "UNIT-2",
+    4:   "UNIT-3",
+    6:   "UNIT-4",
+    162: "UNIT-5",
+  };
+
+  // Always show exactly these 5 units in this order
+  const FIXED_UNITS = ["UNIT-1", "UNIT-2", "UNIT-3", "UNIT-4", "UNIT-5"];
 
   // ─────────────────────────────────────────────────────────────
   // FETCH
@@ -62,36 +59,19 @@ const Bundel = () => {
     try {
       setLoading(true);
       const [res1, res2] = await Promise.all([
-        fetch(`${BASE}/unit_bundle/`),
-        fetch(`${BASE}/get_unit_bundle_data/`)
+        fetch(`${BASE}/unit_bundle/`),           // → receivePendingApi (Receive Pending only)
+        fetch(`${BASE}/get_unit_bundle_data/`),  // → bundleDataApi (pending cards + complete)
       ]);
       const data1 = await res1.json();
       const data2 = await res2.json();
-      const arr1 = Array.isArray(data1) ? data1 : [];
-      const arr2 = Array.isArray(data2) ? data2 : [];
+      const arr1  = Array.isArray(data1) ? data1 : [];
+      const arr2  = Array.isArray(data2) ? data2 : [];
 
-      setPendingApi(arr1);
-      setCompleteApi(arr2);
+      setReceivePendingApi(arr1);
+      setBundleDataApi(arr2);
 
-      // Collect units from BOTH APIs so no unit is ever missing
-      const unitSet = new Set();
-
-        // ONLY use unitname (strict)
-        arr1.forEach(item => {
-          const u = normaliseUnit(item.unitname);
-          if (u) unitSet.add(u);
-        });
-
-        arr2.forEach(item => {
-          const u = normaliseUnit(item.unitname);
-          if (u) unitSet.add(u);
-        });
-
-      setAllUnits(
-        [...unitSet].sort(
-          (a, b) => Number(a.replace("UNIT-", "")) - Number(b.replace("UNIT-", ""))
-        )
-      );
+      // Always use the fixed 5 units — no dynamic discovery needed
+      setAllUnits(FIXED_UNITS);
     } catch (err) {
       console.error("Fetch error:", err);
     } finally {
@@ -104,12 +84,16 @@ const Bundel = () => {
   // ─────────────────────────────────────────────────────────────
   const normaliseUnit = (raw) => {
     if (!raw) return null;
-    const s = String(raw).trim().toUpperCase();
-    if (/^UNIT-\d+$/.test(s)) return s;
-    const m = s.match(/UNIT[\s-]*(\d+)/);
+    const s = String(raw).trim();
+    // Numeric unit_id: resolve via fixed map
+    if (/^\d+$/.test(s)) {
+      return UNIT_ID_MAP[Number(s)] || null;
+    }
+    const up = s.toUpperCase();
+    if (/^UNIT-\d+$/.test(up)) return up;
+    const m = up.match(/UNIT[\s-]*(\d+)/);
     if (m) return `UNIT-${m[1]}`;
-    if (/^\d+$/.test(s)) return `UNIT-${s}`;
-    return `UNIT-${s}`;
+    return null;
   };
 
   const parseDate = (val) => {
@@ -150,8 +134,10 @@ const Bundel = () => {
   };
 
   // ─────────────────────────────────────────────────────────────
-  // buildRows — drives the unit card grid (week range)
-  // FIX: collect units from completeApi too so cards always appear
+  // buildRows — drives the unit card grid
+  // Source: bundleDataApi only
+  //   scan=0 → Pending
+  //   scan=1 → Complete
   // ─────────────────────────────────────────────────────────────
   const buildRows = () => {
     const summaries = {};
@@ -183,111 +169,78 @@ const Bundel = () => {
       }
     };
 
-    // Pending items from pendingApi
-    pendingApi.forEach(item => {
-      const scanVal = pick(item, "mbappr", "scan");
-      if (Number(scanVal) !== 0 && scanVal !== null && scanVal !== undefined && scanVal !== "") return;
+    // ── Pending: bundleDataApi where scan=0 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "0") return;
 
-      const rdtRaw    = pick(item, "r_dt");
-      const mbunidRaw = pick(item, "mbunid");
-      const unitRaw   = pick(item, "unitname", "unit_name");
-      if (!rdtRaw || !mbunidRaw || !unitRaw) return;
+      const dt = parseDate(item.s_date || item.date);
+      if (!dt) return;
+      if (filterStart && dt < filterStart) return;
+      if (filterEnd   && dt > filterEnd)   return;
 
-      const dt = parseDate(rdtRaw);
-      if (!dt || dt < weekStart || dt > weekEnd) return;
-
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
       if (searchUnit !== "All" && searchUnit !== unit) return;
 
-      const mst = Number(pick(item, "totmastbdl") || 0);
-      const sub = Number(pick(item, "totbdl")     || 0);
-      const job = pick(item, "jobno");
+      const sub = Number(item.total_bundles || 0);
+      const pcs = Number(item.pcs_count || 0);
+      const job = item.job_no || item.jobno;
 
-      addSummary(unit, dt, "pending", mst, sub, job);
+      addSummary(unit, dt, "pending", pcs, sub, job);
     });
 
-    // Complete items from completeApi
-    const pendingByBunid = {};
-    pendingApi.forEach(item => {
-      const bunid = pick(item, "mbunid");
-      if (bunid) pendingByBunid[String(bunid)] = item;
-    });
+    // ── Complete: bundleDataApi where scan=1 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "1") return;
 
-    completeApi.forEach(item => {
-      const scanVal = pick(item, "scan", "mbappr");
-      if (Number(scanVal) !== 1) return;
+      const sDate = parseDate(item.s_date || item.date);
+      if (!sDate) return;
+      if (filterStart && sDate < filterStart) return;
+      if (filterEnd   && sDate > filterEnd)   return;
 
-      const mbundleId = pick(item, "mbundle_id", "mbunid", "bundle_id");
-      if (!mbundleId) return;
-
-      const matchedPending = pendingByBunid[String(mbundleId)];
-      const sDateRaw = pick(item, "s_date", "scan_date", "date");
-      const sDate    = parseDate(sDateRaw);
-      if (!sDate || sDate < weekStart || sDate > weekEnd) return;
-
-      const unitRaw = pick(item, "unitname", "unit_name")
-        || (matchedPending && pick(matchedPending, "unitname", "unit_name"));
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
       if (searchUnit !== "All" && searchUnit !== unit) return;
 
-      const mst = Number(pick(item, "total_bundles", "totmastbdl", "mst_count") || 0);
-      const sub = Number(pick(item, "pcs_count", "totbdl", "sub_count")         || 0);
-      const job = pick(item, "job_no", "jobno", "job")
-        || (matchedPending && pick(matchedPending, "jobno"));
+      const sub = Number(item.total_bundles || item.pcs_count || 0);
+      const pcs = Number(item.pcs_count || item.total_bundles || 0);
+      const job = item.job_no || item.jobno;
 
-      addSummary(unit, sDate, "complete", mst, sub, job);
+      addSummary(unit, sDate, "complete", pcs, sub, job);
     });
 
-   // Ensure ALL units are present (even if no weekly data)
-const finalSummaries = allUnits.map(unit => {
-  const existing = summaries[unit];
+    const finalSummaries = allUnits.map(unit => {
+      const existing = summaries[unit];
+      if (existing) {
+        return {
+          ...existing,
+          jobs: [...existing.jobs].filter(Boolean).join(", "),
+        };
+      }
+      return {
+        unitName: unit, totalPending: 0, todayCompleted: 0,
+        sumMasterPending: 0, sumSubPending: 0,
+        sumMasterComp: 0, sumSubComp: 0,
+        jobs: "", daily: {},
+      };
+    });
 
-  if (existing) {
-    return {
-      ...existing,
-      jobs: [...existing.jobs].filter(Boolean).join(", "),
-    };
-  }
-
-  // If no data → create empty card
-  return {
-    unitName: unit,
-    totalPending: 0,
-    todayCompleted: 0,
-    sumMasterPending: 0,
-    sumSubPending: 0,
-    sumMasterComp: 0,
-    sumSubComp: 0,
-    jobs: "",
-    daily: {},
+    setUnitSummaries(finalSummaries);
   };
-});
 
-setUnitSummaries(finalSummaries);
-  };
-  const today = new Date().toISOString().split("T")[0];
   // ─────────────────────────────────────────────────────────────
-  // buildReceivePending
+  // buildReceivePending — uses receivePendingApi (unit_bundle/) ONLY
   // ─────────────────────────────────────────────────────────────
   const buildReceivePending = () => {
-    const byUnit = {};
+    const byUnit   = {};
     const seenBunids = new Set();
 
-    const sdateByBunid = {};
-    completeApi.forEach(item => {
-      const id = pick(item, "mbundle_id");
-      const sd = pick(item, "s_date");
-      if (id && sd) sdateByBunid[String(id)] = sd;
-    });
+    receivePendingApi.forEach(item => {
+      const scanVal = item.mbappr ?? item.scan;
+      if (String(scanVal) !== "0" && scanVal !== null && scanVal !== undefined && scanVal !== "") return;
 
-    pendingApi.forEach(item => {
-      const scanVal = pick(item, "mbappr", "scan");
-      if (Number(scanVal) !== 0 && scanVal !== null && scanVal !== undefined && scanVal !== "") return;
-
-      const mbunidRaw = pick(item, "mbunid");
-      const unitRaw   = pick(item, "unitname", "unit_name");
+      const mbunidRaw = item.mbunid;
+      const unitRaw   = item.unitname || item.unit_name;
       if (!mbunidRaw || !unitRaw) return;
 
       const bunidKey = String(mbunidRaw);
@@ -298,29 +251,24 @@ setUnitSummaries(finalSummaries);
       if (!unit) return;
       if (searchUnit !== "All" && searchUnit !== unit) return;
 
-      const rdtRaw = pick(item, "r_dt", "created_at", "c_dt", "entry_date", "date");
-      const dt     = parseDate(rdtRaw) || parseDate(sdateByBunid[bunidKey]) || null;
-      if (!dt || dt < filterStart || dt > filterEnd) return;
+      const rdtRaw = item.r_dt || item.created_at || item.c_dt || item.entry_date || item.date;
+      const dt     = parseDate(rdtRaw) || null;
+      if (!dt) return;
+      if (filterStart && dt < filterStart) return;
+      if (filterEnd   && dt > filterEnd)   return;
 
-      const mst = Number(pick(item, "totmastbdl") || 0);
-      const sub = Number(pick(item, "totbdl")     || 0);
-      const pcs = Number(pick(item, "pcs_count")  || pick(item, "ordsamid") || 0);
-      const job = pick(item, "jobno") || "-";
-      const bid = pick(item, "b_id")  || "-";
+      const mst = Number(item.totmastbdl || 0);
+      const sub = Number(item.totbdl || 0);
+      const pcs = Number(item.pcs_count || 0);
+      const job = item.jobno || "-";
+      const bid = item.b_id || "-";
 
       if (!byUnit[unit]) byUnit[unit] = [];
       byUnit[unit].push({
-        unit,
-        job_no:      job,
-        b_id:        String(bid),
-        master:      mst,
-        sub,
-        bundle:      bunidKey,
-        pcs_count:   pcs,
-        receiveDate: fmt(dt),
-        _rdtISO:     dt,
-        ageing:      ageing(dt),
-        risk:        risk(dt),
+        unit, job_no: job, b_id: String(bid),
+        master: mst, sub, bundle: bunidKey, pcs_count: pcs,
+        receiveDate: fmt(dt), _rdtISO: dt,
+        ageing: ageing(dt), risk: risk(dt),
       });
     });
 
@@ -344,125 +292,93 @@ setUnitSummaries(finalSummaries);
   };
 
   // ─────────────────────────────────────────────────────────────
-  // buildAllUnitModalCounts
-  // Pending  → pendingApi filtered by r_dt
-  // Complete → completeApi filtered by s_date
+  // buildAllUnitModalCounts — uses bundleDataApi only
+  // scan=0 → pending counts   |   scan=1 → complete counts
   // ─────────────────────────────────────────────────────────────
   const buildAllUnitModalCounts = () => {
     const counts = {};
 
-    const seenPending = new Set();
-    pendingApi.forEach(item => {
-      const scanVal = pick(item, "mbappr", "scan");
-      if (Number(scanVal) !== 0 && scanVal !== null && scanVal !== undefined && scanVal !== "") return;
+    // ── PENDING: scan=0 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "0") return;
 
-      const mbunidRaw = pick(item, "mbunid");
-      const unitRaw   = pick(item, "unitname", "unit_name");
-      if (!mbunidRaw || !unitRaw) return;
-
-      const bunidKey = String(mbunidRaw);
-      if (seenPending.has(bunidKey)) return;
-      seenPending.add(bunidKey);
-
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
 
-      const dt = parseDate(pick(item, "r_dt"));
-      if (!dt || dt < filterStart || dt > filterEnd) return;
+      const dt = parseDate(item.s_date || item.date);
+      if (!dt) return;
+      if (filterStart && dt < filterStart) return;
+      if (filterEnd   && dt > filterEnd)   return;
 
-      const pcs = Number(pick(item, "ordsamid") || 0);
-      const sub = Number(pick(item, "totbdl")   || 0);
+      const sub = Number(item.total_bundles || 0);
+      const pcs = Number(item.pcs_count || 0);
 
       if (!counts[unit]) counts[unit] = { pending: 0, complete: 0, mstPending: 0, subPending: 0, mstComplete: 0, subComplete: 0 };
       counts[unit].pending++;
-      counts[unit].mstPending += pcs;
       counts[unit].subPending += sub;
+      counts[unit].mstPending += pcs;
     });
 
-    const pendingByBunid = {};
-    pendingApi.forEach(item => {
-      const bunid = pick(item, "mbunid");
-      if (bunid) pendingByBunid[String(bunid)] = item;
-    });
+    // ── COMPLETE: scan=1 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "1") return;
 
-    completeApi.forEach(item => {
-      const scanVal = pick(item, "scan");
-      if (Number(scanVal) !== 1) return;
-
-      const mbundleId = pick(item, "mbundle_id");
-      if (mbundleId === null || mbundleId === undefined) return;
-
-      const matched = pendingByBunid[String(mbundleId)];
-      const unitRaw =
-        (matched && pick(matched, "unitname", "unit_name")) ||
-        pick(item, "unitname", "unit_name", "unit_id");
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
 
-      const sDateISO = parseDate(pick(item, "s_date"));
-      if (!sDateISO || sDateISO < filterStart || sDateISO > filterEnd) return;
+      const sDateISO = parseDate(item.s_date || item.date);
+      if (!sDateISO) return;
+      if (filterStart && sDateISO < filterStart) return;
+      if (filterEnd   && sDateISO > filterEnd)   return;
 
-      const pcsMatch = Number((matched && pick(matched, "ordsamid")) || pick(item, "total_bundles") || 0);
-      const subMatch = Number((matched && pick(matched, "totbdl"))   || pick(item, "pcs_count")    || 0);
+      const sub = Number(item.total_bundles || item.pcs_count || 0);
+      const pcs = Number(item.pcs_count || item.total_bundles || 0);
 
       if (!counts[unit]) counts[unit] = { pending: 0, complete: 0, mstPending: 0, subPending: 0, mstComplete: 0, subComplete: 0 };
       counts[unit].complete++;
-      counts[unit].mstComplete += pcsMatch;
-      counts[unit].subComplete += subMatch;
+      counts[unit].subComplete += sub;
+      counts[unit].mstComplete += pcs;
     });
 
     setUnitModalCounts(counts);
   };
 
   // ─────────────────────────────────────────────────────────────
-  // buildModalRows — FIX: pending rows come from pendingApi, NOT completeApi
+  // buildModalRows — uses bundleDataApi only
+  // scan=0 → pending table rows   |   scan=1 → complete table rows
   // ─────────────────────────────────────────────────────────────
   const buildModalRows = () => {
     const mPending  = [];
     const mComplete = [];
 
-    const pendingByBunid = {};
-    pendingApi.forEach(item => {
-      const bunid = pick(item, "mbunid");
-      if (bunid) pendingByBunid[String(bunid)] = item;
-    });
+    // ── PENDING rows: scan=0 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "0") return;
 
-    // ── PENDING rows: directly from pendingApi ──
-    const seenPending = new Set();
-    pendingApi.forEach(item => {
-      const scanVal = pick(item, "mbappr", "scan");
-      if (Number(scanVal) !== 0 && scanVal !== null && scanVal !== undefined && scanVal !== "") return;
-
-      const mbunidRaw = pick(item, "mbunid");
-      const unitRaw   = pick(item, "unitname", "unit_name");
-      if (!mbunidRaw || !unitRaw) return;
-
-      const bunidKey = String(mbunidRaw);
-      if (seenPending.has(bunidKey)) return;
-      seenPending.add(bunidKey);
-
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
       if (selectedUnit && unit !== selectedUnit) return;
 
-      const rdtRaw   = pick(item, "r_dt");
-      const rDateISO = parseDate(rdtRaw);
-      if (!rDateISO || rDateISO < filterStart || rDateISO > filterEnd) return;
+      const sDateISO = parseDate(item.s_date || item.date);
+      if (!sDateISO) return;
+      if (filterStart && sDateISO < filterStart) return;
+      if (filterEnd   && sDateISO > filterEnd)   return;
 
-      const masterBdl = Number(pick(item, "totmastbdl") || 0);
-      const subBdl    = Number(pick(item, "totbdl")     || 0);
-      const pcs       = Number(pick(item, "ordsamid")   || 0);
-      const jobNo     = pick(item, "jobno") || "-";
-      const bid       = pick(item, "b_id")  || "-";
+      const rDateISO = parseDate(item.r_date) || sDateISO;
+      const subBdl   = Number(item.total_bundles || 0);
+      const pcsCount = Number(item.pcs_count || 0);
+      const jobNo    = item.job_no || item.jobno || "-";
+      const bid      = item.id || item.b_id || "-";
+      const mbundleId = item.mbundle_id || item.mbunid || "-";
 
       mPending.push({
         unit,
         job_no:      jobNo,
         b_id:        String(bid),
-        master:      masterBdl,
+        master:      pcsCount,
         sub:         subBdl,
-        bundle:      bunidKey,
-        pcs_count:   pcs,
+        bundle:      String(mbundleId),
+        pcs_count:   pcsCount,
         receiveDate: fmt(rDateISO),
         scannedDate: "-",
         ageing:      ageing(rDateISO),
@@ -471,39 +387,31 @@ setUnitSummaries(finalSummaries);
       });
     });
 
-    // ── COMPLETE rows: from completeApi (scan=1) ──
-    completeApi.forEach(item => {
-      const scanVal   = pick(item, "scan");
-      if (Number(scanVal) !== 1) return;
+    // ── COMPLETE rows: scan=1 ──
+    bundleDataApi.forEach(item => {
+      if (String(item.scan) !== "1") return;
 
-      const mbundleId = pick(item, "mbundle_id");
-      if (mbundleId === null || mbundleId === undefined) return;
-
-      const matched = pendingByBunid[String(mbundleId)];
-      const unitRaw =
-        (matched && pick(matched, "unitname", "unit_name")) ||
-        pick(item, "unitname", "unit_name", "unit_id");
-      const unit = normaliseUnit(unitRaw);
+      const unit = normaliseUnit(item.unitname || item.unit_name || item.unit_id);
       if (!unit) return;
       if (selectedUnit && unit !== selectedUnit) return;
 
-      const sDateISO  = parseDate(pick(item, "s_date"));
-      if (!sDateISO || sDateISO < filterStart || sDateISO > filterEnd) return;
+      const sDateISO = parseDate(item.s_date || item.date);
+      if (!sDateISO) return;
+      if (filterStart && sDateISO < filterStart) return;
+      if (filterEnd   && sDateISO > filterEnd)   return;
 
-      const rDateISO  = parseDate(pick(item, "r_date") || (matched && pick(matched, "r_dt")));
-      const mst       = Number(pick(item, "total_bundles") || 0);
-      const sub       = Number(pick(item, "pcs_count")     || 0);
-      const jobNo     = pick(item, "job_no") || (matched && pick(matched, "jobno")) || "-";
-      const bid       = (matched && pick(matched, "b_id")) || pick(item, "id") || "-";
-      const masterBdl = Number((matched && pick(matched, "totmastbdl")) || mst || 0);
-      const subBdl    = Number((matched && pick(matched, "totbdl"))     || sub || 0);
-      const pcs       = Number((matched && pick(matched, "ordsamid"))   || sub || 0);
+      const rDateISO  = parseDate(item.r_date) || null;
+      const subBdl    = Number(item.total_bundles || item.pcs_count || 0);
+      const pcs       = Number(item.pcs_count || item.total_bundles || 0);
+      const jobNo     = item.job_no || item.jobno || "-";
+      const bid       = item.id || item.b_id || "-";
+      const mbundleId = item.mbundle_id || item.mbunid || "-";
 
       mComplete.push({
         unit,
         job_no:      jobNo,
         b_id:        String(bid),
-        master:      masterBdl,
+        master:      pcs,
         sub:         subBdl,
         bundle:      String(mbundleId),
         pcs_count:   pcs,
@@ -529,12 +437,12 @@ setUnitSummaries(finalSummaries);
     return c;
   });
 
-  const activeRows =
-  modalFilter === "pending" ? modalPendingRows : modalCompletedRows;
+  const activeRows = modalFilter === "pending" ? modalPendingRows : modalCompletedRows;
 
-const normalCount = activeRows.filter(r => r.risk === "Normal").length;
-const riskCount = activeRows.filter(r => r.risk === "Risk").length;
-const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
+  const normalCount   = activeRows.filter(r => r.risk === "Normal").length;
+  const riskCount     = activeRows.filter(r => r.risk === "Risk").length;
+  const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
+
   const riskBadge = (r) => ({
     "High Risk": "bg-red-100 text-red-600",
     "Risk":      "bg-orange-100 text-orange-600",
@@ -590,13 +498,13 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
     });
   };
 
-    const sortedUnitSummaries = [...unitSummaries]
-      .filter(u => searchUnit === "All" || u.unitName === searchUnit)
-      .sort(
-        (a, b) =>
-          Number(a.unitName.replace("UNIT-", "")) -
-          Number(b.unitName.replace("UNIT-", ""))
-      );
+  const sortedUnitSummaries = [...unitSummaries]
+    .filter(u => searchUnit === "All" || u.unitName === searchUnit)
+    .sort(
+      (a, b) =>
+        Number(a.unitName.replace("UNIT-", "")) -
+        Number(b.unitName.replace("UNIT-", ""))
+    );
 
   // ─────────────────────────────────────────────────────────────
   // RENDER
@@ -614,13 +522,18 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
           </div>
           <div className="flex flex-wrap items-center gap-3 bg-white shadow-sm border border-slate-200 p-2 rounded-2xl">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Cards &amp; Table Filter</span>
+              <div className="flex items-center gap-2 px-1 mb-0.5">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Date Range Filter</span>
+                {!filterStart && !filterEnd && (
+                  <span className="text-[9px] font-black text-blue-500 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full uppercase tracking-wider">All Time</span>
+                )}
+              </div>
               <div className="flex items-center bg-slate-50 rounded-xl px-3 py-1">
                 <span className="text-slate-400 text-[11px] font-bold mr-2 uppercase">From:</span>
-                <input type="date" value={filterStart} min = "2026-04-20" max={today} onChange={e => setFilterStart(e.target.value)}
+                <input type="date" value={filterStart} min="2026-05-06" max={today} onChange={e => setFilterStart(e.target.value)}
                   className="bg-transparent border-none text-[11px] font-bold p-2 outline-none text-slate-600"/>
-                <span className="text-slate-400 text-[11px] font-bold mr-2 uppercase">To</span>
-                <input type="date" value={filterEnd} min = "2026-04-20" max={today} onChange={e => setFilterEnd(e.target.value)}
+                <span className="text-slate-400 text-[11px] font-bold mx-2 uppercase">To:</span>
+                <input type="date" value={filterEnd} min="202630-05-06" max="{today}" onChange={e => setFilterEnd(e.target.value)}
                   className="bg-transparent border-none text-[11px] font-bold p-2 outline-none text-slate-600"/>
               </div>
             </div>
@@ -633,7 +546,7 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 cursor-pointer py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">
               ↺ Refresh
             </button>
-            <button onClick={() => { setFilterStart(todayISO()); setFilterEnd(todayISO()); setSearchUnit("All"); }}
+            <button onClick={() => { setFilterStart(""); setFilterEnd(""); setSearchUnit("All"); }}
               className="bg-slate-900 hover:bg-blue-700 text-white px-5 cursor-pointer py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">
               Reset
             </button>
@@ -672,7 +585,7 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
                 {receivePendingRows.length} Total Pending
               </span>
               <span className="text-[9px] text-slate-400 font-semibold">
-                ({fmt(filterStart)} — {fmt(filterEnd)})
+                {(filterStart || filterEnd ? `${filterStart ? fmt(filterStart) : "…"} — ${filterEnd ? fmt(filterEnd) : "…"}` : "All Time")}
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
@@ -720,7 +633,7 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
                   <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-2">
                     Today's Summary&nbsp;
                     <span className="text-blue-400">
-                      ({fmt(filterStart)}{filterStart !== filterEnd ? ` → ${fmt(filterEnd)}` : ""})
+                      {(filterStart || filterEnd ? `${filterStart ? fmt(filterStart) : "…"} — ${filterEnd ? fmt(filterEnd) : "…"}` : "All Time")}
                     </span>
                   </p>
                 </div>
@@ -779,7 +692,7 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
                     <div>
                       <h2 className="text-2xl font-black text-slate-900">{receivePendingUnit}</h2>
                       <p className="text-amber-600 font-bold text-[10px] uppercase tracking-widest mt-1">
-                        Receive Pending — {fmt(filterStart)} to {fmt(filterEnd)}
+                        Receive Pending — {(filterStart || filterEnd ? `${filterStart ? fmt(filterStart) : "…"} — ${filterEnd ? fmt(filterEnd) : "…"}` : "All Time")}
                       </p>
                     </div>
                   </div>
@@ -873,7 +786,7 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
                   <div>
                     <h2 className="text-2xl font-black text-slate-900">{selectedUnit}</h2>
                     <p className="text-blue-600 font-bold text-[10px] uppercase tracking-widest mt-1">
-                      {fmt(filterStart)} — {fmt(filterEnd)}
+                      {(filterStart || filterEnd ? `${filterStart ? fmt(filterStart) : "…"} — ${filterEnd ? fmt(filterEnd) : "…"}` : "All Time")}
                     </p>
                   </div>
                 </div>
@@ -903,31 +816,26 @@ const highRiskCount = activeRows.filter(r => r.risk === "High Risk").length;
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-3 px-6 py-3 bg-slate-50 border-b border-slate-200 flex-wrap">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                  Risk Totals:
-                </span>
 
+              <div className="flex items-center gap-3 px-6 py-3 bg-slate-50 border-b border-slate-200 flex-wrap">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Risk Totals:</span>
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-100 border border-green-200">
                   <span className="text-[10px] font-black text-slate-500 uppercase">Normal</span>
                   <span className="text-[15px] font-black text-green-700">{normalCount}</span>
                 </div>
-
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-100 border border-orange-200">
                   <span className="text-[10px] font-black text-orange-500 uppercase">Risk</span>
                   <span className="text-[15px] font-black text-orange-700">{riskCount}</span>
                 </div>
-
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-100 border border-red-200">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-100 border border-red-200">
                   <span className="text-[10px] font-black text-red-500 uppercase">High Risk</span>
                   <span className="text-[15px] font-black text-red-700">{highRiskCount}</span>
                 </div>
-
                 <div className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-100 border border-blue-200">
                   <span className="text-[10px] font-black text-blue-500 uppercase">Total</span>
-                    <span className="text-[15px] font-black text-blue-700">{activeRows.length}</span>
-                  </div>
+                  <span className="text-[15px] font-black text-blue-700">{activeRows.length}</span>
                 </div>
+              </div>
 
               <div className="flex-1 overflow-auto bg-white">
                 <table className="w-full border-separate border-spacing-0">

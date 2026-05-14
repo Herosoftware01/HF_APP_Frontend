@@ -5,13 +5,10 @@ const Approve = () => {
   const [requests, setRequests] = useState([]);
   const [employees, setEmployees] = useState({});
   const [loading, setLoading] = useState(true);
-  const [mailing, setMailing] = useState(false); // New: Tracks API submission status
-  const [popup, setPopup] = useState(null);
+  const [processing, setProcessing] = useState(false); // Replaced mailing state with a global processing state
   const [params] = useSearchParams();
   const entrynoFromUrl = params.get("entryno");
   const statusFromUrl = params.get("status");
-  const [isSuccess, setIsSuccess] = useState(false); // New state
-  
 
   // Helper to format date to Indian Format (DD-MM-YYYY)
   const formatDate = (dateStr) => {
@@ -49,16 +46,17 @@ const Approve = () => {
       setEmployees(empMap);
       setRequests(filteredRequests);
 
-      // AUTO OPEN FROM EMAIL
+      // AUTO EXECUTE FROM EMAIL
       if (entrynoFromUrl && statusFromUrl) {
-      const found = filteredRequests.find(
-        (r) => String(r.entryno) === String(entrynoFromUrl)
-      );
+        const found = filteredRequests.find(
+          (r) => String(r.entryno) === String(entrynoFromUrl)
+        );
 
-      if (found) {
-        setPopup({ request: found, statusValue: statusFromUrl });
+        if (found) {
+          // Execute action immediately using the fresh empMap
+          handleAction(found, statusFromUrl, empMap);
+        }
       }
-    }
     } catch (err) {
       console.error("Failed to fetch data:", err);
     } finally {
@@ -66,69 +64,53 @@ const Approve = () => {
     }
   };
 
-  const handleAction = async () => {
-  if (!popup) return;
+  // Added empMap as an optional parameter to handle the auto-execute case reliably
+  const handleAction = async (request, statusValue, empMap = employees) => {
+    setProcessing(true);
+    const emp = empMap[request.empid] || {};
+    const now = new Date().toISOString();
 
-  setMailing(true);
-  const { request, statusValue } = popup;
-  const emp = employees[request.empid] || {};
-  const now = new Date().toISOString();
-
-  const payload = {
-    id: request.entryno,
-    status: statusValue,
-    status_dt: now,
-    name: emp.name || "",
-    dept: emp.dept || "",
-    code: request.empid,
-    amount: request.amt,
-    remarks: request.remarks,
-  };
-
-  try {
-    const res = await fetch("https://hfapi.herofashion.com/advance/ad_approve/", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) throw new Error("Update failed");
+    const payload = {
+      id: request.entryno,
+      status: statusValue,
+      status_dt: now,
+      name: emp.name || "",
+      dept: emp.dept || "",
+      code: request.empid,
+      amount: request.amt,
+      remarks: request.remarks,
+    };
 
     try {
-      await fetch("https://hfapi.herofashion.com/advance/approve_mail/", {
-        method: "POST",
+      const res = await fetch("https://hfapi.herofashion.com/advance/ad_approve/", {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ entryno: request.entryno, status: statusValue }),
+        body: JSON.stringify(payload),
       });
-    } catch (mailErr) {
-      console.error("Mail failed", mailErr);
+
+      if (!res.ok) throw new Error("Update failed");
+
+      try {
+        await fetch("https://hfapi.herofashion.com/advance/approve_mail/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ entryno: request.entryno, status: statusValue }),
+        });
+      } catch (mailErr) {
+        console.error("Mail failed", mailErr);
+      }
+
+      // Success Sequence - immediately remove from list
+      setRequests((prev) => prev.filter((r) => r.entryno !== request.entryno));
+    } catch (err) {
+      alert("Server error");
+    } finally {
+      setProcessing(false);
     }
-
-    // Success Sequence
-    setIsSuccess(true); 
-    setRequests((prev) => prev.filter((r) => r.entryno !== request.entryno));
-    
-    // Optional: Auto-close after 2 seconds
-    setTimeout(() => {
-      setPopup(null);
-      setIsSuccess(false);
-      setMailing(false);
-    }, 2000);
-
-  } catch (err) {
-    alert("Server error");
-    setMailing(false);
-  }
-};
-
-  const openPopup = (request, statusValue) => {
-    setPopup({ request, statusValue });
   };
 
-  const isApprove = popup?.statusValue === "Y";
-
   return (
-    <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden">
+    <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden relative">
       {/* ── Fixed Header ── */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex shrink-0 items-center justify-between z-20">
         <div>
@@ -147,7 +129,8 @@ const Approve = () => {
 
           <button
             onClick={() => window.history.back()}
-            className="bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-800 transition active:scale-95 shadow-sm"
+            disabled={processing}
+            className="bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-800 transition active:scale-95 shadow-sm disabled:opacity-50"
           >
             ‹ Back
           </button>
@@ -155,7 +138,7 @@ const Approve = () => {
       </header>
 
       {/* ── Table Container ── */}
-      <main className="flex-1 overflow-auto p-4 sm:p-6">
+      <main className="flex-1 overflow-auto p-4 sm:p-6 relative">
         <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Table Header */}
           <div className="hidden sm:grid grid-cols-6 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
@@ -196,7 +179,7 @@ const Approve = () => {
                     <div className="flex items-center gap-3">
                       <img
                         src={`https://app.herofashion.com/staff_images/${req.empid}.jpg`}
-                        className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-100 object-cover"
+                        className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-100"
                         onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${req.empid}&background=e0e7ff&color=4f46e5`; }}
                         alt="emp"
                       />
@@ -219,14 +202,16 @@ const Approve = () => {
 
                     <div className="flex gap-2 justify-end">
                       <button
-                        onClick={() => openPopup(req, "Y")}
-                        className="bg-green-600 text-white text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-green-700 transition shadow-sm"
+                        disabled={processing}
+                        onClick={() => handleAction(req, "Y")}
+                        className="bg-green-600 text-white text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-green-700 transition shadow-sm disabled:opacity-50"
                       >
                         Approve
                       </button>
                       <button
-                        onClick={() => openPopup(req, "N")}
-                        className="bg-white text-red-600 border border-red-200 text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition"
+                        disabled={processing}
+                        onClick={() => handleAction(req, "N")}
+                        className="bg-white text-red-600 border border-red-200 text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
                       >
                         Reject
                       </button>
@@ -239,73 +224,15 @@ const Approve = () => {
         </div>
       </main>
 
-      {/* ── Confirmation Modal with Mailing State ── */}
-      {popup && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl transition-all">
-      
-      {/* ── Dynamic Icon ── */}
-      <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-500 ${
-        isSuccess ? "bg-green-100 text-green-600" :
-        mailing ? "bg-indigo-50 text-indigo-600" : 
-        isApprove ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
-      }`}>
-        {isSuccess ? (
-          <svg className="w-10 h-10 animate-[bounce_0.5s_ease-in-out]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-          </svg>
-        ) : mailing ? (
-          <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        ) : (
-          <span className="text-3xl font-bold">{isApprove ? "✓" : "✕"}</span>
-        )}
-      </div>
-
-      {/* ── Text Content ── */}
-      <h2 className="text-center text-xl font-black text-gray-900 mb-2">
-        {isSuccess ? "Success!" : mailing ? "Processing..." : isApprove ? "Confirm Approval" : "Confirm Rejection"}
-      </h2>
-      
-      <p className="text-center text-sm text-gray-500 mb-8 leading-relaxed">
-        {isSuccess 
-          ? `The request for #${popup.request.entryno} has been updated and the email was triggered.` 
-          : mailing 
-          ? "We are updating the records and notifying the employee. Please don't close this window." 
-          : `Are you sure you want to ${isApprove ? 'approve' : 'reject'} the request for ${employees[popup.request.empid]?.name || 'this employee'}?`
-        }
-      </p>
-
-      {/* ── Action Buttons ── */}
-      {!isSuccess ? (
-        <div className="flex gap-3">
-          <button 
-            disabled={mailing} 
-            onClick={() => setPopup(null)} 
-            className="flex-1 py-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition disabled:opacity-0"
-          >
-            Cancel
-          </button>
-          <button 
-            disabled={mailing}
-            onClick={handleAction} 
-            className={`flex-2 py-3 rounded-2xl text-sm font-bold text-white transition-all shadow-lg active:scale-95 ${
-              isApprove ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
-            } disabled:bg-gray-300 disabled:shadow-none`}
-          >
-            {mailing ? "Sending..." : "Confirm & Send"}
-          </button>
+      {/* ── Processing Overlay ── */}
+      {processing && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+          <div className="bg-white px-6 py-4 rounded-xl shadow-lg flex items-center gap-4">
+            <div className="animate-spin w-6 h-6 border-4 border-indigo-600 border-t-transparent rounded-full" />
+            <span className="font-bold text-gray-800">Processing Request...</span>
+          </div>
         </div>
-      ) : (
-        <button 
-          onClick={() => { setPopup(null); setIsSuccess(false); setMailing(false); }}
-          className="w-full py-3 bg-gray-900 text-white rounded-2xl text-sm font-bold shadow-lg hover:bg-gray-800 transition"
-        >
-          Done
-        </button>
       )}
-    </div>
-  </div>
-)}
     </div>
   );
 };
