@@ -91,7 +91,7 @@ function Word() {
             ref={container}
             height="100%"
             toolbarMode="Ribbon"
-            serviceUrl="https://document.syncfusion.com/web-services/docx-editor/api/documenteditor/"
+            serviceUrl="http://localhost:6002/api/documenteditor/"
             enableToolbar={true}
             fileMenuItems={[
                 'New',
