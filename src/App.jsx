@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { lazy, useEffect } from "react";
 import { startSilentRefresh, getRefreshToken } from "./auth/auth";
 
+
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";

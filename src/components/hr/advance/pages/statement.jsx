@@ -184,7 +184,7 @@ const Statement = () => {
                 <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200">
                   <tr>
                     <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase">Date</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase">Employee</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase">Employee ID</th>
                     <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase">Remarks</th>
                     <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase text-right">Amount</th>
                     <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase text-center">Status</th>
