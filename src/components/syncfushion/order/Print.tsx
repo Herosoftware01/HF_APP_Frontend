@@ -12,9 +12,7 @@ import {
   Search,
   VirtualScroll,
 } from '@syncfusion/ej2-react-grids';
-import { registerLicense } from '@syncfusion/ej2-base';
 
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
 
 // Define Order Data Interface for the join
 interface OrderData {

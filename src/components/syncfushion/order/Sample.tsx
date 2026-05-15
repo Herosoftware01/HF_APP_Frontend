@@ -15,7 +15,6 @@ import {
   toolbarClick
 } from "@syncfusion/ej2-react-grids";
 import { DataManager, WebApiAdaptor, Query } from "@syncfusion/ej2-data";
-import "./style/style.css";
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations/src";
 
 interface OrderRow {

@@ -5,7 +5,6 @@ import {
   ColumnDirective,
   Sort,
   Inject,
-  Resize,
   Filter,
   Group,
   Reorder,
@@ -15,10 +14,6 @@ import {
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-import { registerLicense } from '@syncfusion/ej2-base';
-import "./style/style.css"
-
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
 
 interface EmployeeData {
   code: number;

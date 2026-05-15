@@ -34,12 +34,13 @@ const Fi_home = () => {
       color: "emerald",
     },
     {
-      title: "Payments Dashboard",
+      title: "Bills & Payments Dashboard",
       desc: "Overall payment insights.",
       icon: <Wallet size={32} />,
-      path: "/finance_report/dashboard", // Matches your logic
+      path: "/finance_report/bill_dash", // Matches your logic
       color: "purple",
     }
+    
   ];
 
   // Helper to handle dynamic Tailwind classes

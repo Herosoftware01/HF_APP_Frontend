@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../auth/auth";
 import { 
   Layout, ShieldCheck, Plus, Edit3, Save, Users, X, 
-  CheckCircle2, Circle, GripVertical, Settings2, Key
+  CheckCircle2, Circle, GripVertical, Settings2, Key,
+  AlertCircle // Added for the error toast
 } from "lucide-react";
 
 const RoleMenuPermissions = () => {
@@ -16,6 +17,9 @@ const RoleMenuPermissions = () => {
 
   const [formData, setFormData] = useState({ name: "", order: 0 });
   const [editingMenu, setEditingMenu] = useState(null);
+
+  // Custom Toast State
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
   useEffect(() => {
     fetchMenus();
@@ -35,6 +39,13 @@ const RoleMenuPermissions = () => {
       const res = await api.get("roles/");
       setRoles(res.data);
     } catch (err) { console.error(err); }
+  };
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "success" });
+    }, 3000);
   };
 
   const fetchRoleMenuPermissions = async (roleId) => {
@@ -62,55 +73,71 @@ const RoleMenuPermissions = () => {
   };
 
   const savePermissions = async () => {
-  if (!selectedRole) return;
-  setIsSaving(true);
-  try {
-    // 1. Correct Endpoint: role-menu-permissions
-    const res = await api.get("role-menu-permissions/"); 
-    const existingPerms = res.data.filter((p) => p.role.id === Number(selectedRole));
+    if (!selectedRole) return showToast("Please select a role first!", "error");
+    setIsSaving(true);
+    try {
+      // 1. Correct Endpoint: role-menu-permissions
+      const res = await api.get("role-menu-permissions/"); 
+      const existingPerms = res.data.filter((p) => p.role.id === Number(selectedRole));
 
-    for (const menuId of Object.keys(roleMenuPermissions)) {
-      const canView = roleMenuPermissions[menuId];
-      const existing = existingPerms.find((p) => p.menu.id === Number(menuId));
-      
-      const payload = { 
-        role_id: Number(selectedRole), 
-        menu_id: Number(menuId), 
-        can_view: canView 
-      };
+      for (const menuId of Object.keys(roleMenuPermissions)) {
+        const canView = roleMenuPermissions[menuId];
+        const existing = existingPerms.find((p) => p.menu.id === Number(menuId));
+        
+        const payload = { 
+          role_id: Number(selectedRole), 
+          menu_id: Number(menuId), 
+          can_view: canView 
+        };
 
-      if (existing) {
-        // 2. Correct PUT URL: role-menu-permissions
-        await api.put(`role-menu-permissions/${existing.id}/`, payload);
-      } else if (canView) {
-        // 3. Correct POST URL: role-menu-permissions
-        await api.post("role-menu-permissions/", payload);
+        if (existing) {
+          // 2. Correct PUT URL: role-menu-permissions
+          await api.put(`role-menu-permissions/${existing.id}/`, payload);
+        } else if (canView) {
+          // 3. Correct POST URL: role-menu-permissions
+          await api.post("role-menu-permissions/", payload);
+        }
       }
+      showToast("System permissions updated successfully!", "success");
+    } catch (err) { 
+      console.error("Save Error Details:", err.response?.data);
+      showToast("Failed to save permissions", "error"); 
+    } finally { 
+      setIsSaving(false); 
     }
-    alert("System permissions updated successfully!");
-  } catch (err) { 
-    console.error("Save Error Details:", err.response?.data); // Error-ai details-ah paaka
-    alert("Failed to save permissions"); 
-  } finally { 
-    setIsSaving(false); 
-  }
-};
+  };
 
   const handleSaveMenu = async () => {
-    if (!formData.name) return;
+    if (!formData.name) return showToast("Menu name is required", "error");
     try {
-      if (editingMenu) await api.put(`menus/${editingMenu.id}/`, formData);
-      else await api.post("menus/", formData);
+      if (editingMenu) {
+        await api.put(`menus/${editingMenu.id}/`, formData);
+        showToast("Menu updated successfully!", "success");
+      } else {
+        await api.post("menus/", formData);
+        showToast("Menu created successfully!", "success");
+      }
       setEditingMenu(null);
       setFormData({ name: "", order: 0 });
       fetchMenus();
-    } catch (err) { alert("Failed to save menu"); }
+    } catch (err) { 
+      showToast("Failed to save menu", "error"); 
+    }
   };
 
   if (loading) return <div className="p-10 text-center font-bold text-slate-400 animate-pulse">Initializing System...</div>;
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] p-3 md:p-8 font-sans antialiased">
+    <div className="min-h-screen bg-[#f8fafc] p-3 md:p-8 font-sans antialiased relative">
+      
+      {/* Custom Popup Toast */}
+      {toast.show && (
+        <div className={`fixed top-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-5 py-3 rounded-xl shadow-lg z-[100] transition-all duration-300 transform ${toast.type === "success" ? "bg-emerald-600 text-white" : "bg-red-500 text-white"}`}>
+          {toast.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+          <span className="text-sm font-bold tracking-wide">{toast.message}</span>
+        </div>
+      )}
+
       {/* Navbar spacing for mobile */}
       <div className="h-14 lg:hidden" />
 

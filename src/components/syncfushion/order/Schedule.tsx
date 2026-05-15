@@ -1,13 +1,10 @@
 import React from 'react';
 import { ScheduleComponent, Day, Week, Month, WorkWeek, Year, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
 import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
-import { registerLicense } from '@syncfusion/ej2-base';
 
 // Theme imports...
 import '@syncfusion/ej2-base/styles/material.css';
 import '@syncfusion/ej2-react-schedule/styles/material.css';
-
-registerLicense('Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX1cdHRUQ2ddUkV3XUpWYEs=');
 
 function Schedule() {
   const remoteData = new DataManager({
