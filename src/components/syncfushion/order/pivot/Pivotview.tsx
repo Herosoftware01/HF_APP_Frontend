@@ -1,12 +1,11 @@
 /* Syncfusion Pivot Table - Order Management Dashboard
-   Features: Sort, Filter, Group, Export, Conditional Formatting */
+  Features: Sort, Filter, Group, Export, Conditional Formatting */
 import * as React from "react";
 import { useState } from "react";
 import { PivotViewComponent, Inject, FieldList, CalculatedField, Toolbar, ToolbarItems, PDFExport, ExcelExport } from "@syncfusion/ej2-react-pivotview";
 import { ConditionalFormatting, NumberFormatting, IDataSet, FieldOptions, ColumnRenderEventArgs, DataSourceSettings } from "@syncfusion/ej2-react-pivotview";
 import { SwitchComponent } from "@syncfusion/ej2-react-buttons";
 import { HeaderCellInfoEventArgs, QueryCellInfoEventArgs } from '@syncfusion/ej2-grids'
-
 let pivotObj: PivotViewComponent;
 
 const dataSourceSettings: DataSourceSettings = {
@@ -27,11 +26,10 @@ const dataSourceSettings: DataSourceSettings = {
     { name: "DcBalQty", caption: "Bal Qty" },
     { name: "DcBalPer", caption: "Bal (%)" }
   ],
+
   // Filter: Show only these orders - modify items array as needed
   filterSettings: [
-    { name: "OrderNo", items: ["J7031A", "J6946A", "J6959A", "J7174A"] }
   ],
-  
   formatSettings: [
     { name: 'ReqQty', format: 'N2' },
     { name: 'PoDcQty', format: 'N2' },
@@ -46,6 +44,7 @@ const dataSourceSettings: DataSourceSettings = {
   showSubTotals: false,
   showGrandTotals: false,
   valueAxis: "row",
+
   // Color coding based on value ranges - modify thresholds/colors as needed
   conditionalFormatSettings: [
     { value1: 1000, value2: 2000, conditions: 'Between', style: { backgroundColor: '#FEF8C3' } },
@@ -53,7 +52,7 @@ const dataSourceSettings: DataSourceSettings = {
     { value1: 100, conditions: 'LessThan', style: { backgroundColor: '#FAFBFD' } },
     { value1: 100, value2: 1000, conditions: 'Between', style: { backgroundColor: '#CDFBF1' } }
   ]
-} as DataSourceSettings;
+} as any;
 
 function PivotTableExporting() {
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
@@ -197,7 +196,6 @@ function PivotTableExporting() {
       .replace(/-highContrast/i, "HighContrast");
   };
 
-
   // Custom cell rendering - modifies row headers and value cell display
   const queryCellInfo = (args: QueryCellInfoEventArgs) => {
     if (pivotObj) {
@@ -215,6 +213,7 @@ function PivotTableExporting() {
       if (cell.axis === "row") {
         if (cell.rowSpan) {
           const element: HTMLElement = currentCellElement.firstElementChild as HTMLElement;
+
           // Apply border to value header cells (last value field) to visually separate groups
           if (cell.type === 'value' && cell.actualText === lastValueFieldName) {
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
@@ -223,12 +222,14 @@ function PivotTableExporting() {
           }
 
           // Check if this cell contains an image URL (img1 field)
-          const cellText = cell.formattedText || cell.actualText || '';
-          const isImageUrl = (cellText as string).toLowerCase().includes('http') &&
-            ((cellText as string).toLowerCase().includes('.jpg') ||
-              (cellText as string).toLowerCase().includes('.jpeg') ||
-              (cellText as string).toLowerCase().includes('.png') ||
-              (cellText as string).toLowerCase().includes('.gif'));
+          const cellText = (cell.formattedText || cell.actualText || '').toString();
+          const isImageUrl = cellText.toLowerCase().includes('http') &&
+            (cellText.toLowerCase().includes('.jpg') ||
+              cellText.toLowerCase().includes('.jpeg') ||
+              cellText.toLowerCase().includes('.png') ||
+              cellText.toLowerCase().includes('.gif')
+            );
+
           // Inserting image element for img1 field, styled to fit within cell
           if (isImageUrl && element) {
             element.innerHTML = '';
@@ -249,7 +250,6 @@ function PivotTableExporting() {
 
             // Apply border-bottom only to img1 level
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
-            (args.cell as HTMLElement).style.background = 'transparent';
           }
           else if (cell.level === 0) {
             if (element) {
@@ -262,9 +262,9 @@ function PivotTableExporting() {
               element.style.justifyContent = "center";
               element.style.alignItems = "center";
             }
+
             // Apply border-bottom to parent group level
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
-            (args.cell as HTMLElement).style.background = 'transparent';
           }
           else if (cell.level === 1) {
             const idx = indexes[0];
@@ -291,15 +291,18 @@ function PivotTableExporting() {
                 <div><a href="#" style="color:#007bff;font-weight:bold;">Comments (3)</a></div>
               </div>
             `;
+
             // Apply border-bottom to Order Details row to align with image
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
             (args.cell as HTMLElement).style.background = 'aliceblue';
           }
         } else {
+
           // Child rows - no border, light background
           (args.cell as HTMLElement).style.background = 'aliceblue';
         }
       }
+
       // Value cells: append units (Kgs/%) to numeric values
       else if (cell.axis === "value") {
         if (!cell?.actualText || !args?.cell) {
@@ -330,6 +333,7 @@ function PivotTableExporting() {
 
         if (nextRowData) {
           const nextRowIndexInfo = nextRowData[rowAxisColumns - 1];
+
           // Get the parent level info (img1 or level 0)
           const currentParent = pivotObj.pivotValues[currentCellData.rowIndex][0];
           const nextParent = nextRowData[0];
@@ -339,6 +343,7 @@ function PivotTableExporting() {
             isLastRowOfGroup = true;
           }
         } else {
+
           // Last row in table
           isLastRowOfGroup = true;
         }
