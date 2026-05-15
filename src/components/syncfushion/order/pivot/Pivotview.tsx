@@ -1,5 +1,4 @@
 /* Syncfusion Pivot Table - Order Management Dashboard
-   Features: Sort, Filter, Group, Export, Conditional Formatting */
   Features: Sort, Filter, Group, Export, Conditional Formatting */
 import * as React from "react";
 import { useState } from "react";
@@ -7,7 +6,6 @@ import { PivotViewComponent, Inject, FieldList, CalculatedField, Toolbar, Toolba
 import { ConditionalFormatting, NumberFormatting, IDataSet, FieldOptions, ColumnRenderEventArgs, DataSourceSettings } from "@syncfusion/ej2-react-pivotview";
 import { SwitchComponent } from "@syncfusion/ej2-react-buttons";
 import { HeaderCellInfoEventArgs, QueryCellInfoEventArgs } from '@syncfusion/ej2-grids'
-
 let pivotObj: PivotViewComponent;
 
 const dataSourceSettings: DataSourceSettings = {
@@ -18,7 +16,7 @@ const dataSourceSettings: DataSourceSettings = {
     { name: "img1" },
     { name: "Buyer", caption: "Order Details" }
   ],
-  values: [D
+  values: [
     { name: "ReqQty", caption: "Req Qty" },
     { name: "PoDcQty", caption: "Po / Dc Qty" },
     { name: "InwQty", caption: "In Qty" },
@@ -32,7 +30,6 @@ const dataSourceSettings: DataSourceSettings = {
   // Filter: Show only these orders - modify items array as needed
   filterSettings: [
   ],
-  
   formatSettings: [
     { name: 'ReqQty', format: 'N2' },
     { name: 'PoDcQty', format: 'N2' },
@@ -58,7 +55,6 @@ const dataSourceSettings: DataSourceSettings = {
 } as any;
 
 function PivotTableExporting() {
-function PivotView() {
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
 
   // Fetch order data from API - Change URL to your endpoint
@@ -200,7 +196,6 @@ function PivotView() {
       .replace(/-highContrast/i, "HighContrast");
   };
 
-
   // Custom cell rendering - modifies row headers and value cell display
   const queryCellInfo = (args: QueryCellInfoEventArgs) => {
     if (pivotObj) {
@@ -227,12 +222,6 @@ function PivotView() {
           }
 
           // Check if this cell contains an image URL (img1 field)
-          const cellText = cell.formattedText || cell.actualText || '';
-          const isImageUrl = (cellText as string).toLowerCase().includes('http') &&
-            ((cellText as string).toLowerCase().includes('.jpg') ||
-              (cellText as string).toLowerCase().includes('.jpeg') ||
-              (cellText as string).toLowerCase().includes('.png') ||
-              (cellText as string).toLowerCase().includes('.gif'));
           const cellText = (cell.formattedText || cell.actualText || '').toString();
           const isImageUrl = cellText.toLowerCase().includes('http') &&
             (cellText.toLowerCase().includes('.jpg') ||
@@ -261,7 +250,6 @@ function PivotView() {
 
             // Apply border-bottom only to img1 level
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
-            (args.cell as HTMLElement).style.background = 'transparent';
           }
           else if (cell.level === 0) {
             if (element) {
@@ -274,9 +262,6 @@ function PivotView() {
               element.style.justifyContent = "center";
               element.style.alignItems = "center";
             }
-            // Apply border-bottom to parent group level
-            (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
-            (args.cell as HTMLElement).style.background = 'transparent';
 
             // Apply border-bottom to parent group level
             (args.cell as HTMLElement).style.borderBottom = '2px solid #d32f2f';
