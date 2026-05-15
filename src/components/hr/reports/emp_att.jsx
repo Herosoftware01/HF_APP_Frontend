@@ -3,22 +3,46 @@ import axios from 'axios';
 import { Bar, Line } from 'react-chartjs-2';
 import * as XLSX from 'xlsx';
 import {
-  FileSpreadsheet, Users, X, TrendingUp, TrendingDown,
-  Download, RefreshCw, Calendar, ChevronDown,ChevronLeft
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  LineController,
+  BarController,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import {
+  FileSpreadsheet,
+  Users,
+  X,
+  TrendingUp,
+  TrendingDown,
+  Download,
+  RefreshCw,
+  Calendar,
+  ChevronDown,
+  ChevronLeft
 } from 'lucide-react';
 import { format, subMonths, isSunday, parseISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  Chart as ChartJS,
-  CategoryScale, LinearScale, BarElement,
-  PointElement, LineElement, Title, Tooltip, Legend,
-} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
-  CategoryScale, LinearScale, BarElement,
-  PointElement, LineElement, Title, Tooltip, Legend, ChartDataLabels
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  LineController,
+  BarController,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels
 );
 
 const API_BASE = "https://hfapi.herofashion.com/reports";
@@ -109,7 +133,11 @@ const AttendanceDashboard = () => {
   const [startDate, setStartDate] = useState('');
   const navigate = useNavigate();
   const [endDate, setEndDate] = useState('');
+  
+  // Modal & Sorting State
   const [modal, setModal] = useState({ show: false, type: '', date: '', data: [], loading: false });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
   const [chartVisibility, setChartVisibility] = useState({
     totalChart:    { 0: true,  1: false, 2: false, 3: false, 4: false, 5: false },
     presentChart:  { 0: true,  1: false, 2: false, 3: false, 4: false, 5: false },
@@ -134,15 +162,9 @@ const AttendanceDashboard = () => {
 
   useEffect(() => { fetchData(); }, [unit, startDate, endDate]);
 
-  const handelNavi = () => {
-    navigate(-1);
-  
-  };
+  const handelNavi = () => navigate(-1);
+  const handelone = () => navigate("/hr/emp_one");
 
-    const handelone = () => {  
-      navigate("/hr/emp_one");
-    }
-  
   const stats = useMemo(() => {
     const filtered = data.filter(d => !isSunday(parseISO(d.date)));
     if (!filtered.length) return {};
@@ -168,6 +190,7 @@ const AttendanceDashboard = () => {
 
   const openDetails = async (type, date) => {
     setModal({ show: true, type, date, data: [], loading: true });
+    setSortConfig({ key: null, direction: 'ascending' }); // Reset sort on open
     const ep = type === 'Present' ? 'present_details' : 'absent_details';
     try {
       const res = await axios.get(`${API_BASE}/${ep}/`, { params: { dept: unit, date } });
@@ -181,6 +204,31 @@ const AttendanceDashboard = () => {
     setEndDate(format(today, 'yyyy-MM-dd'));
   };
 
+  // ── Sorting Logic for Modals ──
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedModalData = useMemo(() => {
+    if (!modal.data) return [];
+    let sortableItems = [...modal.data];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        const aValue = (a[sortConfig.key] || '').toString().toLowerCase();
+        const bValue = (b[sortConfig.key] || '').toString().toLowerCase();
+        if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [modal.data, sortConfig]);
+
+  // ── Chart Data Extracts ──
   const fd = data.filter(d => !isSunday(parseISO(d.date)));
   const labels       = fd.map(d => format(parseISO(d.date), 'dd MMM'));
   const totalData    = fd.map(d => d.total);
@@ -204,40 +252,37 @@ const AttendanceDashboard = () => {
         formatter: v => v === 0 ? '' : v,
       },
       tooltip: {
-        backgroundColor: '#1e293b',
-        titleColor: '#94a3b8',
-        bodyColor: '#f1f5f9',
-        cornerRadius: 8,
-        padding: 10,
+        backgroundColor: '#1e293b', titleColor: '#94a3b8', bodyColor: '#f1f5f9', cornerRadius: 8, padding: 10,
       }
     },
     scales: {
-      x: {
-        grid: { display: false },
-        ticks: { color: '#9ca3af', font: { size: 10 } },
-        border: { display: false },
-      },
-      y: {
-        grid: { color: '#f1f5f9', borderDash: [4, 4] },
-        ticks: { color: '#9ca3af', font: { size: 10 } },
-        border: { display: false },
-      },
+      x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } }, border: { display: false } },
+      y: { grid: { color: '#f1f5f9', borderDash: [4, 4] }, ticks: { color: '#9ca3af', font: { size: 10 } }, border: { display: false } },
     },
     elements: { line: { tension: 0.4 }, bar: { borderRadius: 5 } },
     animation: { duration: 600, easing: 'easeOutQuart' },
   };
 
+  // ── Excel Exports ──
   const exportAttendanceExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Attendance");
     XLSX.writeFile(wb, "Attendance_Report.xlsx");
   };
+
   const exportAbsentExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(modal.data);
+    const ws = XLSX.utils.json_to_sheet(sortedModalData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Absent_Details");
     XLSX.writeFile(wb, `Absent_Report_${unit}.xlsx`);
+  };
+
+  const exportPresentExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(sortedModalData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Present_Details");
+    XLSX.writeFile(wb, `Present_Report_${unit}.xlsx`);
   };
 
   return (
@@ -246,7 +291,6 @@ const AttendanceDashboard = () => {
       {/* ── Header ── */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5">
         <div className="flex flex-col xl:flex-row justify-between gap-5">
-          {/* Brand */}
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
               <Users size={20} className="text-white" />
@@ -263,11 +307,9 @@ const AttendanceDashboard = () => {
 
           {/* Controls */}
           <div className="flex flex-wrap items-center gap-3">
-            {/* Unit Select */}
             <div className="relative">
               <select
-                value={unit}
-                onChange={e => setUnit(e.target.value)}
+                value={unit} onChange={e => setUnit(e.target.value)}
                 className="appearance-none pl-4 pr-9 py-2.5 bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 font-semibold cursor-pointer transition-all"
               >
                 <option value="ALL">All Units</option>
@@ -283,7 +325,6 @@ const AttendanceDashboard = () => {
               <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
 
-            {/* Date Range */}
             <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm">
               <Calendar size={14} className="text-gray-400 mr-1" />
               <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
@@ -293,7 +334,6 @@ const AttendanceDashboard = () => {
                 className="bg-transparent border-none text-gray-600 text-sm focus:ring-0 p-0 w-32.5" />
             </div>
 
-            {/* Quick Ranges */}
             <div className="flex items-center bg-gray-100 p-1 rounded-xl gap-0.5">
               {[1, 3, 6].map(m => (
                 <button key={m} onClick={() => setRange(m)}
@@ -316,9 +356,9 @@ const AttendanceDashboard = () => {
               className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-all">
               <ChevronLeft size={14} /> Back
             </button>
-               <button onClick={handelone} className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-all'>
-            One Day
-          </button>
+            <button onClick={handelone} className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-all'>
+              One Day
+            </button>
           </div>
         </div>
       </div>
@@ -328,7 +368,7 @@ const AttendanceDashboard = () => {
         <StatCard label="Avg Headcount" value={stats.avgTotal}     color={TOKEN.total}   icon={Users}        />
         <StatCard label="Avg Present"   value={stats.avgPresent}   pct={stats.presentPct} color={TOKEN.present} icon={TrendingUp}   />
         <StatCard label="Avg Absent"    value={Math.round((stats.avgTotal||0)-(stats.avgPresent||0))} pct={stats.absentPct} color={TOKEN.absent}  icon={TrendingDown} />
-        <StatCard label="Avg Leave"     value={stats.avgLe}        pct={stats.lePct}      color={TOKEN.leave}   icon={Calendar}    />
+        <StatCard label="Avg Leave"     value={stats.avgLe}        pct={stats.lePct}      color={TOKEN.leave}  icon={Calendar}    />
         <StatCard label="Avg Tailor"    value={stats.avgTlv}       pct={stats.tlvPct}     color={TOKEN.tailor}  icon={Users}       />
         <StatCard label="Avg Non-Tailor" value={stats.avgNtlv}     pct={stats.ntlvPct}    color={TOKEN.ntailor} icon={Users}       />
       </div>
@@ -557,16 +597,28 @@ const AttendanceDashboard = () => {
                     <th className="px-4 py-3 bg-gray-50">Code</th>
                     <th className="px-4 py-3 bg-gray-50">Name</th>
                     <th className="px-4 py-3 bg-gray-50">Dept</th>
-                    <th className="px-4 py-3 bg-gray-50">Category</th>
+                    {/* ── Sortable Category Column ── */}
+                    <th 
+                      className="px-4 py-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                      onClick={() => handleSort('category')}
+                      title="Click to sort by Category"
+                    >
+                      <div className="flex items-center gap-1">
+                        Category
+                        <span className="text-[10px] opacity-70">
+                          {sortConfig.key === 'category' ? (sortConfig.direction === 'ascending' ? '▲' : '▼') : '↕'}
+                        </span>
+                      </div>
+                    </th>
                     <th className="px-4 py-3 bg-gray-50">Mobile</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {modal.loading ? (
                     <tr><td colSpan="6" className="py-16 text-center text-gray-400 font-medium">Loading…</td></tr>
-                  ) : modal.data.length === 0 ? (
+                  ) : sortedModalData.length === 0 ? (
                     <tr><td colSpan="6" className="py-16 text-center text-gray-400 font-medium">No records.</td></tr>
-                  ) : modal.data.map((emp, i) => (
+                  ) : sortedModalData.map((emp, i) => (
                     <tr key={i} className="hover:bg-gray-50 transition-colors">
                       <td className="px-5 py-3">
                         {emp.photo
@@ -601,10 +653,16 @@ const AttendanceDashboard = () => {
                   <p className="text-xs text-gray-400">{modal.date && format(parseISO(modal.date), 'dd MMM yyyy')} · {unit}</p>
                 </div>
               </div>
-              <button onClick={() => setModal({ ...modal, show: false })}
-                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-gray-400 hover:text-gray-700">
-                <X size={16} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button onClick={exportPresentExcel}
+                  className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-colors">
+                  <Download size={12} /> Excel
+                </button>
+                <button onClick={() => setModal({ ...modal, show: false })}
+                  className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-gray-400 hover:text-gray-700">
+                  <X size={16} />
+                </button>
+              </div>
             </div>
             <div className="overflow-y-auto flex-1">
               <table className="w-full text-sm text-left">
@@ -614,15 +672,27 @@ const AttendanceDashboard = () => {
                     <th className="px-4 py-3">Code</th>
                     <th className="px-4 py-3">Name</th>
                     <th className="px-4 py-3">Dept</th>
-                    <th className="px-4 py-3">Category</th>
+                    {/* ── Sortable Category Column ── */}
+                    <th 
+                      className="px-4 py-3 cursor-pointer hover:bg-emerald-100 transition-colors select-none"
+                      onClick={() => handleSort('category')}
+                      title="Click to sort by Category"
+                    >
+                      <div className="flex items-center gap-1">
+                        Category
+                        <span className="text-[10px] opacity-70">
+                          {sortConfig.key === 'category' ? (sortConfig.direction === 'ascending' ? '▲' : '▼') : '↕'}
+                        </span>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {modal.loading ? (
                     <tr><td colSpan="5" className="py-16 text-center text-emerald-500 font-medium animate-pulse">Loading…</td></tr>
-                  ) : modal.data.length === 0 ? (
+                  ) : sortedModalData.length === 0 ? (
                     <tr><td colSpan="5" className="py-16 text-center text-gray-400 font-medium">No records.</td></tr>
-                  ) : modal.data.map((emp, i) => (
+                  ) : sortedModalData.map((emp, i) => (
                     <tr key={i} className="hover:bg-gray-50 transition-colors">
                       <td className="px-5 py-3">
                         {emp.photo

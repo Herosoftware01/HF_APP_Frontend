@@ -2,13 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="manifest" href="/manifest.webmanifest">
-    
-    <meta name="theme-color" content="#ffffff">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hero Fashion</title>
+
+    <!-- favicon placeholder -->
+    <link id="app-favicon" rel="icon" />
+
+    <!-- theme -->
+    <meta name="theme-color" content="#ffffff" />
+
+    <title>App</title>
+
+    <!-- DOMAIN BASED MANIFEST (BEFORE JS LOADS) -->
+    <script>
+      const host = window.location.hostname;
+
+      const manifest = document.createElement("link");
+      manifest.rel = "manifest";
+
+      if (host === "hf.herofashion.com") {
+        manifest.href = "/manifest-hf.json";
+        document.title = "HF APP";
+      } else {
+        manifest.href = "/manifest-other.json";
+        document.title = "development APP";
+      }
+
+      document.head.appendChild(manifest);
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

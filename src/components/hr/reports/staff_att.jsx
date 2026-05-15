@@ -158,7 +158,7 @@ const StaffModal = ({ title, color, data, loading, onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((emp, i) => (
+                {weeklyData.map((emp, i) => (
                   <tr
                     key={i}
                     className="border-b border-slate-50 hover:bg-slate-50 transition-colors"
@@ -292,6 +292,57 @@ export default function Staff_att() {
   });
   const navigate = useNavigate();
 
+  const groupWeeklyData = (rows) => {
+  const weeks = [];
+  let currentWeek = [];
+
+  rows.forEach((row) => {
+    const day = new Date(row.date).getDay();
+
+    // Skip Sunday
+    if (day === 0) return;
+
+    currentWeek.push(row);
+
+    // Saturday OR last record
+    if (day === 6) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+  });
+
+  // Push remaining
+  if (currentWeek.length) {
+    weeks.push(currentWeek);
+  }
+
+  return weeks.map((week, index) => {
+    const total = week.reduce((s, r) => s + (r.total || 0), 0);
+    const present = week.reduce((s, r) => s + (r.present || 0), 0);
+    const absent = week.reduce((s, r) => s + (r.absent || 0), 0);
+    const leave = week.reduce((s, r) => s + (r.leave || 0), 0);
+
+    const count = week.length;
+
+    return {
+      date: `${formatDateToDisplay(week[0].date)} → ${formatDateToDisplay(
+        week[week.length - 1].date
+      )}`,
+      total: Math.round(total / count),
+      present: Math.round(present / count),
+      absent: Math.round(absent / count),
+      leave: Math.round(leave / count),
+      present_pct: ((present / total) * 100).toFixed(1),
+      absent_pct: ((absent / total) * 100).toFixed(1),
+      leave_pct: ((leave / total) * 100).toFixed(1),
+    };
+  });
+};
+
+const weeklyData = groupWeeklyData(data);
+
+const nonSundayData = weeklyData;
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -357,7 +408,7 @@ export default function Staff_att() {
     setEndDate(formatDateToInput(today));
   };
 
-  const nonSundayData = data.filter((r) => !isSunday(r.date));
+
   const avg = (arr, key) =>
     arr.length
       ? Math.round(arr.reduce((s, r) => s + (r[key] || 0), 0) / arr.length)
@@ -367,18 +418,18 @@ export default function Staff_att() {
       ? (arr.reduce((s, r) => s + (r[key] || 0), 0) / arr.length).toFixed(1)
       : '0.0';
 
-  const chartLabels = data.map((r) => formatDateToDisplay(r.date));
-  const totalArr = data.map((r) => r.total || 0);
-  const presentArr = data.map((r) => r.present || 0);
-  const absentArr = data.map((r) => r.absent || 0);
+  const chartLabels = weeklyData.map((r) => r.date);
+  const totalArr = weeklyData.map((r) => r.total || 0);
+  const presentArr = weeklyData.map((r) => r.present || 0);
+  const absentArr = weeklyData.map((r) => r.absent || 0);
   const totalTrend = generateTrend(totalArr);
   const presentTrend = generateTrend(presentArr);
   const absentTrend = generateTrend(absentArr);
 
   const getDept = (dept, field) =>
-    data.map((r) => r.departments?.[dept]?.[field] || 0);
+    weeklyData.map((r) => r.departments?.[dept]?.[field] || 0);
 
-  const chartData = data.map((r, i) => ({
+  const chartData = weeklyData.map((r, i) => ({
     date: chartLabels[i],
     total: totalArr[i],
     present: presentArr[i],
@@ -411,7 +462,7 @@ export default function Staff_att() {
       'Leave',
       'Leave%',
     ];
-    const rows = data.map((r) => [
+    const rows = weeklyData.map((r) => [
       formatDateToDisplay(r.date),
       r.total,
       r.present,
@@ -652,7 +703,7 @@ export default function Staff_att() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, i) => (
+                {weeklyData.map((row, i) => (
                   <tr
                     key={i}
                     className={`border-b border-slate-50 transition-colors hover:bg-slate-50 ${isSunday(row.date) ? 'bg-purple-50' : ''}`}

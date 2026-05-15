@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { lazy, useEffect } from "react";
 import { startSilentRefresh, getRefreshToken } from "./auth/auth";
 
+
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
@@ -37,6 +38,7 @@ import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
 import Fi_home  from "./components/fininace/reports/fi_main";
 import Del_home from "./components/Cutting/delivery/cut_main";
 import Imp_home from "./components/implemantation_reports/imp_main";
+import Bitchecking_New from "./components/Cutting/new_bitchecking/main"
 
 function App() {
 
@@ -409,6 +411,16 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Imp_home/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bitchecking_new/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Bitchecking_New/>
               </ProtectedLayout>
             </ProtectedRoute>
           }
