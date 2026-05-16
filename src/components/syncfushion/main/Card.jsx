@@ -651,7 +651,7 @@ const Dashboard = () => {
           >
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-fuchsia-200 rounded-full opacity-40 group-hover:scale-150 transition duration-500"></div>
             <div className="w-14 h-14 flex items-center justify-center bg-fuchsia-100 rounded-xl mb-4 group-hover:rotate-12 transition duration-300">
-              <FaGithub className="text-fuchsia-500 text-2xl" />
+              <FaFeatherAlt className="text-fuchsia-500 text-2xl" />
             </div>
             <h2 className="text-lg font-semibold text-gray-800 group-hover:text-fuchsia-600 transition">
             Document Explorer
