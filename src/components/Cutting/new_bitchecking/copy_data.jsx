@@ -54,7 +54,7 @@ const allSaved =
         setLoadingEmp(true);
 
         const response = await fetch(
-          'https://hfapi.herofashion.com/bit_checking/emp_stick'
+          'http://10.1.21.153:7003/bit_checking/emp_stick'
         );
 
         const data = await response.json();
@@ -90,7 +90,7 @@ useEffect(() => {
 
     try {
       const res = await fetch(
-        `https://hfapi.herofashion.com/bit_checking/check_final_saved?scanner_id=${qrData.id}`
+        `http://10.1.21.153:7003/bit_checking/check_final_saved?scanner_id=${qrData.id}`
       );
 
       const data = await res.json();
@@ -113,7 +113,7 @@ useEffect(() => {
       try {
 
         const res = await fetch(
-          "https://hfapi.herofashion.com/bit_checking/saved_plans/"
+          "http://10.1.21.153:7003/bit_checking/saved_plans/"
         );
 
         const data = await res.json();
@@ -157,7 +157,7 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `https://hfapi.herofashion.com/bit_checking/qr_api?qr_id=${val}`
+        `http://10.1.21.153:7003/bit_checking/qr_api?qr_id=${val}`
       );
 
       const data = await response.json();
@@ -372,7 +372,7 @@ useEffect(() => {
         try {
 
           const res = await fetch(
-            `https://hfapi.herofashion.com/bit_checking/delete_checking/?plan_no=${qrData.plan_no}`,
+            `http://10.1.21.153:7003/bit_checking/delete_checking/?plan_no=${qrData.plan_no}`,
             {
               method: "DELETE",
             }
@@ -482,7 +482,7 @@ useEffect(() => {
       try {
 
         const res = await fetch(
-          "https://hfapi.herofashion.com/bit_checking/final_bit_checking",
+          "http://10.1.21.153:7003/bit_checking/final_bit_checking",
           {
             method: "POST",
             headers: {
@@ -791,7 +791,7 @@ useEffect(() => {
 
     try {
       const res = await fetch(
-        "https://hfapi.herofashion.com/bit_checking/save_checking/",
+        "http://10.1.21.153:7003/bit_checking/save_checking/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
