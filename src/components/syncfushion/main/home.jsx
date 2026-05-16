@@ -43,6 +43,7 @@ import Sheet from '../order/Spreadsheet/Spreadsheet.tsx'
 import Word from '../order/Word/Word.tsx'
 import Smartpaste from '../order/Smart_Paste/Smartpaste.tsx'
 import Speech from '../order/Speak/Speech.tsx'
+// import Explorer from '../order/DocumentExplorer/ShowCase.tsx';
 import Explorer from '../order/DocumentExplorer/Explorer.tsx';
 import Floor from '../order/Floor_Plan/Floor.tsx';
 import ImageEditor from '../order/Image_Editor/ImageEditor.tsx';

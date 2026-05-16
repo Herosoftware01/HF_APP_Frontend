@@ -41,6 +41,7 @@ import Imp_home from "./components/implemantation_reports/imp_main";
 import Sec from "./components/security/sec_main";
 import Empleave from "./components/production/reports/emp_re_main";
 
+import Bitchecking_New from "./components/Cutting/new_bitchecking/main"
 
 function App() {
 
@@ -434,6 +435,16 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Imp_home/>
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bitchecking_new/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Bitchecking_New/>
               </ProtectedLayout>
             </ProtectedRoute>
           }
