@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React, { useEffect, useRef, useState } from 'react';
 import { ItemDirective, ItemsDirective, SidebarComponent, ToolbarComponent, TreeViewComponent } from '@syncfusion/ej2-react-navigations';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
@@ -11,7 +12,7 @@ function Layout() {
   const navigate = useNavigate();
   const fileObj = useRef<FileManagerComponent | null>(null);
   let dialogInstance: DialogComponent | null = null;
-  let hostUrl: string = 'https://sfblazor.azurewebsites.net/documentexplorer-services/production/';
+  let hostUrl: string = 'http://localhost:62870/';
   let ajaxSettings = {
     url: hostUrl + 'api/FileManager/FileOperations',
     getImageUrl: hostUrl + 'api/FileManager/GetImage',
@@ -22,9 +23,7 @@ function Layout() {
   let continents: { [key: string]: Object }[] = [
     { id: '01', name: 'All Files', Icon: "sf-icon-Allfiles", selected: true },
     { id: '02', name: 'Recent Files', Icon: "sf-icon-RecentFiles", selected: false },
-    { id: '03', name: 'Shared with me', Icon: "e-icons e-shared", selected: false },
-    { id: '04', name: 'Trash', Icon: "sf-icon-Delete", selected: false },
-    { id: '05', name: 'About', Icon: "sf-icon-About", selected: false }
+    { id: '03', name: 'About', Icon: "sf-icon-About", selected: false }
   ];
   const [status, setStatus] = useState<boolean>(false);
   let buttons = [
@@ -151,7 +150,7 @@ function Layout() {
 
   function getExcel(fileName : string, file :object)
   {
-      navigate('spreadSheet',{state:{name: fileName,file:file}})
+      navigate('Spreadsheet',{state:{name: fileName,file:file}})
   }
 
   function newClick():void{
@@ -161,19 +160,6 @@ function Layout() {
   function dlgButtonClick():void{
     setStatus(false);
     dialogInstance?.hide();
-  }
-
-  const toolbarClick = (args :any)=>{
-    switch (args.item.id) {
-      case 'User':
-        setPopupVisibility(!popupVisibility);
-          break;
-      case 'GitHub':
-          window.open('https://github.com/syncfusion/blazor-showcase-document-explorer', '_blank'); // Navigate to GitHub in a new tab
-          break;
-      default:
-          break;
-  }
   }
 
      // State to store selected tree items
@@ -227,40 +213,22 @@ function Layout() {
        let newFileMenu: any = [];
        let newFolderMenu: any = [];
        let newLayoutMenu: any = [];
-       if(treeNode === "05"){
+       if(treeNode === "03"){
         flag = true;
        }
        switch (treeNode) {
          case "02":
            newToolItems = ["Download", "Rename", "SortBy", "Refresh", "Selection", "View", "Details"];
-           newFileMenu = ["Open", "|", "Delete", "Download", "Rename", "|", "Details"];
-           newFolderMenu = ["Open", "|", "Delete", "Download", "Rename", "|", "Details"];
-           newLayoutMenu = ["SortBy", "View", "Refresh", "|", "NewFolder", "|", "Details", "SelectAll"];
+           newFileMenu = ["Open", "Delete", "Download", "Rename", "Details"];
+           newFolderMenu = ["Open", "Delete", "Download", "Rename", "Details"];
+           newLayoutMenu = ["SortBy", "View", "Refresh", "NewFolder", "Details", "SelectAll"];
+
            selectedTree.current = "Recent";
            (fileObj as any).ajaxSettings.url = hostUrl + 'api/FileManager/FileOperations';
            (fileObj as any).ajaxSettings.getImageUrl = hostUrl + 'api/FileManager/GetImage';
            (fileObj as any).ajaxSettings.downloadUrl = hostUrl + 'api/FileManager/Download';
            break;
          case "03":
-           newToolItems = ["Download", "SortBy", "Refresh", "Selection", "View", "Details"];
-           newFileMenu = ["Open", "|", "Download", "|", "Details"];
-           newFolderMenu = ["Open", "|", "Download", "|", "Details"];
-           newLayoutMenu = ["SortBy", "|", "View", "|", "Refresh", "|", "Details", "|", "SelectAll"];
-           selectedTree.current = "Shared";
-           (fileObj as any).ajaxSettings.url = hostUrl + 'api/SharedFiles/FileOperations';
-           (fileObj as any).ajaxSettings.getImageUrl = hostUrl + 'api/SharedFiles/GetImage';
-           (fileObj as any).ajaxSettings.downloadUrl = hostUrl + 'api/SharedFiles/Download';
-           break;
-         case "04":
-           newToolItems = ["Delete", "SortBy", "Refresh", "Selection", "View", "Details"];
-           newFileMenu = ["Delete", "|", "Details",  "|", "SelectAll"];
-           newFolderMenu = ["Download", "|", "Details",  "|", "SelectAll"];
-           newLayoutMenu = ["SortBy", "View", "Refresh", "|", "Details", "SelectAll"];
-           selectedTree.current = "Trash";
-           (fileObj as any).ajaxSettings.url = hostUrl + 'api/Trash/FileOperations';
-           (fileObj as any).ajaxSettings.getImageUrl = hostUrl + 'api/Trash/GetImage';
-           break;
-         case "05":
            navigate('about');
            break;
          default:
@@ -269,9 +237,11 @@ function Layout() {
           } else {
             newToolItems = ["Upload", "Delete", "Download", "Rename", "SortBy", "Refresh", "Selection", "View", "Details"];
           }
-           newFileMenu = ["Open", "|", "Delete", "Download", "Rename", "|", "Details"];
-           newFolderMenu = ["Open", "|", "Delete", "Download", "Rename", "|", "Details"];
-           newLayoutMenu = ["SortBy", "View", "Refresh", "|", "NewFolder", "|", "Details", "SelectAll"];
+           
+            newFileMenu = ["Open", "Delete", "Download", "Rename", "Details"];
+            newFolderMenu = ["Open", "Delete", "Download", "Rename", "Details"];
+            newLayoutMenu = ["SortBy", "View", "Refresh", "NewFolder", "Details", "SelectAll"];
+
            selectedTree.current = "AllFiles";
            (fileObj as any).ajaxSettings.url = hostUrl + 'api/FileManager/FileOperations';
            (fileObj as any).ajaxSettings.getImageUrl = hostUrl + 'api/FileManager/GetImage';
@@ -280,7 +250,7 @@ function Layout() {
            break;
        }
        if (!flag) {
-        (fileObj as any).Path = "/";
+        (fileObj as any).path = "/";
         (fileObj as any).refresh();
        }
        setToolItems(newToolItems);
@@ -318,8 +288,6 @@ function Layout() {
               <ItemDirective cssClass="e-hamburger" click={hamburgerClick}  template={header} tooltipText="Menu" align="Left"></ItemDirective>
               <ItemDirective template={headerlogo} tooltipText="Logo" align="Left"></ItemDirective>
               <ItemDirective id="doc-header" text="Document Explorer" align="Left"></ItemDirective>
-              <ItemDirective template={profile} click={toolbarClick} tooltipText="Profile" align="Right" id="User"></ItemDirective>
-              <ItemDirective align="Right" prefixIcon="sf-icon-Github" id='GitHub' tooltipText="https://github.com/syncfusion/blazor-showcase-document-explorer"></ItemDirective>
             </ItemsDirective>
           </ToolbarComponent>
         </div>
@@ -341,19 +309,6 @@ function Layout() {
                 {/* sidebar options */}
                 <div id="LeftTreeContainer" className="e-left-tree-contain">               
                 <TreeViewComponent id='treeelement' fields={{ dataSource: continents, id: 'id', text: 'name', iconCss: 'Icon' }} cssClass='e-left-tree'  nodeSelected={handleTreeSelect} selectedNodes={selectedTreeItems} />                    
-                <div className="e-storage-container" title="Storage status">
-                        <div className="e-storage-header">
-                            <div className="e-storage-icon sf-icon-Storage" style={{ display: 'inline-block' }}></div>
-                            <div className="e-storage-title" style={{ display: 'inline-block', marginLeft: '10px' }}>Storage </div>
-                        </div>
-                        <div className="e-storage-content">
-                            <div className="e-storage-progress progress">
-                                <div className="progress-bar">
-                                </div>
-                            </div>
-                            <div className="e-storage-value">70% storage used</div>
-                        </div>
-                    </div>
                 </div>
                 <div className="e-card e-side-card e-side-bottom-card">
                     <div className="e-card-content"><a className="e-empty-link">My Profile</a></div>
@@ -367,11 +322,7 @@ ref={(s: FileManagerComponent | null) => {
     fileObj.current = s;
   }}
  height={'100%'} ajaxSettings = {ajaxSettings} toolbarSettings={{ items: toolItems }} fileOpen={onFileOpen} beforeImageLoad={beforeImageLoad} beforeSend={beforeSend} beforeDownload={beforeDownload} enablePersistence={true}
-                 contextMenuSettings = {{ 
-                  file : fileMenu,
-                  folder : folderMenu,
-                  layout : layoutMenu,
-                }}>
+                 >
                 <Inject services={[ DetailsView, Toolbar]}/>
                 </FileManagerComponent>
                 <div id="file-overlay" className={`e-file-overlay ${fileOverlayDisplay}`}></div>

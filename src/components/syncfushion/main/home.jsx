@@ -39,7 +39,7 @@ import Embedd from '../DashboardListing/Dashboardnew.jsx'
 import Pdf from "../order/Pdf/Pdf.tsx"
 import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
-import Sheet from '../order/Spreadsheet/Spreadsheet.tsx'
+import Spreadsheet from '../order/Spreadsheet/Spreadsheet.tsx'
 import Word from '../order/Word/Word.tsx'
 import Smartpaste from '../order/Smart_Paste/Smartpaste.tsx'
 import Speech from '../order/Speak/Speech.tsx'
@@ -91,7 +91,7 @@ function Home() {
         <Route path='/pdf' element={<Pdf />} />
         <Route path='/HeroFashionGrid1311' element={<HeroFashionGrid1311 />} />
         <Route path='/optimize' element={<Optimize />} />
-        <Route path='/xlsheet' element={<Sheet />} />
+        <Route path='/spreadsheet' element={<Spreadsheet />} />
         <Route path='/word' element={<Word />} />
         <Route path='/smart' element={<Smartpaste />} />
         <Route path='/speak' element={<Speech />} />
