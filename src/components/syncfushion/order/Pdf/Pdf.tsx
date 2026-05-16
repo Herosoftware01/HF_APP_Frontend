@@ -28,6 +28,9 @@ import {
 } from '@syncfusion/ej2-pdf-export';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 function Default() {
+    // API Base URL constant
+    const API_BASE_URL = 'http://localhost:8080/api/pdfviewer';
+
     let viewer: PdfViewerComponent;
     // ✅ Store only names as strings (not the full objects)
     const [pdfList, setPdfList] = useState<string[]>([]);
@@ -225,7 +228,7 @@ function Default() {
 
             // 5️⃣ Call AddTemplate API
             const apiResponse = await fetch(
-                "https://localhost:32791/api/pdfviewer/AddTemplate",
+                `${API_BASE_URL}/AddTemplate`,
                 {
                     method: "POST",
                     headers: {
@@ -264,7 +267,7 @@ function Default() {
 
             // 4️⃣ Call PerformOCR API
             const response = await fetch(
-                "https://localhost:32791/api/pdfviewer/PerformOCR",
+                `${API_BASE_URL}/PerformOCR`,
                 {
                     method: "POST",
                     headers: {
