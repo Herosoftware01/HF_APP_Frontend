@@ -1,0 +1,31 @@
+.custom-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: linear-gradient(
+    to bottom,
+    #101d2b,
+    #00295a
+  );
+  border-radius: 12px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    to bottom,
+    #024c58,
+    #183c42
+  );
+  border-radius: 12px;
+  border: 2px solid #103101;
+  transition: all 0.3s ease;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    to bottom,
+    #2563eb,
+    #0891b2
+  );
+}
