@@ -156,7 +156,7 @@ const Approve = () => {
               Approvals Portal
             </h1>
             <p className="text-slate-500 text-sm font-medium">
-              Manage pending staff incentive and debit claims
+              Manage staff And Emloyee incentive and debit claims
             </p>
           </div>
 
