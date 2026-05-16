@@ -41,13 +41,6 @@ const Re_home = () => {
       path: "/hr/emp_trend",
       color: "bg-blue-50",
     },
-    {
-      title: "Contract  Secruity Attendance Dashboard",
-      description: "Manage employee leave requests and approval.",
-      icon: <Settings className="w-8 h-8 text-rose-600" />,
-      path: "/hr/sec",
-      color: "bg-rose-50",
-    },
   ];
 
   return (

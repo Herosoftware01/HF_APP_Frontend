@@ -16,6 +16,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.9",
+    "@react-icons/all-files": "^4.1.0",
     "@syncfusion/ej2-base": "*",
     "@syncfusion/ej2-data": "*",
     "@syncfusion/ej2-react-blockeditor": "^33.1.44",
