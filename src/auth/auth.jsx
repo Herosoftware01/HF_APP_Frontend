@@ -41,6 +41,7 @@ export const loginUser = async (username, password) => {
 };
 
 // ---------------- LOGOUT ----------------
+
 export const logoutUser = async () => {
   try {
     const refreshToken = getRefreshToken();
