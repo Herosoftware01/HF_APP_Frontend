@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Activity, Layers, Box, AlertTriangle, ExternalLink, Globe, Search } from "lucide-react";
+import { HiClipboard  } from "react-icons/hi";
 
 const Imp_home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +35,13 @@ const Imp_home = () => {
       icon: <Activity size={20} />,
       theme: "purple"
     },
+    { 
+      name: "Quality Inspection First Piece", 
+      path: "/imp/first", 
+      description: "Monitor Liveline Quality Inspection First Piece Output",
+      icon: <HiClipboard  size={20} />,
+      theme: "gray"
+    },
     // Add more items here easily...
   ];
 
@@ -42,6 +50,7 @@ const Imp_home = () => {
     emerald: "text-emerald-600 bg-emerald-50 border-emerald-100 group-hover:bg-emerald-600",
     amber: "text-amber-600 bg-amber-50 border-amber-100 group-hover:bg-amber-600",
     purple: "text-purple-600 bg-purple-50 border-purple-100 group-hover:bg-purple-600",
+    gray: "text-gray-600 bg-gray-50 border-gray-100 group-hover:bg-gray-600",
   };
 
   return (

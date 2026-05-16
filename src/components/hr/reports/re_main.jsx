@@ -8,7 +8,7 @@ import Join from "../reports/join";
 import Staff_att from "../reports/staff_att";
 import Staff_one from "../reports/staff_one";
 import Emp_one from "../reports/emp_one";
-import Sec from "../reports/sec";
+import Sec from "../../security/sec";
 import Emp_trend from "./emp_trend";
 import Emp_trend1 from "../reports/emp_trend1";
  

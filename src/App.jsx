@@ -38,6 +38,9 @@ import FormBuilder from './components/syncfushion/order/FormBuilder/formbuilder'
 import Fi_home  from "./components/fininace/reports/fi_main";
 import Del_home from "./components/Cutting/delivery/cut_main";
 import Imp_home from "./components/implemantation_reports/imp_main";
+import Sec from "./components/security/sec_main";
+import Empleave from "./components/production/reports/emp_re_main";
+
 
 function App() {
 
@@ -212,6 +215,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/emp_reports/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Empleave />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
 
          <Route
           path="/advance/*"
@@ -261,6 +274,17 @@ function App() {
             <ProtectedRoute>
               <ProtectedLayout>
                 <Del_home />
+              </ProtectedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+         <Route
+          path="/sec/*"
+          element={
+            <ProtectedRoute>
+              <ProtectedLayout>
+                <Sec/>
               </ProtectedLayout>
             </ProtectedRoute>
           }

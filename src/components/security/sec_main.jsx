@@ -1,13 +1,13 @@
  import { Route, Routes } from "react-router-dom";
 
 
- import Sec from "./sec";
+ import Sec from "../security/sec";
 
 
  const Sec_main = () => {
    return (
      <Routes>
-        <Route path = "sec" element={<Sec/>} />
+        <Route path = "/" element={<Sec/>} />
      </Routes>
    );
  };
