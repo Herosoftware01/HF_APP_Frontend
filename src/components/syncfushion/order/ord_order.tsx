@@ -63,6 +63,60 @@ interface OrderData {
   Others2: string; Others3: string; Others4: string; Others5: string; Others6: string; Others7: string,
 }
 
+// Separate QueryBuilder Component
+interface QueryBuilderContentProps {
+  qryBldrObj: React.RefObject<QueryBuilderComponent>;
+  queryBuilderColumns: ColumnsModel[];
+  updateResult: (args: any, isRightPanel?: boolean) => void;
+  dataSource: OrderData[];
+  onApplyQuery?: () => void;
+  onClearQuery?: () => void;
+  isRightPanel?: boolean;
+}
+
+function QueryBuilderContent({ qryBldrObj, queryBuilderColumns, updateResult, dataSource, onApplyQuery, onClearQuery, isRightPanel = false }: QueryBuilderContentProps) {
+  const handleClear = () => {
+    qryBldrObj.current?.reset();
+    onClearQuery?.();
+  };
+
+  const handleRuleChange = (args: any) => {
+    updateResult(args, isRightPanel);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '12px' }}>
+        <QueryBuilderComponent
+          ref={qryBldrObj}
+          columns={queryBuilderColumns}
+          ruleChange={handleRuleChange}
+          dataSource={dataSource}
+          width="100%"
+        />
+      </div>
+      {(onApplyQuery || onClearQuery) && (
+        <div style={{ padding: '12px', borderTop: '1px solid #ddd', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+          <ButtonComponent
+            onClick={handleClear}
+            cssClass="e-outline"
+            style={{ padding: '6px 16px', fontSize: '12px' }}
+          >
+            Clear
+          </ButtonComponent>
+          <ButtonComponent
+            onClick={onApplyQuery}
+            cssClass="e-primary"
+            style={{ padding: '6px 16px', fontSize: '12px' }}
+          >
+            OK
+          </ButtonComponent>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const HeroFashionGrid131: React.FC = () => {
   const [dataSource, setDataSource] = useState<OrderData[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -100,6 +154,7 @@ const HeroFashionGrid131: React.FC = () => {
   const tooltipRef = useRef<TooltipComponent>(null);
   const gridRef = useRef<GridComponent>(null);
   const qryBldrObj = useRef<QueryBuilderComponent>(null);
+  const qryBldrObjRight = useRef<QueryBuilderComponent>(null);
   const dialogRef = useRef<DialogComponent>(null);
 
 
@@ -523,13 +578,21 @@ const HeroFashionGrid131: React.FC = () => {
 
   ], []);
 
-  const updateResult = useCallback((args: any) => {
-    if (!qryBldrObj.current) return;
-
+  const updateResult = useCallback((args: any, isRightPanel: boolean = false) => {
     try {
-      // Get the predicate from QueryBuilder and store it temporarily
-      const predicate = qryBldrObj.current.getPredicate(args.rule);
+      const sourceRef = isRightPanel ? qryBldrObjRight : qryBldrObj;
+      const targetRef = isRightPanel ? qryBldrObj : qryBldrObjRight;
+      
+      if (!sourceRef.current) return;
+
+      // Get the predicate from the QueryBuilder that was updated
+      const predicate = sourceRef.current.getPredicate(args.rule);
       setTempPredicate(predicate);
+
+      // Sync the other QueryBuilder with the same rules
+      if (targetRef.current && args.rule) {
+        targetRef.current.rule = args.rule;
+      }
     } catch (error) {
       console.error('Error building predicate:', error);
       setTempPredicate(null);
@@ -567,6 +630,21 @@ const HeroFashionGrid131: React.FC = () => {
       }
     }
   }, [tempPredicate, dataSource]);
+
+  const clearQueryBuilder = useCallback(() => {
+    try {
+      // Clear the temp predicate
+      setTempPredicate(null);
+      
+      // Clear the grid filter
+      if (gridRef.current) {
+        gridRef.current.query = new Query();
+        setShowingCount(dataSource.length);
+      }
+    } catch (error) {
+      console.error('Error clearing query:', error);
+    }
+  }, [dataSource]);
 
   const toggleQueryBuilder = useCallback(() => {
     setShowQueryBuilderDialog((prevState) => !prevState);
@@ -1840,6 +1918,39 @@ const HeroFashionGrid131: React.FC = () => {
     gridContainer.style.height = `${calculatedHeight}px`;
   },[])
 
+  // Filter dropdown states
+  const [filterDirectorSampleOrder, setFilterDirectorSampleOrder] = useState<string>('');
+  const [filterPrintingR, setFilterPrintingR] = useState<string>('');
+  const [filterEmbR, setFilterEmbR] = useState<string>('');
+  const [filterFabR, setFilterFabR] = useState<string>('');
+  const [filterAbcStatus, setFilterAbcStatus] = useState<string>('');
+
+  // Get unique values for filter dropdowns
+  const getUniqueValues = (fieldName: keyof OrderData): any[] => {
+    return Array.from(new Set(dataSource.map(item => item[fieldName]))).filter(Boolean);
+  };
+
+  // Handle filter dropdown change
+  const handleFilterChange = (fieldName: string, value: any) => {
+
+    if (!gridRef.current) return;
+    
+    if (!value || value === '') {
+      // Clear filter for this field
+      gridRef.current.clearFiltering([fieldName]);
+    } else {
+      // Apply filter using filterByColumn method
+      gridRef.current.filterByColumn(fieldName, 'equal', value);
+    }
+  };
+
+  // Get dropdown options for each filter field
+  const directorOptions = useMemo(() => getUniqueValues('director_sample_order'), [dataSource]);
+  const printingROptions = useMemo(() => getUniqueValues('printing_R'), [dataSource]);
+  const embROptions = useMemo(() => getUniqueValues('Emb_R'), [dataSource]);
+  const fabROptions = useMemo(() => getUniqueValues('Fab_R'), [dataSource]);
+  const abcStatusOptions = useMemo(() => getUniqueValues('abc'), [dataSource]);
+
   const dateEditor = (props: any) => {
     return (
       <div>
@@ -1943,6 +2054,19 @@ const HeroFashionGrid131: React.FC = () => {
   const pageSettings=useMemo(()=>(
     { pageSize: 20 }
   ),[])
+
+  const filterBarTemplate=
+  {
+    create:()=>
+    {
+      const elem = document.createElement('div');
+      elem.textContent = 'No Filtering';
+      elem.style.color = '#999';
+      elem.style.fontSize = '12px';
+      elem.style.padding = '4px';
+      return elem;
+    }
+  }
   // Memoize the grid component to prevent unnecessary re-renders
   const memoizedGridComponent = useMemo(() => (
     <><div><TooltipComponent ref={tooltipRef} target=".e-rowcell" width="130px" height="130px" opensOn={!Browser.isDevice ? "Hover" :"Custom"} beforeRender={tooltipBeforeRender} beforeOpen={beforeOpen}>
@@ -1959,6 +2083,7 @@ const HeroFashionGrid131: React.FC = () => {
           dataBound={dataBound}
           pageSettings={pageSettings}
           height="100%"
+          width={1100}
           rowHeight={100}
           enableVirtualization={true}
           allowSorting={true}
@@ -1993,17 +2118,17 @@ const HeroFashionGrid131: React.FC = () => {
         >
           <ColumnsDirective>
             <ColumnDirective isPrimaryKey={true} field="jobno_oms" headerTemplate={orderSummaryHeaderTemplate} width="90" maxWidth="120" filter={{ operator: 'startsWith' }} template={orderSummaryTemplate} allowEditing={false} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center" allowFiltering={false} filter={{ operator: 'startsWith' }} template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="mainimagepath" headerText="IMG" width="100" textAlign="Center"  allowFiltering={false} filterBarTemplate={filterBarTemplate}  template={imageFieldTemplate('mainimagepath')} allowEditing={true} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="Fdt" headerText="Fdt,Dir,ST,Uom,Ptype" width="110" maxWidth="150" headerTemplate={ordHeaderTemplate} template={deliveryInfoTemplate} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="n" headerText='n' minWidth={60} width="30" textAlign="Center" allowFiltering={false} template={rollnoTemplate} filter={{ operator: 'startsWith' }} allowEditing={false} />
             <ColumnDirective field="printing_R" headerText="1_PR,3_Em,8_Fa_9_Dy,7_Cus" headerTemplate= {udfheaderTemplate} width="150" maxWidth="150" type="string" template={udf} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="ITS_R" headerText="31_IT,36_Cu,45_Or,46_Em,141-Sa" headerTemplate= {udf2HeaderTemplate} width="150" maxWidth="150" type="string" template={udf2} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="Week_R" headerText="Mo,Wk,Ye,Uo" width="150" maxWidth="150" headerTemplate= {udf4HeaderTemplate} template={udf4} customAttributes={{ class: 'editCss' }} />
             <ColumnDirective field="FabdyIN" headerText="FabdyIN"  width="150" maxWidth="150" type="string" template={udf11} filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
-            <ColumnDirective field="Print" headerText="Print" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Emb" headerText="Emb" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Others1" headerText="imgs1" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
-            <ColumnDirective field="Others2" headerText="AOP-9 img" width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others2')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Print" headerText="Print" filterBarTemplate={filterBarTemplate} width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Print')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Emb" headerText="Emb" width="100" filterBarTemplate={filterBarTemplate} textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Emb')} allowEditing={true} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Others1" headerText="imgs1" filterBarTemplate={filterBarTemplate} width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others1')} allowEditing={false} customAttributes={{ class: 'img' }} />
+            <ColumnDirective field="Others2" headerText="AOP-9 img" filterBarTemplate={filterBarTemplate} width="100" textAlign="Center" allowFiltering={false} template={imageFieldTemplate('Others2')} allowEditing={false} customAttributes={{ class: 'img' }} />
             <ColumnDirective field="quantity" headerText="QTY" width="110" textAlign="Center" template={genericHighlighter('quantity')} />
             <ColumnDirective field="director_sample_order" headerText="dir" width="75" maxWidth="100" filter={{ operator: 'startsWith' }} customAttributes={{ class: 'editCss' }} />
           </ColumnsDirective>
@@ -2295,26 +2420,195 @@ const HeroFashionGrid131: React.FC = () => {
           }
         ]}
       >
-        <div style={{ padding: '20px' }}>
-          <QueryBuilderComponent
-            ref={qryBldrObj}
-            columns={queryBuilderColumns}
-            ruleChange={updateResult}
-            dataSource={dataSource}
-            width="100%"
-          />
-        </div>
+        <QueryBuilderContent
+          qryBldrObj={qryBldrObj}
+          queryBuilderColumns={queryBuilderColumns}
+          updateResult={updateResult}
+          dataSource={dataSource}
+        />
       </DialogComponent>
 
-      {/* Grid Container */}
-      <div style={{ flex: 1, overflow: 'auto' }}>
-        {loading ? (
-          <div style={{ padding: '50px', textAlign: 'center' }}>Loading Data...</div>
-        ) : error ? (
-          <div style={{ padding: '50px', textAlign: 'center', color: 'red' }}>Error: {error}</div>
-        ) : (
-          memoizedGridComponent
+      {/* Main Container - Wraps Filters and Grid */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        height: '100%'
+      }}>
+        {/* Filter Section - 5 Dropdown Filters */}
+        <div style={{
+          padding: '4px 8px',
+          backgroundColor: '#f5f5f5',
+          borderBottom: '1px solid #ddd',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+          gap: '6px',
+          alignItems: 'start',
+          alignContent: 'start',
+          flexShrink: 0
+        }}>
+          <div style={{ gridColumn: '1 / -1', fontWeight: 'bold', fontSize: '11px', color: '#333', padding: '2px 0' }}>Quick Filters:</div>
+        
+          {/* Filter 1: Director Sample/Order */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: '130px' }}>
+            <label style={{ fontSize: '9px', fontWeight: '600', color: '#555', marginBottom: '1px' }}>Director Sample/Order</label>
+            <DropDownListComponent
+              dataSource={directorOptions.map(val => ({ text: val, value: val }))}
+              fields={{ text: 'text', value: 'value' }}
+              value={filterDirectorSampleOrder || null}
+              change={(e: any) => {
+                handleFilterChange('director_sample_order', e.value);
+                setFilterDirectorSampleOrder(e.value || '');
+                
+              }}
+              placeholder="Select..."
+              allowFiltering={true}
+              popupHeight="150px"
+              style={{ width: '100%', fontSize: '10px', height: '26px' }}
+              cssClass="compact-dropdown"
+            />
+          </div>
+
+          {/* Filter 2: Printing Status */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: '130px' }}>
+            <label style={{ fontSize: '9px', fontWeight: '600', color: '#555', marginBottom: '1px' }}>Printing Status</label>
+            <DropDownListComponent
+              dataSource={printingROptions.map(val => ({ text: val, value: val }))}
+              fields={{ text: 'text', value: 'value' }}
+              value={filterPrintingR || null}
+              change={(e: any) => {
+                setFilterPrintingR(e.value || '');
+                handleFilterChange('printing_R', e.value);
+              }}
+              placeholder="Select..."
+              allowFiltering={true}
+              popupHeight="150px"
+              style={{ width: '100%', fontSize: '10px', height: '26px' }}
+              cssClass="compact-dropdown"
+            />
+          </div>
+
+          {/* Filter 3: Embroidery Status */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: '130px' }}>
+            <label style={{ fontSize: '9px', fontWeight: '600', color: '#555', marginBottom: '1px' }}>Embroidery Status</label>
+            <DropDownListComponent
+              dataSource={embROptions.map(val => ({ text: val, value: val }))}
+              fields={{ text: 'text', value: 'value' }}
+              value={filterEmbR || null}
+              change={(e: any) => {
+                setFilterEmbR(e.value || '');
+                handleFilterChange('Emb_R', e.value);
+              }}
+              placeholder="Select..."
+              allowFiltering={true}
+              popupHeight="150px"
+              style={{ width: '100%', fontSize: '10px', height: '26px' }}
+              cssClass="compact-dropdown"
+            />
+          </div>
+
+          {/* Filter 4: Fabric Status */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: '130px' }}>
+            <label style={{ fontSize: '9px', fontWeight: '600', color: '#555', marginBottom: '1px' }}>Fabric Status</label>
+            <DropDownListComponent
+              dataSource={fabROptions.map(val => ({ text: val, value: val }))}
+              fields={{ text: 'text', value: 'value' }}
+              value={filterFabR || null}
+              change={(e: any) => {
+                setFilterFabR(e.value || '');
+                handleFilterChange('Fab_R', e.value);
+              }}
+              placeholder="Select..."
+              allowFiltering={true}
+              popupHeight="150px"
+              style={{ width: '100%', fontSize: '10px', height: '26px' }}
+              cssClass="compact-dropdown"
+            />
+          </div>
+
+          {/* Filter 5: ABC Status */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: '130px' }}>
+            <label style={{ fontSize: '9px', fontWeight: '600', color: '#555', marginBottom: '1px' }}>ABC Status</label>
+            <DropDownListComponent
+              dataSource={abcStatusOptions.map(val => ({ text: val, value: val }))}
+              fields={{ text: 'text', value: 'value' }}
+              value={filterAbcStatus || null}
+              change={(e: any) => {
+                setFilterAbcStatus(e.value || '');
+                handleFilterChange('abc', e.value);
+              }}
+              placeholder="Select..."
+              allowFiltering={true}
+              popupHeight="150px"
+              style={{ width: '100%', fontSize: '10px', height: '26px' }}
+              cssClass="compact-dropdown"
+            />
+          </div>
+
+          {/* Clear All Filters Button */}
+          <button
+            onClick={() => {
+              setFilterDirectorSampleOrder('');
+              setFilterPrintingR('');
+              setFilterEmbR('');
+              setFilterFabR('');
+              setFilterAbcStatus('');
+              if (gridRef.current) {
+                gridRef.current.clearFiltering(['director_sample_order', 'printing_R', 'Emb_R', 'Fab_R', 'abc']);
+              }
+            }}
+            className="px-2 py-1 text-xs font-medium text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors duration-200"
+            style={{ height: '26px', alignSelf: 'flex-end' }}
+          >
+            Clear All
+          </button>
+        </div>
+
+        {/* Grid Container with QueryBuilder */}
+        <div style={{ 
+          flex: 1,
+          display: 'flex',
+          gap: '12px',
+          padding: '12px',
+          overflow: 'hidden',
+          minHeight: 0
+        }}>
+        {/* Grid Section */}
+        <div style={{ flex: 1, overflow: 'auto', backgroundColor: '#fff', borderRadius: '4px', border: '1px solid #ddd', height: '100%' }}>
+          {loading ? (
+            <div style={{ padding: '50px', textAlign: 'center' }}>Loading Data...</div>
+          ) : error ? (
+            <div style={{ padding: '50px', textAlign: 'center', color: 'red' }}>Error: {error}</div>
+          ) : (
+            memoizedGridComponent
+          )}
+        </div>
+
+        {/* QueryBuilder Panel */}
+       {!Browser.isDevice && (
+          <div style={{ 
+            width: '350px', 
+            backgroundColor: '#f9f9f9', 
+            borderRadius: '4px', 
+            border: '1px solid #ddd', 
+            overflow: 'hidden', 
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)', 
+            display: 'flex', 
+            flexDirection: 'column' 
+          }}>
+            <QueryBuilderContent
+              qryBldrObj={qryBldrObjRight}
+              queryBuilderColumns={queryBuilderColumns}
+              updateResult={updateResult}
+              dataSource={dataSource}
+              onApplyQuery={applyQueryToGrid}
+              onClearQuery={clearQueryBuilder}
+              isRightPanel={true}
+            />
+          </div>
         )}
+        </div>
       </div>
     </div>
   );
