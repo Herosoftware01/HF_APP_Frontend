@@ -10,7 +10,7 @@ const QCSystemResponsive = () => {
   const [checkedData, setCheckedData] = useState({});
   const [savedMap, setSavedMap] = useState({});
   const scanInputRef = useRef(null);
- const [finalSaved, setFinalSaved] = useState(false);
+  const [finalSaved, setFinalSaved] = useState(false);
   const [employeeList, setEmployeeList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingEmp, setLoadingEmp] = useState(false);
@@ -28,9 +28,9 @@ const QCSystemResponsive = () => {
   // };
 
   const isSaved = (desc) => {
-  const list = savedMap?.[qrData.plan_no] || [];
-  return list.includes(desc);
-};
+    const list = savedMap?.[qrData.plan_no] || [];
+    return list.includes(desc);
+  };
 
   // const isLocked = (desc) => {
   //   return savedMap?.[qrData.id]?.includes(desc);
@@ -38,11 +38,11 @@ const QCSystemResponsive = () => {
 
   const isLocked = (desc) => isSaved(desc);
 
-const allSaved =
-  descriptions.length > 0 &&
-  descriptions.every((desc) =>
-    (savedMap?.[qrData.plan_no] || []).includes(desc)
-  );
+  const allSaved =
+    descriptions.length > 0 &&
+    descriptions.every((desc) =>
+      (savedMap?.[qrData.plan_no] || []).includes(desc)
+    );
 
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const allSaved =
         setLoadingEmp(true);
 
         const response = await fetch(
-          'http://10.1.21.153:7003/bit_checking/emp_stick'
+          'https://hfapi.herofashion.com/bit_checking/emp_stick'
         );
 
         const data = await response.json();
@@ -84,24 +84,24 @@ const allSaved =
 
 
 
-useEffect(() => {
-  const checkFinalSaved = async () => {
-    if (!qrData.id) return;
+  useEffect(() => {
+    const checkFinalSaved = async () => {
+      if (!qrData.id) return;
 
-    try {
-      const res = await fetch(
-        `http://10.1.21.153:7003/bit_checking/check_final_saved?scanner_id=${qrData.id}`
-      );
+      try {
+        const res = await fetch(
+          `https://hfapi.herofashion.com/bit_checking/check_final_saved?scanner_id=${qrData.id}`
+        );
 
-      const data = await res.json();
-      setFinalSaved(data.final_saved);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+        const data = await res.json();
+        setFinalSaved(data.final_saved);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-  checkFinalSaved();
-}, [qrData.id]);
+    checkFinalSaved();
+  }, [qrData.id]);
 
 
 
@@ -113,7 +113,7 @@ useEffect(() => {
       try {
 
         const res = await fetch(
-          "http://10.1.21.153:7003/bit_checking/saved_plans/"
+          "https://hfapi.herofashion.com/bit_checking/saved_plans/"
         );
 
         const data = await res.json();
@@ -157,62 +157,62 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `http://10.1.21.153:7003/bit_checking/qr_api?qr_id=${val}`
+        `https://hfapi.herofashion.com/bit_checking/qr_api?qr_id=${val}`
       );
 
       const data = await response.json();
 
       if (data.status) {
 
-  setQrData({
-    id: data.sl,
-    plan_no: data.plan_no,
-    total: data.pc
-  });
+        setQrData({
+          id: data.sl,
+          plan_no: data.plan_no,
+          total: data.pc
+        });
 
-  // =====================
-  // ALREADY SAVED
-  // =====================
-  if (data.already_saved) {
+        // =====================
+        // ALREADY SAVED
+        // =====================
+        if (data.already_saved) {
 
-    setDescriptions(data.descriptions);
+          setDescriptions(data.descriptions);
 
-    setActiveSide(data.descriptions[0]);
+          setActiveSide(data.descriptions[0]);
 
-    setCheckedData(data.checked_data);
+          setCheckedData(data.checked_data);
 
-    // employee auto select
-    const emp = employeeList.find(
-      e => String(e.code) === String(data.employee.code)
-    );
+          // employee auto select
+          const emp = employeeList.find(
+            e => String(e.code) === String(data.employee.code)
+          );
 
-    if (emp) {
-      setSelectedEmp(emp);
-    }
+          if (emp) {
+            setSelectedEmp(emp);
+          }
 
-    setStep(3);
+          setStep(3);
 
-    return;
-  }
+          return;
+        }
 
- 
-  setDescriptions(data.descriptions);
 
-  setActiveSide(data.descriptions[0]);
+        setDescriptions(data.descriptions);
 
-  const initialChecked = {};
+        setActiveSide(data.descriptions[0]);
 
-  data.descriptions.forEach(desc => {
-    initialChecked[desc] = [];
-  });
+        const initialChecked = {};
 
-  setCheckedData(initialChecked);
+        data.descriptions.forEach(desc => {
+          initialChecked[desc] = [];
+        });
 
-  setStep(2);
-} else {
-  
-  alert("QR Sticker Not Made");
-   
+        setCheckedData(initialChecked);
+
+        setStep(2);
+      } else {
+
+        alert("QR Sticker Not Made");
+
 
       }
 
@@ -359,171 +359,184 @@ useEffect(() => {
 
         <div className="flex gap-3 w-full sm:w-auto">
           {/* DELETE BUTTON */}
-  {(savedMap?.[qrData.plan_no]?.length > 0) && (
-    <button
-      className="flex-1 sm:px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-black rounded-2xl shadow-lg transition-transform active:scale-95"
-      onClick={async () => {
+          {(savedMap?.[qrData.plan_no]?.length > 0) && (
+            <button
+              className="flex-1 sm:px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-black rounded-2xl shadow-lg transition-transform active:scale-95"
+              onClick={async () => {
 
-        const confirmDelete =
-          window.confirm("Saved data delete panna confirm ah?");
+                const confirmDelete =
+                  window.confirm("Saved data delete panna confirm ah?");
 
-        if (!confirmDelete) return;
+                if (!confirmDelete) return;
 
-        try {
+                try {
 
-          const res = await fetch(
-            `http://10.1.21.153:7003/bit_checking/delete_checking/?plan_no=${qrData.plan_no}`,
-            {
-              method: "DELETE",
-            }
-          );
+                  const res = await fetch(
+                    `https://hfapi.herofashion.com/bit_checking/delete_checking/?plan_no=${qrData.plan_no}`,
+                    {
+                      method: "DELETE",
+                    }
+                  );
 
-          const data = await res.json();
+                  const data = await res.json();
 
-          if (data.status) {
+                  if (data.status) {
 
-            alert("Deleted Successfully");
+                    alert("Deleted Successfully");
 
-            // remove local saved state
-            setSavedMap((prev) => ({
-              ...prev,
-              [qrData.plan_no]: []
-            }));
+                    // remove local saved state
+                    setSavedMap((prev) => ({
+                      ...prev,
+                      [qrData.plan_no]: []
+                    }));
 
-            setFinalSaved(false);
+                    setFinalSaved(false);
 
-          } else {
+                  } else {
 
-            alert(data.message || "Delete Failed");
+                    alert(data.message || "Delete Failed");
 
-          }
+                  }
 
-        } catch (err) {
+                } catch (err) {
 
-          console.error(err);
-          alert("Server Error");
+                  console.error(err);
+                  alert("Server Error");
 
-        }
+                }
 
-      }}
-    >
-      DELETE
-    </button>
-  )}
-          
+              }}
+            >
+              DELETE
+            </button>
+          )}
+
           {allSaved && !finalSaved && (
-  <button
-    className="flex-1 sm:px-10 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-lg transition-transform active:scale-95"
-    onClick={async () => {
+            <button
+              className="flex-1 sm:px-10 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-lg transition-transform active:scale-95"
+              onClick={async () => {
 
-      const payload = {
-    scaner_id: qrData.id,
-    emp_id: selectedEmp.code,
-    total_qty: qrData.total,
+                const payload = {
+                  scaner_id: qrData.id,
+                  emp_id: selectedEmp.code,
+                  total_qty: qrData.total,
 
-    details: descriptions.map(desc => {
+                  details: descriptions.map(desc => {
 
-      const checkedPieces =
-        checkedData[desc] || [];
+                    const checkedPieces =
+                      checkedData[desc] || [];
 
-      // OUT PCS
-      const outPieces = totalUniqueList.filter(num => {
+                    // OUT PCS
+                    const outPieces = totalUniqueList.filter(num => {
 
-        const selectedInCurrent =
-          (checkedData[desc] || []).includes(num);
+                      const selectedInCurrent =
+                        (checkedData[desc] || []).includes(num);
 
-        const selectedInOthers =
-          descriptions.some(otherDesc => {
+                      const selectedInOthers =
+                        descriptions.some(otherDesc => {
 
-            if (otherDesc === desc) return false;
+                          if (otherDesc === desc) return false;
 
-            return (
-              checkedData[otherDesc] || []
-            ).includes(num);
+                          return (
+                            checkedData[otherDesc] || []
+                          ).includes(num);
 
-          });
+                        });
 
-        return !selectedInCurrent && selectedInOthers;
+                      return !selectedInCurrent && selectedInOthers;
 
-      });
+                    });
 
-      return {
+                    return {
 
-  scaner_id: qrData.id,
+                      scaner_id: qrData.id,
 
-  emp_id: selectedEmp.code,
+                      emp_id: selectedEmp.code,
 
-  descriptions: desc,
+                      descriptions: desc,
 
-  // select_pcs: checkedPieces.join(','),
+                      // select_pcs: checkedPieces.join(','),
 
-  mistake_pcs: checkedPieces.join(','),
-  
-  mistake_count: checkedPieces.length,
+                      mistake_pcs: checkedPieces.join(','),
 
-  out_pcs: outPieces.join(','),
+                      mistake_count: checkedPieces.length,
 
-  ok_pcs: outPieces.length,
+                      out_pcs: outPieces.join(','),
 
-  total_qty: qrData.total,
+                      ok_pcs: outPieces.length,
 
-  plan_no: qrData.plan_no,
+                      total_qty: qrData.total,
 
-  total_select_pcs:
-    totalUniqueList.join(','),
+                      plan_no: qrData.plan_no,
 
-  final_tpcs: totalUniqueList.length
+                      total_select_pcs:
+                        totalUniqueList.join(','),
 
-};
+                      final_tpcs: totalUniqueList.length
 
-    })
-  };
+                    };
 
-      try {
+                  })
+                };
 
-        const res = await fetch(
-          "http://10.1.21.153:7003/bit_checking/final_bit_checking",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-          }
-        );
+                try {
 
-        const data = await res.json();
+                  const res = await fetch(
+                    "https://hfapi.herofashion.com/bit_checking/final_bit_checking",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify(payload)
+                    }
+                  );
 
-        if (data.status) {
+                  const data = await res.json();
 
-          alert("Final Checking Completed");
+                  if (data.status) {
 
-          // RESET
-          setCheckedData({});
-          setDescriptions([]);
-          setSelectedEmp(null);
-          setQrData({ id: '', total: 0 });
-          setSavedMap({});
-          setStep(1);
+                    alert("Final Checking Completed");
 
-        } else {
+                    // current plan descriptions mark as saved
+                    setSavedMap((prev) => ({
+                      ...prev,
+                      [qrData.plan_no]: [...descriptions]
+                    }));
 
-          alert(data.message || "Finish Failed");
+                    setFinalSaved(true);
 
-        }
+                    // RESET SCREEN
+                    setCheckedData({});
+                    setDescriptions([]);
+                    setSelectedEmp(null);
 
-      } catch (err) {
+                    setQrData({
+                      id: '',
+                      total: 0,
+                      plan_no: ''
+                    });
 
-        console.error(err);
-        alert("Server Error");
+                    setStep(1);
 
-      }
+                  } else {
 
-    }}
-  >
-    FINISH
-  </button>
-)}
+                    alert(data.message || "Finish Failed");
+
+                  }
+
+                } catch (err) {
+
+                  console.error(err);
+                  alert("Server Error");
+
+                }
+
+              }}
+            >
+              FINISH
+            </button>
+          )}
 
           <button
             className="px-6 py-2 bg-slate-800 text-slate-400 hover:text-white rounded-2xl transition-colors"
@@ -560,24 +573,23 @@ useEffect(() => {
         <div className="flex bg-gray-200 p-1 rounded-2xl overflow-x-auto">
 
           {descriptions.map((desc) => (
-  <button
-    key={desc}
-    onClick={() => setActiveSide(desc)}
-    className={`flex-1 whitespace-nowrap px-4 py-3 rounded-xl font-black text-sm transition-all ${
-      activeSide === desc
-        ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
-        : 'text-gray-500 hover:text-gray-700'
-    }`}
-  >
-    {desc.toUpperCase()}
+            <button
+              key={desc}
+              onClick={() => setActiveSide(desc)}
+              className={`flex-1 whitespace-nowrap px-4 py-3 rounded-xl font-black text-sm transition-all ${activeSide === desc
+                  ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
+                  : 'text-gray-500 hover:text-gray-700'
+                }`}
+            >
+              {desc.toUpperCase()}
 
-    {isSaved(desc) && (
-      <span className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-green-500 text-white text-[10px] rounded-full">
-        ✓
-      </span>
-    )}
-  </button>
-))}
+              {isSaved(desc) && (
+                <span className="ml-2 inline-flex items-center justify-center w-5 h-5 bg-green-500 text-white text-[10px] rounded-full">
+                  ✓
+                </span>
+              )}
+            </button>
+          ))}
 
         </div>
         {/* GRID SECTION - Dynamic Columns */}
@@ -623,39 +635,40 @@ useEffect(() => {
             <div className='px-3 py-2 border-l-4 border-emerald-500 rounded-r-xl bg-white shadow-md flex flex-col items-center gap-2'>
 
               <button
-  disabled={isLocked(activeSide)}
-  className={`w-10 h-10 rounded-lg text-xl font-bold shadow transition
-    ${
-      isLocked(activeSide)
-        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-        : "bg-green-500 hover:bg-green-600 text-white active:scale-95"
-    }`
-  }
-  onClick={() => {
-    if (isLocked(activeSide)) return;
+                disabled={isLocked(activeSide)}
+                className={`w-10 h-10 rounded-lg text-xl font-bold shadow transition
+    ${isLocked(activeSide)
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-green-500 hover:bg-green-600 text-white active:scale-95"
+                  }`
+                }
+                onClick={() => {
+                  if (isLocked(activeSide)) return;
 
-    const newCount = currentCount + 1;
+                  const newCount = Math.min(
+                    currentCount + 1,
+                    qrData.total
+                  );
+                  setCountData((prev) => ({
+                    ...prev,
+                    [activeSide]: newCount,
+                  }));
 
-    setCountData((prev) => ({
-      ...prev,
-      [activeSide]: newCount,
-    }));
+                  const start = qrData.total - newCount + 1;
 
-    const start = qrData.total - newCount + 1;
+                  const lastPieces = Array.from(
+                    { length: newCount },
+                    (_, i) => start + i
+                  );
 
-    const lastPieces = Array.from(
-      { length: newCount },
-      (_, i) => start + i
-    );
-
-    setCheckedData((prev) => ({
-      ...prev,
-      [activeSide]: lastPieces,
-    }));
-  }}
->
-  +
-</button>
+                  setCheckedData((prev) => ({
+                    ...prev,
+                    [activeSide]: lastPieces,
+                  }));
+                }}
+              >
+                +
+              </button>
 
               <input
                 type="number"
@@ -665,47 +678,46 @@ useEffect(() => {
               />
 
               <button
-  disabled={isLocked(activeSide)}
-  className={`w-10 h-10 rounded-lg text-xl font-bold shadow transition
-    ${
-      isLocked(activeSide)
-        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-        : "bg-red-500 hover:bg-red-600 text-white active:scale-95"
-    }`
-  }
-  onClick={() => {
-    if (isLocked(activeSide)) return;
+                disabled={isLocked(activeSide)}
+                className={`w-10 h-10 rounded-lg text-xl font-bold shadow transition
+    ${isLocked(activeSide)
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-red-500 hover:bg-red-600 text-white active:scale-95"
+                  }`
+                }
+                onClick={() => {
+                  if (isLocked(activeSide)) return;
 
-    const newCount = Math.max(currentCount - 1, 0);
+                  const newCount = Math.max(currentCount - 1, 0);
 
-    setCountData((prev) => ({
-      ...prev,
-      [activeSide]: newCount,
-    }));
+                  setCountData((prev) => ({
+                    ...prev,
+                    [activeSide]: newCount,
+                  }));
 
-    if (newCount === 0) {
-      setCheckedData((prev) => ({
-        ...prev,
-        [activeSide]: [],
-      }));
-      return;
-    }
+                  if (newCount === 0) {
+                    setCheckedData((prev) => ({
+                      ...prev,
+                      [activeSide]: [],
+                    }));
+                    return;
+                  }
 
-    const start = qrData.total - newCount + 1;
+                  const start = qrData.total - newCount + 1;
 
-    const lastPieces = Array.from(
-      { length: newCount },
-      (_, i) => start + i
-    );
+                  const lastPieces = Array.from(
+                    { length: newCount },
+                    (_, i) => start + i
+                  );
 
-    setCheckedData((prev) => ({
-      ...prev,
-      [activeSide]: lastPieces,
-    }));
-  }}
->
-  -
-</button>
+                  setCheckedData((prev) => ({
+                    ...prev,
+                    [activeSide]: lastPieces,
+                  }));
+                }}
+              >
+                -
+              </button>
 
             </div>
           </div>
@@ -714,7 +726,13 @@ useEffect(() => {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {descriptions.map((desc, index) => {
+           {/* // {descriptions.map((desc, index) => {  */}
+          {[
+          activeSide,
+          ...descriptions.filter(
+            d => d !== activeSide
+          )
+        ].map((desc, index) => {
 
             const checkedPieces = checkedData[desc] || [];
 
@@ -770,67 +788,66 @@ useEffect(() => {
 
                   {activeSide === desc && (
                     <button
-  disabled={isSaved(desc)}
-  onClick={async () => {
-    if (isSaved(desc)) return;
+                      disabled={isSaved(desc)}
+                      onClick={async () => {
+                        if (isSaved(desc)) return;
 
-    const checkedPieces = checkedData[desc] || [];
+                        const checkedPieces = checkedData[desc] || [];
 
-    const payload = {
-      scaner_id: qrData.id,
-      emp_id: selectedEmp.code,
-      descriptions: desc,
-      out_pcs: outPieces.join(","),
-      mistake_pcs: checkedPieces.join(","),
-      mistake_count: checkedPieces.length,
-      ok_pcs: outPieces.length,
-      total_qty: qrData.total,
-      plan_no: qrData.plan_no,
-      total_select_pcs: totalUniqueList.join(","),
-    };
+                        const payload = {
+                          scaner_id: qrData.id,
+                          emp_id: selectedEmp.code,
+                          descriptions: desc,
+                          out_pcs: outPieces.join(","),
+                          mistake_pcs: checkedPieces.join(","),
+                          mistake_count: checkedPieces.length,
+                          ok_pcs: outPieces.length,
+                          total_qty: qrData.total,
+                          plan_no: qrData.plan_no,
+                          total_select_pcs: totalUniqueList.join(","),
+                        };
 
-    try {
-      const res = await fetch(
-        "http://10.1.21.153:7003/bit_checking/save_checking/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+                        try {
+                          const res = await fetch(
+                            "https://hfapi.herofashion.com/bit_checking/save_checking/",
+                            {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify(payload),
+                            }
+                          );
 
-      const data = await res.json();
+                          const data = await res.json();
 
-      if (data.status) {
-        setSavedMap((prev) => {
-          const key = qrData.plan_no;
-          const list = prev[key] || [];
+                          if (data.status) {
+                            setSavedMap((prev) => {
+                              const key = qrData.plan_no;
+                              const list = prev[key] || [];
 
-          return {
-            ...prev,
-            [key]: [...new Set([...list, desc])],
-          };
-        });
+                              return {
+                                ...prev,
+                                [key]: [...new Set([...list, desc])],
+                              };
+                            });
 
-        alert("Saved successfully");
-      } else {
-        alert(data.message || "Already saved");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
-  }}
-  className={`ml-2 px-3 py-1 text-[10px] font-bold rounded-full transition
-    ${
-      isSaved(desc)
-        ? "bg-gray-400 text-white cursor-not-allowed opacity-70"
-        : "bg-green-600 hover:bg-green-700 text-white"
-    }`
-  }
->
-  {isSaved(desc) ? "SAVED" : "SAVE"}
-</button>
+                            alert("Saved successfully");
+                          } else {
+                            alert(data.message || "Already saved");
+                          }
+                        } catch (err) {
+                          console.error(err);
+                          alert("Server error");
+                        }
+                      }}
+                      className={`ml-2 px-3 py-1 text-[10px] font-bold rounded-full transition
+    ${isSaved(desc)
+                          ? "bg-gray-400 text-white cursor-not-allowed opacity-70"
+                          : "bg-green-600 hover:bg-green-700 text-white"
+                        }`
+                      }
+                    >
+                      {isSaved(desc) ? "SAVED" : "SAVE"}
+                    </button>
                   )}
 
                 </div>
@@ -874,11 +891,94 @@ useEffect(() => {
                   {/* COMPLETED */}
                   <div className="text-center border-t pt-3">
 
+                    <div className="flex justify-between">
+
                     <p className="text-[12px] font-bold text-sky-400 uppercase">
                       Ok Pcs : <span className="text-[12px] font-bold truncate"> {outPieces.length}</span>
                     </p>
 
+
+                    {isSaved(desc) && (
+  <button
+    onClick={async () => {
+
+      const confirmClear =
+        window.confirm(
+          `${desc} data clear panna confirm ah?`
+        );
+
+      if (!confirmClear) return;
+
+      try {
+
+        const res = await fetch(
+          "https://hfapi.herofashion.com/bit_checking/delete_single_checking/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              plan_no: qrData.plan_no,
+              descriptions: desc,
+              scaner_id: qrData.id
+            })
+          }
+        );
+
+        const data = await res.json();
+
+        if (data.status) {
+
+          // remove saved state
+          setSavedMap((prev) => {
+
+            const list =
+              prev[qrData.plan_no] || [];
+
+            return {
+              ...prev,
+              [qrData.plan_no]:
+                list.filter(d => d !== desc)
+            };
+
+          });
+
+          // clear checked data
+          setCheckedData((prev) => ({
+            ...prev,
+            [desc]: []
+          }));
+
+          alert("Cleared Successfully");
+
+        } else {
+
+          alert(data.message || "Clear Failed");
+
+        }
+
+      } catch (err) {
+
+        console.error(err);
+        alert("Server Error");
+
+      }
+
+    }}
+    className="ml-2 px-3 py-1 text-[10px] font-bold rounded-full bg-red-500 hover:bg-red-600 text-white transition"
+  >
+    CLEAR
+  </button>
+)}
+
+
+</div>
+
                   </div>
+
+
+                  
 
                 </div>
 
@@ -902,17 +1002,17 @@ useEffect(() => {
           </div> */}
 
           <div className="flex-1 max-w-md w-full">
-  <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-2 text-[10px] font-mono text-blue-300 py-2">
-    {totalUniqueList.map((n) => (
-      <span
-        key={n}
-        className="bg-slate-800 px-2 py-1 rounded text-center"
-      >
-        {n}
-      </span>
-    ))}
-  </div>
-</div>
+            <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-2 text-[10px] font-mono text-blue-300 py-2">
+              {totalUniqueList.map((n) => (
+                <span
+                  key={n}
+                  className="bg-slate-800 px-2 py-1 rounded text-center"
+                >
+                  {n}
+                </span>
+              ))}
+            </div>
+          </div>
 
         </div>
       </main>
