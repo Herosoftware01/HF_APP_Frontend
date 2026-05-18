@@ -40,6 +40,8 @@ import Spreadsheet from '../order/Spreadsheet/Spreadsheet.tsx';
 import Pdf from "../order/Pdf/Pdf.tsx"
 import CuttingDeliveryGrid from '../order/CuttingGrid/cuttingGrid.tsx';
 import ShowCase from '../order/Document_Explorer/ShowCase.tsx'
+import Word from '../order/Word/Word.tsx'
+import Mail_Merge from '../order/Mail_Merge/Mail_Merge.tsx'
 
 function Home() {
   return (
@@ -85,6 +87,8 @@ function Home() {
       <Route path='/spreadsheet' element={<Spreadsheet />} />
       <Route path='/cutting-delivery' element={<CuttingDeliveryGrid />} />
       <Route path='/explor/*' element={<ShowCase />} />
+      <Route path='/word' element={<Word />} />
+      <Route path='/mailmerch' element={<Mail_Merge />} />
     </Routes>
   );
 }

@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './ShowCase.css';
+import '../../../../App.css';
 import Layout from './ShowCase/layout';
 import ImageViewer from './ShowCase/imageEditor';
 import SpreadSheet from './ShowCase/excel';

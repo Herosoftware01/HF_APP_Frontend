@@ -16,7 +16,7 @@
 .e-filemanager .e-toolbar .e-toolbar-items .e-toolbar-item .e-dropdown-btn.e-btn.e-tbar-btn{
   height: 0px;
 }
-.sf-icon-Github:before {
+.sf-icon-de-Github:before {
   color: white;
   font-size: 28px;
   content: "\e706";
@@ -108,7 +108,7 @@ a.e-empty-link:hover {
   font-style: normal;
 }
 
-[class^="sf-icon-"], [class*=" sf-icon-"] {
+[class^="sf-icon-de"], [class*="sf-icon-de"] {
   font-family: 'Font Blazor icon' !important;
   font-size: 14px;
   font-style: normal;
@@ -120,30 +120,30 @@ a.e-empty-link:hover {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.sf-icon-Storage:before {
+.sf-icon-de-Storage:before {
   content: "\e700";
 }
 
-.sf-icon-Starred:before {
+.sf-icon-de-Starred:before {
   content: "\e701";
 }
 
-.sf-icon-Print:before {
+.sf-icon-de-Print:before {
   content: "\e702";
 }
 
-.sf-icon-Allfiles:before {
+.sf-icon-de-Allfiles:before {
   content: "\e703";
 }
 
-.sf-icon-Delete:before {
+.sf-icon-de-Delete:before {
   content: "\e704";
 }
 
-.sf-icon-RecentFiles:before {
+.sf-icon-de-RecentFiles:before {
   content: "\e705";
 }
-.sf-icon-About:before {
+.sf-icon-de-About:before {
   content: "\e707";
 }
 .e-treeview .e-list-item div.e-icons.e-shared:before {

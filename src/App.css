@@ -19,6 +19,14 @@
 @import "../node_modules/@syncfusion/ej2-querybuilder/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-dropdowns/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-spreadsheet/styles/tailwind3.css";
+@import "../node_modules/@syncfusion/ej2-react-documenteditor/styles/tailwind3.css";
+@import "../node_modules/@syncfusion/ej2-ribbon/styles/tailwind3.css"; /* Required for Ribbon */
+@import '../node_modules/@syncfusion/ej2-icons/styles/bootstrap4.css';
+@import '../node_modules/@syncfusion/ej2-layouts/styles/bootstrap4.css';
+@import "../node_modules/@syncfusion/ej2-react-filemanager/styles/bootstrap4.css";
+@import "../node_modules/@syncfusion/ej2-pdfviewer/styles/bootstrap4.css";
+@import '../node_modules/@syncfusion/ej2-image-editor/styles/bootstrap4.css';
+@import '../node_modules/@syncfusion/ej2-react-spreadsheet/styles/bootstrap4.css';
 
 
 /* Tailwind must come after all other @import rules */
