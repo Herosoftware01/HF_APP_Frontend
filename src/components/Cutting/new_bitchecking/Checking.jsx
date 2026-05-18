@@ -234,8 +234,10 @@ const QCSystemResponsive = () => {
       const current = prev[activeSide] || [];
 
       const updated = current.includes(num)
-        ? current.filter(n => n !== num)
-        : [...current, num].sort((a, b) => a - b);
+  ? current.filter(n => n !== num)
+  : [...current, num]
+      .filter(n => n > 0)
+      .sort((a, b) => a - b);
 
       return {
         ...prev,
@@ -246,20 +248,24 @@ const QCSystemResponsive = () => {
 
 
 
-  const totalUniqueList = [
-    ...new Set(
-      Object.values(checkedData).flat()
-    )
-  ].sort((a, b) => a - b);
+const totalUniqueList = [
+  ...new Set(
+    Object.values(checkedData)
+      .flat()
+      .filter(n => n > 0)
+  )
+].sort((a, b) => a - b);
 
-  const fullyChecked = Array.from(
-    { length: qrData.total },
-    (_, i) => i + 1
-  ).filter(num =>
-    descriptions.every(desc =>
-      (checkedData[desc] || []).includes(num)
-    )
-  );
+const fullyChecked = Array.from(
+  { length: qrData.total },
+  (_, i) => i + 1
+)
+.filter(num => num > 0)
+.filter(num =>
+  descriptions.every(desc =>
+    (checkedData[desc] || []).includes(num)
+  )
+);
 
   const currentMistakes = checkedData[activeSide] || [];
 
@@ -457,11 +463,13 @@ const QCSystemResponsive = () => {
 
                       // select_pcs: checkedPieces.join(','),
 
-                      mistake_pcs: checkedPieces.join(','),
+                      // mistake_pcs: checkedPieces.join(','),
+                      mistake_pcs: checkedPieces.filter(n => n > 0).join(','),
 
                       mistake_count: checkedPieces.length,
 
-                      out_pcs: outPieces.join(','),
+                      // out_pcs: outPieces.join(','),
+                      out_pcs: outPieces.filter(n => n > 0).join(','),
 
                       ok_pcs: outPieces.length,
 
@@ -469,8 +477,9 @@ const QCSystemResponsive = () => {
 
                       plan_no: qrData.plan_no,
 
-                      total_select_pcs:
-                        totalUniqueList.join(','),
+                      // total_select_pcs:totalUniqueList.join(','),
+                      
+                      total_select_pcs: totalUniqueList.filter(n => n > 0).join(','),
 
                       final_tpcs: totalUniqueList.length
 
@@ -607,7 +616,7 @@ const QCSystemResponsive = () => {
                   (checkedData[desc] || []).includes(num)
                 );
 
-                let style = "bg-slate-50 text-slate-300 border-slate-200";
+                let style = "bg-slate-50 text-black border-slate-200";
 
                 // ONLY current active side selection matters
                 if (fullySelected) {
@@ -622,7 +631,7 @@ const QCSystemResponsive = () => {
                     key={num}
                     onClick={() => toggleNumber(num)}
                     className={`aspect-square sm:h-11 border rounded-xl flex items-center justify-center text-[11px] transition-all active:scale-90 shadow-sm ${style}  ${isLocked(activeSide)
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      ? "bg-gray-300 text-black cursor-not-allowed"
                       : style
                       }`}
                   >
@@ -726,8 +735,13 @@ const QCSystemResponsive = () => {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {descriptions.map((desc, index) => {
-
+          {/* {descriptions.map((desc, index) => { */}
+          {[
+          activeSide,
+          ...descriptions.filter(
+            d => d !== activeSide
+          )
+        ].map((desc, index) => {
             const checkedPieces = checkedData[desc] || [];
 
             // OTHER DESCRIPTION-la select aana pieces
@@ -798,7 +812,8 @@ const QCSystemResponsive = () => {
                           ok_pcs: outPieces.length,
                           total_qty: qrData.total,
                           plan_no: qrData.plan_no,
-                          total_select_pcs: totalUniqueList.join(","),
+                          // total_select_pcs: totalUniqueList.join(","),
+                          total_select_pcs: totalUniqueList.filter(n => n > 0).join(','),
                         };
 
                         try {
@@ -824,7 +839,7 @@ const QCSystemResponsive = () => {
                               };
                             });
 
-                            alert("Saved successfully");
+                            // alert("Saved successfully");
                           } else {
                             alert(data.message || "Already saved");
                           }
@@ -857,9 +872,9 @@ const QCSystemResponsive = () => {
 
                     <div className="flex flex-wrap gap-1 text-[12px] text-sky-600 font-mono italic">
 
-                      {checkedPieces.length > 0
-                        ? checkedPieces.join(', ')
-                        : '---'}
+                      {checkedPieces.filter(n => n > 0).length > 0
+  ? checkedPieces.filter(n => n > 0).join(', ')
+  : '---'}
 
                     </div>
 
@@ -874,9 +889,9 @@ const QCSystemResponsive = () => {
 
                     <div className="flex flex-wrap gap-1 text-[12px] text-green-600 font-mono font-bold">
 
-                      {outPieces.length > 0
-                        ? outPieces.join(', ')
-                        : '0'}
+                      {outPieces.filter(n => n > 0).length > 0
+  ? outPieces.filter(n => n > 0).join(', ')
+  : '---'}
 
                     </div>
 
@@ -997,7 +1012,9 @@ const QCSystemResponsive = () => {
 
           <div className="flex-1 max-w-md w-full">
             <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-2 text-[10px] font-mono text-blue-300 py-2">
-              {totalUniqueList.map((n) => (
+              {totalUniqueList
+  .filter(n => n > 0)
+  .map((n) => (
                 <span
                   key={n}
                   className="bg-slate-800 px-2 py-1 rounded text-center"
