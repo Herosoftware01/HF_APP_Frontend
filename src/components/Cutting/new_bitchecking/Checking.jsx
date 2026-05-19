@@ -21,6 +21,34 @@ const QCSystemResponsive = () => {
   const [showPendingModal, setShowPendingModal] = useState(false);
 
 
+
+  const formatTimeDiff = (dateString) => {
+
+  const past = new Date(dateString);
+  const now = new Date();
+
+  const diffMs = now - past;
+
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  const mins = diffMins % 60;
+  const hours = diffHours % 24;
+
+  if (diffDays > 0) {
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ${hours} hr ${mins} min`;
+  }
+
+  if (diffHours > 0) {
+    return `${diffHours} hr ${mins} min`;
+  }
+
+  return `${diffMins} min`;
+};
+
+
+
   const currentCount =
     countData[activeSide] || 0;
 
@@ -349,11 +377,13 @@ const QCSystemResponsive = () => {
 
               <div className="overflow-auto max-h-[400px]">
                 <table className="w-full text-sm border">
+
                   <thead>
                     <tr className="bg-gray-100">
                       <th className="p-2 border">Scaner ID</th>
                       <th className="p-2 border">Emp ID</th>
-                      <th className="p-2 border">Date</th>
+                      <th className="p-2 border">start date</th>
+                      <th className="p-2 border">Idle</th>
                     </tr>
                   </thead>
 
@@ -362,8 +392,13 @@ const QCSystemResponsive = () => {
                       <tr key={index} className="text-center">
                         <td className="border p-2">{item.scaner_id}</td>
                         <td className="border p-2">{item.emp_id}</td>
+
                         <td className="border p-2">
                           {new Date(item.date).toLocaleString()}
+                        </td>
+                        <td className="border p-2 ">
+                          <span className='text-red-700'>{formatTimeDiff(item.date)}</span>
+                          
                         </td>
                       </tr>
                     ))}
@@ -399,10 +434,40 @@ const QCSystemResponsive = () => {
             {filteredEmployees.map(emp => (
               <button
                 key={emp.code}
-                onClick={() => {
-                  setSelectedEmp(emp);
-                  setStep(3);
-                }}
+                // onClick={() => {
+                //   setSelectedEmp(emp);
+                //   setStep(3);
+                // }}
+
+                onClick={async () => {
+
+  setSelectedEmp(emp);
+
+  try {
+
+    await fetch(
+      "https://hfapi.herofashion.com/bit_checking/qc_start/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          qrid: qrData.id,
+          empid: emp.code
+        })
+      }
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+  setStep(3);
+
+}}
                 className="group flex justify-between items-center p-4 border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-4">
