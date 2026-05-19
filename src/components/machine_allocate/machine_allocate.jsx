@@ -337,7 +337,7 @@ useEffect(() => {
                         <div className="flex items-center gap-3">
                           <img src={a.employees[0].photo || 'https://via.placeholder.com/40'} className="h-10 w-10 rounded-full border-2 border-white shadow-sm" alt=""/>
                           <div>
-                            <div className="text-xs font-black text-slate-700">{a.employees[0].emp_code}</div>
+                            <div className="text-xs font-black text-slate-700">{a.employees[0].emp_code} - {a.employees[0].name}</div>
                             <button onClick={() => setPopup({ open: true, machineId: a.machine.id })} className="text-[9px] font-bold text-indigo-600 uppercase">Change</button>
                           </div>
                         </div>
