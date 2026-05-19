@@ -32,11 +32,13 @@ const MailMerge = () => {
         "Redo",
         "Separator",
         {
+            prefixIcon: 'sf-icon-InsertMergeField',            
             tooltipText: "Insert Field",
             text: onWrapText("Insert Field"),
             id: "InsertField",
         },
         {
+            prefixIcon: 'sf-icon-FinishMerge',            
             tooltipText: "Merge Document",
             text: onWrapText("Merge Document"),
             id: "MergeDocument",

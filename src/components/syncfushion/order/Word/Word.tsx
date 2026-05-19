@@ -192,7 +192,7 @@ function Word() {
                     height="100%"
                     toolbarMode="Ribbon"
                     ribbonLayout="Classic"
-                    serviceUrl="http://localhost:62871/api/documenteditor/"
+                    serviceUrl="http://localhost:6002/api/documenteditor/"
                     enableToolbar={true}
                     enableSpellCheck={true}
                     contentChange={onContentChange}
