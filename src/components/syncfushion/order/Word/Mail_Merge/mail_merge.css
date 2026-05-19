@@ -1,0 +1,106 @@
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Root container */
+.mail_merge-control-pane {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Split layout */
+.mail_merge-control-section {
+    display: flex;
+    height: 100%;
+}
+
+.mail_merge-left-panel {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-right: 1px solid #e5e5e5;
+    background: #fafafa;
+}
+
+/* Header */
+.mail_merge-left-panel-header {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #f3f3f3;
+}
+
+.mail_merge-field-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 10px;
+    margin: 0;
+}
+
+/* Remove internal unwanted gaps (very important) */
+.mail_merge-field-list ul {
+    margin: 0;
+    padding: 0;
+}
+
+.mail_merge-field-list li {
+    margin: 0;
+}
+
+/* Force list component to fill height */
+.mail_merge-field-list > * {
+    height: 100% !important;
+    min-height: 100%;
+}
+
+/* ================= RIGHT PANEL ================= */
+.mail_merge-right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Toolbar */
+.mail_merge-toolbar {
+    flex: 0 0 auto;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Editor container */
+.mail_merge-editor-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Document editor */
+.mail_merge-document-editor {
+    flex: 1;
+    height: 100% !important;
+    width: 100%;
+}
+
+/* Optional: smoother look */
+.mail_merge-field-list {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.sf-icon-FinishMerge:before {
+    content: "\e700";
+}
+
+.sf-icon-InsertMergeField:before {
+    content: "\e701";
+}

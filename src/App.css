@@ -1,26 +1,30 @@
 /* All @import statements must come first */
 @import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';  
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';  
-@import '../node_modules/@syncfusion/ej2-calendars/styles/tailwind3.css';  
-@import '../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css';  
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';  
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-react-buttons/styles/tailwind3.css';  
+@import '../node_modules/@syncfusion/ej2-react-calendars/styles/tailwind3.css';  
+@import '../node_modules/@syncfusion/ej2-react-inputs/styles/tailwind3.css';  
+@import '../node_modules/@syncfusion/ej2-react-lists/styles/tailwind3.css';  
+@import '../node_modules/@syncfusion/ej2-react-navigations/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-react-popups/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-react-splitbuttons/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-react-notifications/styles/tailwind3.css';
 @import "../node_modules/@syncfusion/ej2-react-grids/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-blockeditor/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-gantt/styles/tailwind3.css";
-@import '../node_modules/@syncfusion/ej2-kanban/styles/tailwind3.css';
-@import "../node_modules/@syncfusion/ej2-pivotview/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-querybuilder/styles/tailwind3.css";
+@import "../node_modules/@syncfusion/ej2-react-gantt/styles/tailwind3.css";
+@import '../node_modules/@syncfusion/ej2-react-kanban/styles/tailwind3.css';
+@import "../node_modules/@syncfusion/ej2-react-pivotview/styles/tailwind3.css";
+@import "../node_modules/@syncfusion/ej2-react-querybuilder/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-dropdowns/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-spreadsheet/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-documenteditor/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-pdfviewer/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-ribbon/styles/tailwind3.css"; /* Required for Ribbon */
-/* @import '../node_modules/@syncfusion/ej2-richtexteditor/styles/tailwind3.css'; */
-/* @import '../node_modules/@syncfusion/ej2-layouts/styles/tailwind3.css'; */
+@import '../node_modules/@syncfusion/ej2-react-richtexteditor/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-react-layouts/styles/tailwind3.css';
+@import "../node_modules/@syncfusion/ej2-react-filemanager/styles/tailwind3.css";
+@import '../node_modules/@syncfusion/ej2-react-image-editor/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-icons/styles/tailwind3.css';
+
 
 /* Tailwind must come after all other @import rules */
 @import "tailwindcss";

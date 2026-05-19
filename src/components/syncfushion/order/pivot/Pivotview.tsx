@@ -241,7 +241,7 @@ function PivotTableExporting() {
             img.height = 75;
             img.style.borderRadius = "4px";
             img.style.objectFit = "cover";
-            img.onerror = function () { img.src = 'https://via.placeholder.com/75?text=No+Image'; };
+            // img.onerror = function () { img.src = 'https://via.placeholder.com/75?text=No+Image'; };
             element.appendChild(img);
             element.style.display = "flex";
             element.style.flexDirection = "column";

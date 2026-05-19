@@ -1,5 +1,6 @@
 @import "@syncfusion/ej2-react-form-renderer/styles/tailwind3.css";
 @import "tailwindcss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
