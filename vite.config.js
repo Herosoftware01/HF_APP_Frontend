@@ -66,9 +66,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
+    // require('tailwind-scrollbar'),
     react(),
     tailwindcss(),
-
     VitePWA({
       registerType: 'autoUpdate',
 

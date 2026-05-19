@@ -15,6 +15,40 @@ const QCSystemResponsive = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingEmp, setLoadingEmp] = useState(false);
 
+
+  const [pendingScanners, setPendingScanners] = useState([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [showPendingModal, setShowPendingModal] = useState(false);
+
+
+
+  const formatTimeDiff = (dateString) => {
+
+  const past = new Date(dateString);
+  const now = new Date();
+
+  const diffMs = now - past;
+
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  const mins = diffMins % 60;
+  const hours = diffHours % 24;
+
+  if (diffDays > 0) {
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ${hours} hr ${mins} min`;
+  }
+
+  if (diffHours > 0) {
+    return `${diffHours} hr ${mins} min`;
+  }
+
+  return `${diffMins} min`;
+};
+
+
+
   const currentCount =
     countData[activeSide] || 0;
 
@@ -23,18 +57,11 @@ const QCSystemResponsive = () => {
 
   ];
 
-  // const isSaved = (desc) => {
-  //   return savedMap?.[qrData.id]?.includes(desc) ?? false;
-  // };
 
   const isSaved = (desc) => {
     const list = savedMap?.[qrData.plan_no] || [];
     return list.includes(desc);
   };
-
-  // const isLocked = (desc) => {
-  //   return savedMap?.[qrData.id]?.includes(desc);
-  // };
 
   const isLocked = (desc) => isSaved(desc);
 
@@ -43,6 +70,27 @@ const QCSystemResponsive = () => {
     descriptions.every((desc) =>
       (savedMap?.[qrData.plan_no] || []).includes(desc)
     );
+
+
+  useEffect(() => {
+    const loadPending = async () => {
+      try {
+        const res = await fetch(
+          "https://hfapi.herofashion.com/bit_checking/pending-scaners/"
+        );
+        const data = await res.json();
+
+        if (data.status === "success") {
+          setPendingScanners(data.data);
+          setPendingCount(data.count);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    loadPending();
+  }, []);
 
 
   useEffect(() => {
@@ -81,7 +129,6 @@ const QCSystemResponsive = () => {
     emp.employee.toLowerCase().includes(searchTerm.toLowerCase()) ||
     String(emp.code).includes(searchTerm)
   );
-
 
 
   useEffect(() => {
@@ -181,14 +228,18 @@ const QCSystemResponsive = () => {
 
           setCheckedData(data.checked_data);
 
-          // employee auto select
+
+
           const emp = employeeList.find(
             e => String(e.code) === String(data.employee.code)
           );
 
-          if (emp) {
-            setSelectedEmp(emp);
-          }
+          setSelectedEmp({
+            employee: emp?.employee || data.employee.employee || '',
+            code: emp?.code || data.employee.code || '',
+            category: emp?.category || data.employee.category || '',
+            photo: emp?.photo || data.employee.photo || ''
+          });
 
           setStep(3);
 
@@ -235,7 +286,9 @@ const QCSystemResponsive = () => {
 
       const updated = current.includes(num)
         ? current.filter(n => n !== num)
-        : [...current, num].sort((a, b) => a - b);
+        : [...current, num]
+          .filter(n => n > 0)
+          .sort((a, b) => a - b);
 
       return {
         ...prev,
@@ -248,18 +301,22 @@ const QCSystemResponsive = () => {
 
   const totalUniqueList = [
     ...new Set(
-      Object.values(checkedData).flat()
+      Object.values(checkedData)
+        .flat()
+        .filter(n => n > 0)
     )
   ].sort((a, b) => a - b);
 
   const fullyChecked = Array.from(
     { length: qrData.total },
     (_, i) => i + 1
-  ).filter(num =>
-    descriptions.every(desc =>
-      (checkedData[desc] || []).includes(num)
-    )
-  );
+  )
+    .filter(num => num > 0)
+    .filter(num =>
+      descriptions.every(desc =>
+        (checkedData[desc] || []).includes(num)
+      )
+    );
 
   const currentMistakes = checkedData[activeSide] || [];
 
@@ -271,8 +328,28 @@ const QCSystemResponsive = () => {
   if (step === 1) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+
         <form onSubmit={handleScan} className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl text-center w-full max-w-md border-b-8 border-blue-600">
-          <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">🔍</div>
+
+          {/* ✅ ONLY HERE */}
+          <button
+            type="button"
+            onClick={() => {
+              console.log("clicked");
+              setShowPendingModal(true);
+            }}
+            className="relative bg-yellow-500 text-white px-4 py-2 rounded-xl font-bold mb-4"
+          >
+            Incomplete Scans
+
+            {pendingCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                {pendingCount}
+              </span>
+            )}
+          </button>
+
+          {/* <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">🔍</div> */}
           <h2 className="text-xl md:text-2xl font-black mb-6 text-gray-800">SCAN PRODUCT QR</h2>
           <input
             ref={scanInputRef}
@@ -281,7 +358,61 @@ const QCSystemResponsive = () => {
             placeholder="Scan here..."
           />
         </form>
+
+
+        {showPendingModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white w-[90%] max-w-lg rounded-2xl p-5 shadow-xl">
+
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="font-black text-lg">Incomplete Scaners</h2>
+
+                <button
+                  onClick={() => setShowPendingModal(false)}
+                  className="text-red-500 font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="overflow-auto max-h-[400px]">
+                <table className="w-full text-sm border">
+
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="p-2 border">Scaner ID</th>
+                      <th className="p-2 border">Emp ID</th>
+                      <th className="p-2 border">start date</th>
+                      <th className="p-2 border">Idle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {pendingScanners.map((item, index) => (
+                      <tr key={index} className="text-center">
+                        <td className="border p-2">{item.scaner_id}</td>
+                        <td className="border p-2">{item.emp_id}</td>
+
+                        <td className="border p-2">
+                          {new Date(item.date).toLocaleString()}
+                        </td>
+                        <td className="border p-2 ">
+                          <span className='text-red-700'>{formatTimeDiff(item.date)}</span>
+                          
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+
       </div>
+
     );
   }
 
@@ -303,10 +434,40 @@ const QCSystemResponsive = () => {
             {filteredEmployees.map(emp => (
               <button
                 key={emp.code}
-                onClick={() => {
-                  setSelectedEmp(emp);
-                  setStep(3);
-                }}
+                // onClick={() => {
+                //   setSelectedEmp(emp);
+                //   setStep(3);
+                // }}
+
+                onClick={async () => {
+
+  setSelectedEmp(emp);
+
+  try {
+
+    await fetch(
+      "https://hfapi.herofashion.com/bit_checking/qc_start/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          qrid: qrData.id,
+          empid: emp.code
+        })
+      }
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+  setStep(3);
+
+}}
                 className="group flex justify-between items-center p-4 border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-4">
@@ -344,8 +505,11 @@ const QCSystemResponsive = () => {
     );
   }
 
+
   return (
     <div className="min-h-screen bg-slate-50 sm:mt-4 md:mt-2 lg:mt-0 md text-slate-800 flex flex-col">
+
+
       {/* Top Navigation - Responsive Header */}
       <header className="bg-white border-b sticky top-0 z-10 px-4 py-3 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
         <div className="flex items-center gap-3">
@@ -457,11 +621,13 @@ const QCSystemResponsive = () => {
 
                       // select_pcs: checkedPieces.join(','),
 
-                      mistake_pcs: checkedPieces.join(','),
+                      // mistake_pcs: checkedPieces.join(','),
+                      mistake_pcs: checkedPieces.filter(n => n > 0).join(','),
 
                       mistake_count: checkedPieces.length,
 
-                      out_pcs: outPieces.join(','),
+                      // out_pcs: outPieces.join(','),
+                      out_pcs: outPieces.filter(n => n > 0).join(','),
 
                       ok_pcs: outPieces.length,
 
@@ -469,8 +635,9 @@ const QCSystemResponsive = () => {
 
                       plan_no: qrData.plan_no,
 
-                      total_select_pcs:
-                        totalUniqueList.join(','),
+                      // total_select_pcs:totalUniqueList.join(','),
+
+                      total_select_pcs: totalUniqueList.filter(n => n > 0).join(','),
 
                       final_tpcs: totalUniqueList.length
 
@@ -577,8 +744,8 @@ const QCSystemResponsive = () => {
               key={desc}
               onClick={() => setActiveSide(desc)}
               className={`flex-1 whitespace-nowrap px-4 py-3 rounded-xl font-black text-sm transition-all ${activeSide === desc
-                  ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
-                  : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
+                : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
               {desc.toUpperCase()}
@@ -607,7 +774,7 @@ const QCSystemResponsive = () => {
                   (checkedData[desc] || []).includes(num)
                 );
 
-                let style = "bg-slate-50 text-slate-300 border-slate-200";
+                let style = "bg-slate-50 text-black border-slate-200";
 
                 // ONLY current active side selection matters
                 if (fullySelected) {
@@ -622,7 +789,7 @@ const QCSystemResponsive = () => {
                     key={num}
                     onClick={() => toggleNumber(num)}
                     className={`aspect-square sm:h-11 border rounded-xl flex items-center justify-center text-[11px] transition-all active:scale-90 shadow-sm ${style}  ${isLocked(activeSide)
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      ? "bg-gray-300 text-black cursor-not-allowed"
                       : style
                       }`}
                   >
@@ -726,8 +893,13 @@ const QCSystemResponsive = () => {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {descriptions.map((desc, index) => {
-
+          {/* {descriptions.map((desc, index) => { */}
+          {[
+            activeSide,
+            ...descriptions.filter(
+              d => d !== activeSide
+            )
+          ].map((desc, index) => {
             const checkedPieces = checkedData[desc] || [];
 
             // OTHER DESCRIPTION-la select aana pieces
@@ -798,7 +970,8 @@ const QCSystemResponsive = () => {
                           ok_pcs: outPieces.length,
                           total_qty: qrData.total,
                           plan_no: qrData.plan_no,
-                          total_select_pcs: totalUniqueList.join(","),
+                          // total_select_pcs: totalUniqueList.join(","),
+                          total_select_pcs: totalUniqueList.filter(n => n > 0).join(','),
                         };
 
                         try {
@@ -824,7 +997,7 @@ const QCSystemResponsive = () => {
                               };
                             });
 
-                            alert("Saved successfully");
+                            // alert("Saved successfully");
                           } else {
                             alert(data.message || "Already saved");
                           }
@@ -857,8 +1030,8 @@ const QCSystemResponsive = () => {
 
                     <div className="flex flex-wrap gap-1 text-[12px] text-sky-600 font-mono italic">
 
-                      {checkedPieces.length > 0
-                        ? checkedPieces.join(', ')
+                      {checkedPieces.filter(n => n > 0).length > 0
+                        ? checkedPieces.filter(n => n > 0).join(', ')
                         : '---'}
 
                     </div>
@@ -874,9 +1047,9 @@ const QCSystemResponsive = () => {
 
                     <div className="flex flex-wrap gap-1 text-[12px] text-green-600 font-mono font-bold">
 
-                      {outPieces.length > 0
-                        ? outPieces.join(', ')
-                        : '0'}
+                      {outPieces.filter(n => n > 0).length > 0
+                        ? outPieces.filter(n => n > 0).join(', ')
+                        : '---'}
 
                     </div>
 
@@ -887,92 +1060,92 @@ const QCSystemResponsive = () => {
 
                     <div className="flex justify-between">
 
-                    <p className="text-[12px] font-bold text-sky-400 uppercase">
-                      Ok Pcs : <span className="text-[12px] font-bold truncate"> {outPieces.length}</span>
-                    </p>
+                      <p className="text-[12px] font-bold text-sky-400 uppercase">
+                        Ok Pcs : <span className="text-[12px] font-bold truncate"> {outPieces.length}</span>
+                      </p>
 
 
-                    {isSaved(desc) && (
-  <button
-    onClick={async () => {
+                      {isSaved(desc) && (
+                        <button
+                          onClick={async () => {
 
-      const confirmClear =
-        window.confirm(
-          `${desc} data clear panna confirm ah?`
-        );
+                            const confirmClear =
+                              window.confirm(
+                                `${desc} data clear panna confirm ah?`
+                              );
 
-      if (!confirmClear) return;
+                            if (!confirmClear) return;
 
-      try {
+                            try {
 
-        const res = await fetch(
-          "https://hfapi.herofashion.com/bit_checking/delete_single_checking/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              plan_no: qrData.plan_no,
-              descriptions: desc,
-              scaner_id: qrData.id
-            })
-          }
-        );
+                              const res = await fetch(
+                                "https://hfapi.herofashion.com/bit_checking/delete_single_checking/",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json"
+                                  },
+                                  body: JSON.stringify({
+                                    plan_no: qrData.plan_no,
+                                    descriptions: desc,
+                                    scaner_id: qrData.id
+                                  })
+                                }
+                              );
 
-        const data = await res.json();
+                              const data = await res.json();
 
-        if (data.status) {
+                              if (data.status) {
 
-          // remove saved state
-          setSavedMap((prev) => {
+                                // remove saved state
+                                setSavedMap((prev) => {
 
-            const list =
-              prev[qrData.plan_no] || [];
+                                  const list =
+                                    prev[qrData.plan_no] || [];
 
-            return {
-              ...prev,
-              [qrData.plan_no]:
-                list.filter(d => d !== desc)
-            };
+                                  return {
+                                    ...prev,
+                                    [qrData.plan_no]:
+                                      list.filter(d => d !== desc)
+                                  };
 
-          });
+                                });
 
-          // clear checked data
-          setCheckedData((prev) => ({
-            ...prev,
-            [desc]: []
-          }));
+                                // clear checked data
+                                setCheckedData((prev) => ({
+                                  ...prev,
+                                  [desc]: []
+                                }));
 
-          alert("Cleared Successfully");
+                                alert("Cleared Successfully");
 
-        } else {
+                              } else {
 
-          alert(data.message || "Clear Failed");
+                                alert(data.message || "Clear Failed");
 
-        }
+                              }
 
-      } catch (err) {
+                            } catch (err) {
 
-        console.error(err);
-        alert("Server Error");
+                              console.error(err);
+                              alert("Server Error");
 
-      }
+                            }
 
-    }}
-    className="ml-2 px-3 py-1 text-[10px] font-bold rounded-full bg-red-500 hover:bg-red-600 text-white transition"
-  >
-    CLEAR
-  </button>
-)}
+                          }}
+                          className="ml-2 px-3 py-1 text-[10px] font-bold rounded-full bg-red-500 hover:bg-red-600 text-white transition"
+                        >
+                          CLEAR
+                        </button>
+                      )}
 
 
-</div>
+                    </div>
 
                   </div>
 
 
-                  
+
 
                 </div>
 
@@ -989,27 +1162,27 @@ const QCSystemResponsive = () => {
             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Global Progress</span>
             <span className="text-2xl font-black">{totalUniqueList.length} <span className="text-xs text-slate-500 font-bold">/ {qrData.total} PCS</span></span>
           </div>
-          {/* <div className="flex-1 max-w-md w-full overflow-hidden">
-            <div className="flex gap-2 text-[10px] font-mono text-blue-300 overflow-x-auto no-scrollbar py-2">
-              {totalUniqueList.map(n => <span key={n} className="bg-slate-800 px-2 py-1 rounded">{n}</span>)}
-            </div>
-          </div> */}
-
+       
           <div className="flex-1 max-w-md w-full">
             <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-2 text-[10px] font-mono text-blue-300 py-2">
-              {totalUniqueList.map((n) => (
-                <span
-                  key={n}
-                  className="bg-slate-800 px-2 py-1 rounded text-center"
-                >
-                  {n}
-                </span>
-              ))}
+              {totalUniqueList
+                .filter(n => n > 0)
+                .map((n) => (
+                  <span
+                    key={n}
+                    className="bg-slate-800 px-2 py-1 rounded text-center"
+                  >
+                    {n}
+                  </span>
+                ))}
             </div>
           </div>
 
         </div>
       </main>
+
+
+
     </div>
   );
 };

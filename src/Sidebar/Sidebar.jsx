@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { logoutUser } from "../auth/auth";
 import { UserContext } from "../UserContext";
 import image from "../assets/Hero Logo.png" 
+import './sidebar.css'
 
 // --- Custom Component to handle API Image Icons or Default Lucide Icons ---
 const MenuIcon = ({ iconData, isActive }) => {
@@ -135,7 +136,7 @@ function Sidebar({ children }) {
                   ? "bg-cyan-600 text-white font-bold rounded-lg mx-2 shadow-md" 
                   : isParentActive 
                   ? "text-cyan-400 font-semibold" 
-                  : "text-white/50 hover:text-white hover:bg-white/5"}`}
+                  : "text-white/70 hover:text-white hover:bg-white/5"}`}
               style={{ paddingLeft: `${level * 16}px` }}
             >
               <div className="flex items-center gap-2">
@@ -230,7 +231,8 @@ function Sidebar({ children }) {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto py-2 space-y-1">
+        {/* <div className="flex-1 overflow-y-auto py-2 space-y-1 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100"> */}
+         <div className="custom-scroll flex-1 overflow-y-auto py-2 space-y-1">
           {filteredMenus.map((menu) => {
             const hasChildren = (menu.submenus || menu.children || []).length > 0;
             const isActive = isChildActive(menu);
