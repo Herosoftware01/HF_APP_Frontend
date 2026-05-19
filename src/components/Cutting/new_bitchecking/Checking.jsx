@@ -126,6 +126,8 @@ const QCSystemResponsive = () => {
 
 
   useEffect(() => {
+    const checkFinalSaved = async () => {
+      if (!qrData.id) return;
 
     const loadSaved = async () => {
 
@@ -1110,6 +1112,19 @@ const QCSystemResponsive = () => {
                     {n}
                   </span>
                 ))}
+            </div>
+          </div> */}
+
+          <div className="flex-1 max-w-md w-full">
+            <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-2 text-[10px] font-mono text-blue-300 py-2">
+              {totalUniqueList.map((n) => (
+                <span
+                  key={n}
+                  className="bg-slate-800 px-2 py-1 rounded text-center"
+                >
+                  {n}
+                </span>
+              ))}
             </div>
           </div>
 

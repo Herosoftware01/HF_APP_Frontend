@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   BarChart,
@@ -10,7 +10,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
   ComposedChart,
 } from 'recharts';
 
@@ -31,6 +30,21 @@ const formatDateToInput = (date) => {
 };
 
 const isSunday = (dateStr) => new Date(dateStr).getDay() === 0;
+
+// ADDED: Replicate the Backend Monday-Saturday logic
+const getWeekBounds = () => {
+  const today = new Date();
+  const jsDay = today.getDay(); // Sunday = 0, Monday = 1, ... Saturday = 6
+  const pythonDow = jsDay === 0 ? 6 : jsDay - 1;
+
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - pythonDow);
+
+  const saturday = new Date(monday);
+  saturday.setDate(monday.getDate() + 5);
+
+  return { monday, saturday };
+};
 
 const DEPT_COLORS = {
   HR: '#a855f7',
@@ -114,7 +128,6 @@ const StaffModal = ({ title, color, data, loading, onClose }) => {
         className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
         <div
           className="px-5 py-4 border-b border-slate-200 flex items-center justify-between rounded-t-2xl flex-shrink-0"
           style={{ borderTop: `4px solid ${color}` }}
@@ -134,7 +147,6 @@ const StaffModal = ({ title, color, data, loading, onClose }) => {
           </button>
         </div>
 
-        {/* Modal Body */}
         <div className="overflow-y-auto flex-1 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded">
           {loading ? (
             <div className="p-10 text-center text-slate-400">Loading...</div>
@@ -158,7 +170,8 @@ const StaffModal = ({ title, color, data, loading, onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                {weeklyData.map((emp, i) => (
+                {/* FIXED: Loop over actual employee "data" prop, not weeklyData */}
+                {data.map((emp, i) => (
                   <tr
                     key={i}
                     className="border-b border-slate-50 hover:bg-slate-50 transition-colors"
@@ -184,7 +197,6 @@ const StaffModal = ({ title, color, data, loading, onClose }) => {
           )}
         </div>
 
-        {/* Modal Footer */}
         <div className="px-5 py-3.5 border-t border-slate-100 text-right flex-shrink-0">
           <button
             className="bg-slate-100 border-none px-5 py-2 rounded-lg text-[13px] font-semibold cursor-pointer text-slate-700 hover:bg-slate-200 transition-colors"
@@ -241,107 +253,71 @@ const ToggleBtn = ({ label, color, idx, vis, setter }) => {
 
 export default function Staff_att() {
   const today = new Date();
-  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  
+  // FIXED: Setup default Mon-Sat initialization
+  const { monday: defaultMon, saturday: defaultSat } = getWeekBounds();
 
   const [data, setData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [unit, setUnit] = useState('ALL');
-  const [startDate, setStartDate] = useState(formatDateToInput(firstOfMonth));
-  const [endDate, setEndDate] = useState(formatDateToInput(today));
+  
+  // FIXED: Apply defaults to useState
+  const [startDate, setStartDate] = useState(formatDateToInput(defaultMon));
+  const [endDate, setEndDate] = useState(formatDateToInput(defaultSat));
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [totalVis, setTotalVis] = useState({
-    0: true,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  });
-  const [presentVis, setPresentVis] = useState({
-    0: true,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  });
-  const [absentVis, setAbsentVis] = useState({
-    0: true,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  });
-  const [combinedVis, setCombinedVis] = useState({
-    0: true,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  });
+  const [totalVis, setTotalVis] = useState({ 0: true, 1: false, 2: false, 3: false, 4: false, 5: false });
+  const [presentVis, setPresentVis] = useState({ 0: true, 1: false, 2: false, 3: false, 4: false, 5: false });
+  const [absentVis, setAbsentVis] = useState({ 0: true, 1: false, 2: false, 3: false, 4: false, 5: false });
+  const [combinedVis, setCombinedVis] = useState({ 0: true, 1: false, 2: false, 3: false, 4: false, 5: false });
 
-  const [modal, setModal] = useState({
-    type: null,
-    date: null,
-    loading: false,
-    data: null,
-  });
+  const [modal, setModal] = useState({ type: null, date: null, loading: false, data: null });
   const navigate = useNavigate();
 
   const groupWeeklyData = (rows) => {
-  const weeks = [];
-  let currentWeek = [];
+    const weeks = [];
+    let currentWeek = [];
 
-  rows.forEach((row) => {
-    const day = new Date(row.date).getDay();
+    rows.forEach((row) => {
+      const day = new Date(row.date).getDay();
+      if (day === 0) return; // Skip Sunday
+      currentWeek.push(row);
+      if (day === 6) { // Saturday OR last record
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+    });
 
-    // Skip Sunday
-    if (day === 0) return;
-
-    currentWeek.push(row);
-
-    // Saturday OR last record
-    if (day === 6) {
+    if (currentWeek.length) {
       weeks.push(currentWeek);
-      currentWeek = [];
     }
-  });
 
-  // Push remaining
-  if (currentWeek.length) {
-    weeks.push(currentWeek);
-  }
+    return weeks.map((week, index) => {
+      const total = week.reduce((s, r) => s + (r.total || 0), 0);
+      const present = week.reduce((s, r) => s + (r.present || 0), 0);
+      const absent = week.reduce((s, r) => s + (r.absent || 0), 0);
+      const leave = week.reduce((s, r) => s + (r.leave || 0), 0);
+      const count = week.length;
 
-  return weeks.map((week, index) => {
-    const total = week.reduce((s, r) => s + (r.total || 0), 0);
-    const present = week.reduce((s, r) => s + (r.present || 0), 0);
-    const absent = week.reduce((s, r) => s + (r.absent || 0), 0);
-    const leave = week.reduce((s, r) => s + (r.leave || 0), 0);
+      return {
+        date: `${formatDateToDisplay(week[0].date)} → ${formatDateToDisplay(
+          week[week.length - 1].date
+        )}`,
+        total: Math.round(total / count),
+        present: Math.round(present / count),
+        absent: Math.round(absent / count),
+        leave: Math.round(leave / count),
+        present_pct: ((present / total) * 100).toFixed(1),
+        absent_pct: ((absent / total) * 100).toFixed(1),
+        leave_pct: ((leave / total) * 100).toFixed(1),
+      };
+    });
+  };
 
-    const count = week.length;
-
-    return {
-      date: `${formatDateToDisplay(week[0].date)} → ${formatDateToDisplay(
-        week[week.length - 1].date
-      )}`,
-      total: Math.round(total / count),
-      present: Math.round(present / count),
-      absent: Math.round(absent / count),
-      leave: Math.round(leave / count),
-      present_pct: ((present / total) * 100).toFixed(1),
-      absent_pct: ((absent / total) * 100).toFixed(1),
-      leave_pct: ((leave / total) * 100).toFixed(1),
-    };
-  });
-};
-
-const weeklyData = groupWeeklyData(data);
-
-const nonSundayData = weeklyData;
+  const weeklyData = data; // Original code used groupWeeklyData, adjust here if you want daily instead
+  const nonSundayData = weeklyData;
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -402,12 +378,13 @@ const nonSundayData = weeklyData;
     setEndDate(formatDateToInput(end));
   };
 
+  // FIXED: Clear filters to use new Monday-Saturday baseline
   const clearFilters = () => {
+    const { monday: defaultMon, saturday: defaultSat } = getWeekBounds();
     setUnit('ALL');
-    setStartDate(formatDateToInput(firstOfMonth));
-    setEndDate(formatDateToInput(today));
+    setStartDate(formatDateToInput(defaultMon));
+    setEndDate(formatDateToInput(defaultSat));
   };
-
 
   const avg = (arr, key) =>
     arr.length
@@ -491,7 +468,6 @@ const nonSundayData = weeklyData;
 
   return (
     <div className="font-sans min-h-screen bg-[#eef2f7] p-5 flex flex-col gap-5 text-slate-800">
-      {/* ── Header Card ── */}
       <div className="bg-white rounded-2xl border border-slate-200 px-5 py-4 flex flex-wrap items-center gap-4 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-lg">
@@ -560,15 +536,17 @@ const nonSundayData = weeklyData;
             ✕
           </button>
 
+          {/* FIXED: "Today" button updated to reset to current Mon-Sat week */}
           <button
             className="bg-blue-600 text-white border-none rounded-lg cursor-pointer text-[13px] font-semibold px-4 py-2 hover:bg-blue-700 transition-colors"
             onClick={() => {
-              setStartDate(formatDateToInput(firstOfMonth));
-              setEndDate(formatDateToInput(today));
+              const { monday: defaultMon, saturday: defaultSat } = getWeekBounds();
+              setStartDate(formatDateToInput(defaultMon));
+              setEndDate(formatDateToInput(defaultSat));
               navigate('/hr/staff_one');
             }}
           >
-            Today
+            This Week
           </button>
 
           <button
@@ -580,19 +558,16 @@ const nonSundayData = weeklyData;
         </div>
       </div>
 
-      {/* ── Loading Bar ── */}
       {loading && (
         <div className="h-[3px] rounded-sm bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 bg-[length:200%] animate-[shimmer_1.2s_infinite]" />
       )}
 
-      {/* ── Error Box ── */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-[13px]">
           ⚠ Failed to load data: {error}
         </div>
       )}
 
-      {/* ── Summary Cards ── */}
       {nonSundayData.length > 0 && (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3.5">
           <div className="bg-white rounded-xl border border-slate-200 px-4 py-4 flex flex-col gap-1.5 shadow-sm">
@@ -640,9 +615,7 @@ const nonSundayData = weeklyData;
         </div>
       )}
 
-      {/* ── Table + Onroll Chart ── */}
       <div className="grid grid-cols-2 gap-5 max-[900px]:grid-cols-1">
-        {/* Daily Log Table */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[500px] overflow-hidden">
           <div className="px-4 py-3.5 bg-slate-50 border-b border-slate-200 rounded-t-2xl flex justify-between items-center flex-shrink-0">
             <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
@@ -783,268 +756,64 @@ const nonSundayData = weeklyData;
           </div>
         </div>
 
-        {/* Onroll Trends Chart */}
         <ChartCard
           title="Onroll Trends"
           accentColor="#3b82f6"
           controls={
             <>
-              <ToggleBtn
-                label="Total"
-                color="#3b82f6"
-                idx={0}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
-              <ToggleBtn
-                label="Trend"
-                color="#1e40af"
-                idx={1}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
-              <ToggleBtn
-                label="HR"
-                color="#a855f7"
-                idx={2}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
-              <ToggleBtn
-                label="Prod"
-                color="#0ea5e9"
-                idx={3}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
-              <ToggleBtn
-                label="Fin"
-                color="#f59e0b"
-                idx={4}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
-              <ToggleBtn
-                label="Merch"
-                color="#ec4899"
-                idx={5}
-                vis={totalVis}
-                setter={setTotalVis}
-              />
+              <ToggleBtn label="Total" color="#3b82f6" idx={0} vis={totalVis} setter={setTotalVis} />
+              <ToggleBtn label="Trend" color="#1e40af" idx={1} vis={totalVis} setter={setTotalVis} />
+              <ToggleBtn label="HR" color="#a855f7" idx={2} vis={totalVis} setter={setTotalVis} />
+              <ToggleBtn label="Prod" color="#0ea5e9" idx={3} vis={totalVis} setter={setTotalVis} />
+              <ToggleBtn label="Fin" color="#f59e0b" idx={4} vis={totalVis} setter={setTotalVis} />
+              <ToggleBtn label="Merch" color="#ec4899" idx={5} vis={totalVis} setter={setTotalVis} />
             </>
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={chartData}
-              margin={{ top: 16, right: 8, bottom: 8, left: 0 }}
-            >
+            <ComposedChart data={chartData} margin={{ top: 16, right: 8, bottom: 8, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-                interval="preserveStartEnd"
-              />
-              <YAxis
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              {totalVis[0] && (
-                <Bar
-                  dataKey="total"
-                  name="Total"
-                  fill="rgba(59,130,246,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {totalVis[1] && (
-                <Line
-                  type="monotone"
-                  dataKey="totalTrend"
-                  name="Trend"
-                  stroke="#1e40af"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {totalVis[2] && (
-                <Line
-                  type="monotone"
-                  dataKey="hrTotal"
-                  name="HR"
-                  stroke="#a855f7"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {totalVis[3] && (
-                <Line
-                  type="monotone"
-                  dataKey="prodTotal"
-                  name="Prod"
-                  stroke="#0ea5e9"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {totalVis[4] && (
-                <Line
-                  type="monotone"
-                  dataKey="finTotal"
-                  name="Fin"
-                  stroke="#f59e0b"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {totalVis[5] && (
-                <Line
-                  type="monotone"
-                  dataKey="merchTotal"
-                  name="Merch"
-                  stroke="#ec4899"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
+              {totalVis[0] && <Bar dataKey="total" name="Total" fill="rgba(59,130,246,0.6)" radius={[3, 3, 0, 0]} />}
+              {totalVis[1] && <Line type="monotone" dataKey="totalTrend" name="Trend" stroke="#1e40af" strokeWidth={2} dot={false} />}
+              {totalVis[2] && <Line type="monotone" dataKey="hrTotal" name="HR" stroke="#a855f7" strokeWidth={2} dot={false} />}
+              {totalVis[3] && <Line type="monotone" dataKey="prodTotal" name="Prod" stroke="#0ea5e9" strokeWidth={2} dot={false} />}
+              {totalVis[4] && <Line type="monotone" dataKey="finTotal" name="Fin" stroke="#f59e0b" strokeWidth={2} dot={false} />}
+              {totalVis[5] && <Line type="monotone" dataKey="merchTotal" name="Merch" stroke="#ec4899" strokeWidth={2} dot={false} />}
             </ComposedChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      {/* ── Present + Absent Charts ── */}
       <div className="grid grid-cols-2 gap-5 max-[900px]:grid-cols-1">
         <ChartCard
           title="Present Stats"
           accentColor="#10b981"
           controls={
             <>
-              <ToggleBtn
-                label="Present"
-                color="#10b981"
-                idx={0}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
-              <ToggleBtn
-                label="Trend"
-                color="#047857"
-                idx={1}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
-              <ToggleBtn
-                label="HR"
-                color="#a855f7"
-                idx={2}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
-              <ToggleBtn
-                label="Prod"
-                color="#0ea5e9"
-                idx={3}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
-              <ToggleBtn
-                label="Fin"
-                color="#f59e0b"
-                idx={4}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
-              <ToggleBtn
-                label="Merch"
-                color="#ec4899"
-                idx={5}
-                vis={presentVis}
-                setter={setPresentVis}
-              />
+              <ToggleBtn label="Present" color="#10b981" idx={0} vis={presentVis} setter={setPresentVis} />
+              <ToggleBtn label="Trend" color="#047857" idx={1} vis={presentVis} setter={setPresentVis} />
+              <ToggleBtn label="HR" color="#a855f7" idx={2} vis={presentVis} setter={setPresentVis} />
+              <ToggleBtn label="Prod" color="#0ea5e9" idx={3} vis={presentVis} setter={setPresentVis} />
+              <ToggleBtn label="Fin" color="#f59e0b" idx={4} vis={presentVis} setter={setPresentVis} />
+              <ToggleBtn label="Merch" color="#ec4899" idx={5} vis={presentVis} setter={setPresentVis} />
             </>
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={chartData}
-              margin={{ top: 16, right: 8, bottom: 8, left: 0 }}
-            >
+            <ComposedChart data={chartData} margin={{ top: 16, right: 8, bottom: 8, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-                interval="preserveStartEnd"
-              />
-              <YAxis
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              {presentVis[0] && (
-                <Bar
-                  dataKey="present"
-                  name="Present"
-                  fill="rgba(16,185,129,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {presentVis[1] && (
-                <Line
-                  type="monotone"
-                  dataKey="presentTrend"
-                  name="Trend"
-                  stroke="#047857"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {presentVis[2] && (
-                <Line
-                  type="monotone"
-                  dataKey="hrPresent"
-                  name="HR"
-                  stroke="#a855f7"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {presentVis[3] && (
-                <Line
-                  type="monotone"
-                  dataKey="prodPresent"
-                  name="Prod"
-                  stroke="#0ea5e9"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {presentVis[4] && (
-                <Line
-                  type="monotone"
-                  dataKey="finPresent"
-                  name="Fin"
-                  stroke="#f59e0b"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {presentVis[5] && (
-                <Line
-                  type="monotone"
-                  dataKey="merchPresent"
-                  name="Merch"
-                  stroke="#ec4899"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
+              {presentVis[0] && <Bar dataKey="present" name="Present" fill="rgba(16,185,129,0.6)" radius={[3, 3, 0, 0]} />}
+              {presentVis[1] && <Line type="monotone" dataKey="presentTrend" name="Trend" stroke="#047857" strokeWidth={2} dot={false} />}
+              {presentVis[2] && <Line type="monotone" dataKey="hrPresent" name="HR" stroke="#a855f7" strokeWidth={2} dot={false} />}
+              {presentVis[3] && <Line type="monotone" dataKey="prodPresent" name="Prod" stroke="#0ea5e9" strokeWidth={2} dot={false} />}
+              {presentVis[4] && <Line type="monotone" dataKey="finPresent" name="Fin" stroke="#f59e0b" strokeWidth={2} dot={false} />}
+              {presentVis[5] && <Line type="monotone" dataKey="merchPresent" name="Merch" stroke="#ec4899" strokeWidth={2} dot={false} />}
             </ComposedChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -1054,134 +823,32 @@ const nonSundayData = weeklyData;
           accentColor="#f43f5e"
           controls={
             <>
-              <ToggleBtn
-                label="Absent"
-                color="#f43f5e"
-                idx={0}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
-              <ToggleBtn
-                label="Trend"
-                color="#be123c"
-                idx={1}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
-              <ToggleBtn
-                label="HR"
-                color="#a855f7"
-                idx={2}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
-              <ToggleBtn
-                label="Prod"
-                color="#0ea5e9"
-                idx={3}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
-              <ToggleBtn
-                label="Fin"
-                color="#f59e0b"
-                idx={4}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
-              <ToggleBtn
-                label="Merch"
-                color="#ec4899"
-                idx={5}
-                vis={absentVis}
-                setter={setAbsentVis}
-              />
+              <ToggleBtn label="Absent" color="#f43f5e" idx={0} vis={absentVis} setter={setAbsentVis} />
+              <ToggleBtn label="Trend" color="#be123c" idx={1} vis={absentVis} setter={setAbsentVis} />
+              <ToggleBtn label="HR" color="#a855f7" idx={2} vis={absentVis} setter={setAbsentVis} />
+              <ToggleBtn label="Prod" color="#0ea5e9" idx={3} vis={absentVis} setter={setAbsentVis} />
+              <ToggleBtn label="Fin" color="#f59e0b" idx={4} vis={absentVis} setter={setAbsentVis} />
+              <ToggleBtn label="Merch" color="#ec4899" idx={5} vis={absentVis} setter={setAbsentVis} />
             </>
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={chartData}
-              margin={{ top: 16, right: 8, bottom: 8, left: 0 }}
-            >
+            <ComposedChart data={chartData} margin={{ top: 16, right: 8, bottom: 8, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-                interval="preserveStartEnd"
-              />
-              <YAxis
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              {absentVis[0] && (
-                <Bar
-                  dataKey="absent"
-                  name="Absent"
-                  fill="rgba(244,63,94,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {absentVis[1] && (
-                <Line
-                  type="monotone"
-                  dataKey="absentTrend"
-                  name="Trend"
-                  stroke="#be123c"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {absentVis[2] && (
-                <Line
-                  type="monotone"
-                  dataKey="hrAbsent"
-                  name="HR"
-                  stroke="#a855f7"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {absentVis[3] && (
-                <Line
-                  type="monotone"
-                  dataKey="prodAbsent"
-                  name="Prod"
-                  stroke="#0ea5e9"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {absentVis[4] && (
-                <Line
-                  type="monotone"
-                  dataKey="finAbsent"
-                  name="Fin"
-                  stroke="#f59e0b"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {absentVis[5] && (
-                <Line
-                  type="monotone"
-                  dataKey="merchAbsent"
-                  name="Merch"
-                  stroke="#ec4899"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
+              {absentVis[0] && <Bar dataKey="absent" name="Absent" fill="rgba(244,63,94,0.6)" radius={[3, 3, 0, 0]} />}
+              {absentVis[1] && <Line type="monotone" dataKey="absentTrend" name="Trend" stroke="#be123c" strokeWidth={2} dot={false} />}
+              {absentVis[2] && <Line type="monotone" dataKey="hrAbsent" name="HR" stroke="#a855f7" strokeWidth={2} dot={false} />}
+              {absentVis[3] && <Line type="monotone" dataKey="prodAbsent" name="Prod" stroke="#0ea5e9" strokeWidth={2} dot={false} />}
+              {absentVis[4] && <Line type="monotone" dataKey="finAbsent" name="Fin" stroke="#f59e0b" strokeWidth={2} dot={false} />}
+              {absentVis[5] && <Line type="monotone" dataKey="merchAbsent" name="Merch" stroke="#ec4899" strokeWidth={2} dot={false} />}
             </ComposedChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      {/* ── Combined Chart ── */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
         <div className="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3.5 text-center">
           Comprehensive Analysis (Excluding Sundays)
@@ -1193,123 +860,28 @@ const nonSundayData = weeklyData;
               margin={{ top: 16, right: 8, bottom: 8, left: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-                interval="preserveStartEnd"
-              />
-              <YAxis
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              {combinedVis[0] && (
-                <Bar
-                  dataKey="total"
-                  name="Total"
-                  fill="rgba(59,130,246,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {combinedVis[1] && (
-                <Bar
-                  dataKey="present"
-                  name="Present"
-                  fill="rgba(16,185,129,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {combinedVis[2] && (
-                <Bar
-                  dataKey="absent"
-                  name="Absent"
-                  fill="rgba(244,63,94,0.6)"
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-              {combinedVis[3] && (
-                <Line
-                  type="monotone"
-                  dataKey="totalTrend"
-                  name="Total Trend"
-                  stroke="#1e40af"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {combinedVis[4] && (
-                <Line
-                  type="monotone"
-                  dataKey="presentTrend"
-                  name="Pres Trend"
-                  stroke="#15803d"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
-              {combinedVis[5] && (
-                <Line
-                  type="monotone"
-                  dataKey="absentTrend"
-                  name="Abs Trend"
-                  stroke="#b91c1c"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              )}
+              {combinedVis[0] && <Bar dataKey="total" name="Total" fill="rgba(59,130,246,0.6)" radius={[3, 3, 0, 0]} />}
+              {combinedVis[1] && <Bar dataKey="present" name="Present" fill="rgba(16,185,129,0.6)" radius={[3, 3, 0, 0]} />}
+              {combinedVis[2] && <Bar dataKey="absent" name="Absent" fill="rgba(244,63,94,0.6)" radius={[3, 3, 0, 0]} />}
+              {combinedVis[3] && <Line type="monotone" dataKey="totalTrend" name="Total Trend" stroke="#1e40af" strokeWidth={2} dot={false} />}
+              {combinedVis[4] && <Line type="monotone" dataKey="presentTrend" name="Pres Trend" stroke="#15803d" strokeWidth={2} dot={false} />}
+              {combinedVis[5] && <Line type="monotone" dataKey="absentTrend" name="Abs Trend" stroke="#b91c1c" strokeWidth={2} dot={false} />}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
         <div className="flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100 justify-center">
-          <ToggleBtn
-            label="Total"
-            color="#3b82f6"
-            idx={0}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
-          <ToggleBtn
-            label="Present"
-            color="#10b981"
-            idx={1}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
-          <ToggleBtn
-            label="Absent"
-            color="#f43f5e"
-            idx={2}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
-          <ToggleBtn
-            label="Total Trend"
-            color="#1e40af"
-            idx={3}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
-          <ToggleBtn
-            label="Pres Trend"
-            color="#15803d"
-            idx={4}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
-          <ToggleBtn
-            label="Abs Trend"
-            color="#b91c1c"
-            idx={5}
-            vis={combinedVis}
-            setter={setCombinedVis}
-          />
+          <ToggleBtn label="Total" color="#3b82f6" idx={0} vis={combinedVis} setter={setCombinedVis} />
+          <ToggleBtn label="Present" color="#10b981" idx={1} vis={combinedVis} setter={setCombinedVis} />
+          <ToggleBtn label="Absent" color="#f43f5e" idx={2} vis={combinedVis} setter={setCombinedVis} />
+          <ToggleBtn label="Total Trend" color="#1e40af" idx={3} vis={combinedVis} setter={setCombinedVis} />
+          <ToggleBtn label="Pres Trend" color="#15803d" idx={4} vis={combinedVis} setter={setCombinedVis} />
+          <ToggleBtn label="Abs Trend" color="#b91c1c" idx={5} vis={combinedVis} setter={setCombinedVis} />
         </div>
       </div>
 
-      {/* ── Modals ── */}
       {modal.type && (
         <StaffModal
           title={`${modal.type === 'present' ? 'Present' : 'Absent'} Details — ${formatDateToDisplay(modal.date)} | ${unit}`}
