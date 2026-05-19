@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 // import { updateSampleSection } from '../common/sample-base';
 import { DocumentEditorContainerComponent, Toolbar } from '@syncfusion/ej2-react-documenteditor';
 import { DialogUtility, Dialog } from '@syncfusion/ej2-react-popups';
-// import '../../../../App.css';
 import './Mail_Merge.css';
 import { Item, ClickEventArgs } from '@syncfusion/ej2-react-navigations';
 import { ListView, SelectEventArgs, ListViewComponent } from '@syncfusion/ej2-react-lists';
@@ -34,11 +33,13 @@ const MailMerge = () => {
         "Redo",
         "Separator",
         {
+            prefixIcon: 'sf-icon-InsertMergeField',
             tooltipText: "Insert Field",
             text: onWrapText("Insert Field"),
             id: "InsertField",
         },
         {
+            prefixIcon: 'sf-icon-FinishMerge',
             tooltipText: "Merge Document",
             text: onWrapText("Merge Document"),
             id: "MergeDocument",
