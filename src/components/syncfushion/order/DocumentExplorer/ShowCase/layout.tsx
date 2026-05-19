@@ -21,9 +21,9 @@ function Layout() {
   };
   
   let continents: { [key: string]: Object }[] = [
-    { id: '01', name: 'All Files', Icon: "sf-icon-Allfiles", selected: true },
-    { id: '02', name: 'Recent Files', Icon: "sf-icon-RecentFiles", selected: false },
-    { id: '03', name: 'About', Icon: "sf-icon-About", selected: false }
+    { id: '01', name: 'All Files', Icon: "sf-icon-de-Allfiles", selected: true },
+    { id: '02', name: 'Recent Files', Icon: "sf-icon-de-RecentFiles", selected: false },
+    { id: '03', name: 'About', Icon: "sf-icon-de-About", selected: false }
   ];
   const [status, setStatus] = useState<boolean>(false);
   let buttons = [

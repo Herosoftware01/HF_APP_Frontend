@@ -135,7 +135,7 @@ function Sidebar({ children }) {
                   ? "bg-cyan-600 text-white font-bold rounded-lg mx-2 shadow-md" 
                   : isParentActive 
                   ? "text-cyan-400 font-semibold" 
-                  : "text-white/50 hover:text-white hover:bg-white/5"}`}
+                  : "text-white/70 hover:text-white hover:bg-white/5"}`}
               style={{ paddingLeft: `${level * 16}px` }}
             >
               <div className="flex items-center gap-2">

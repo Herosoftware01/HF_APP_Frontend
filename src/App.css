@@ -19,8 +19,12 @@
 @import "../node_modules/@syncfusion/ej2-react-documenteditor/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-react-pdfviewer/styles/tailwind3.css";
 @import "../node_modules/@syncfusion/ej2-ribbon/styles/tailwind3.css"; /* Required for Ribbon */
-/* @import '../node_modules/@syncfusion/ej2-richtexteditor/styles/tailwind3.css'; */
-/* @import '../node_modules/@syncfusion/ej2-layouts/styles/tailwind3.css'; */
+@import '../node_modules/@syncfusion/ej2-richtexteditor/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-layouts/styles/tailwind3.css';
+@import "../node_modules/@syncfusion/ej2-react-filemanager/styles/tailwind3.css";
+@import '../node_modules/@syncfusion/ej2-image-editor/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-icons/styles/tailwind3.css';
+
 
 /* Tailwind must come after all other @import rules */
 @import "tailwindcss";
