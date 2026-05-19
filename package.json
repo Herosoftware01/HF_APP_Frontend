@@ -67,6 +67,7 @@
     "react-toastify": "^11.1.0",
     "recharts": "^3.8.1",
     "sweetalert2": "^11.26.24",
+    "tailwind-scrollbar": "^4.0.2",
     "vite-plugin-pwa": "^1.2.0",
     "xlsx": "^0.18.5"
   },
