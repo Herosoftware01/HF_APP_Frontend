@@ -3,6 +3,7 @@ import '../../../App.css'
 
 import {  Routes, Route, } from 'react-router-dom';
 import HeroFashionGrid13 from "../order/ord_order.tsx"
+import Order_Grid from "../order/Order_Grid/Order_Grid.tsx"
 import IframeBold from "../order/sync_iframe.jsx"
 import HrReportGrid from "../order/ord1 ok.tsx"
 import TallyBalanceReport from "../order/tally.tsx"
@@ -41,6 +42,7 @@ import HeroFashionGrid1311 from '../order/PrintingSync.jsx'
 import Optimize from '../order/ord_order_opt.tsx'
 import Spreadsheet from '../order/Spreadsheet/Spreadsheet.tsx'
 import Word from '../order/Word/Word.tsx'
+import Mail_Merge from '../order/Word/Mail_Merge/Mail_Merge.tsx'
 import Smartpaste from '../order/Smart_Paste/Smartpaste.tsx'
 import Speech from '../order/Speak/Speech.tsx'
 // import Explorer from '../order/DocumentExplorer/ShowCase.tsx';
@@ -57,6 +59,7 @@ function Home() {
     <Routes>
         <Route path="/" element={<CardGrid />} />
         <Route path="/order" element={<HeroFashionGrid13 />} />
+        <Route path="/ordergrid" element={<Order_Grid />} />
         <Route path="/sync_iframe" element={<IframeBold />} />
         <Route path="/HrReportGrid" element={<HrReportGrid />} /> 
         <Route path="/OrdPagination" element={<OrdPagination />} /> 
@@ -93,6 +96,7 @@ function Home() {
         <Route path='/optimize' element={<Optimize />} />
         <Route path='/spreadsheet' element={<Spreadsheet />} />
         <Route path='/word' element={<Word />} />
+        <Route path='/mailmerch' element={<Mail_Merge />} />
         <Route path='/smart' element={<Smartpaste />} />
         <Route path='/speak' element={<Speech />} />
         <Route path='/explor' element={<Explorer />} />

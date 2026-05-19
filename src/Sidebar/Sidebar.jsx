@@ -136,7 +136,7 @@ function Sidebar({ children }) {
                   ? "bg-cyan-600 text-white font-bold rounded-lg mx-2 shadow-md" 
                   : isParentActive 
                   ? "text-cyan-400 font-semibold" 
-                  : "text-white/50 hover:text-white hover:bg-white/5"}`}
+                  : "text-white/70 hover:text-white hover:bg-white/5"}`}
               style={{ paddingLeft: `${level * 16}px` }}
             >
               <div className="flex items-center gap-2">
@@ -231,8 +231,6 @@ function Sidebar({ children }) {
           </div>
         )}
 
-        
-        
         {/* <div className="flex-1 overflow-y-auto py-2 space-y-1 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100"> */}
          <div className="custom-scroll flex-1 overflow-y-auto py-2 space-y-1">
           {filteredMenus.map((menu) => {
